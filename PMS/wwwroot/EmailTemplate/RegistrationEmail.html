@@ -1,0 +1,217 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Vipra DAM</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f2f4f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background-color: #1a3e6f;
+            color: #ffffff;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+            .header h1 {
+                margin: 0;
+                font-size: 26px;
+                letter-spacing: 1px;
+            }
+
+        .content {
+            padding: 30px 25px;
+            color: #333333;
+        }
+
+            .content h2 {
+                font-size: 20px;
+                margin-bottom: 15px;
+                color: #1a3e6f;
+            }
+
+            .content p {
+                font-size: 16px;
+                line-height: 1.6;
+            }
+
+        .temp-password {
+            display: inline-block;
+            background-color: #e6f7f8;
+            color: #045d66;
+            padding: 12px 18px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 20px 0;
+            letter-spacing: 1px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #008080;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn:hover {
+                background-color: #006666;
+            }
+
+        .features {
+            margin-top: 20px;
+        }
+
+            .features ul {
+                padding-left: 20px;
+            }
+
+            .features li {
+                margin-bottom: 8px;
+                font-size: 15px;
+            }
+
+        .plans {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .plan-box {
+            flex: 1;
+            min-width: 160px;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+            .plan-box h4 {
+                margin: 10px 0 5px 0;
+                font-size: 18px;
+            }
+
+            .plan-box p {
+                margin: 5px 0;
+                font-size: 16px;
+            }
+
+        .gold {
+            background: linear-gradient(135deg, #FFD700, #FFC107);
+            color: #000;
+        }
+
+        .diamond {
+            background: linear-gradient(135deg, #B9F2FF, #81D4FA);
+            color: #000;
+        }
+
+        .sapphire {
+            background: linear-gradient(135deg, #0F52BA, #1E3A8A);
+            color: #fff;
+        }
+
+        .footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #777777;
+            background-color: #f9fafb;
+        }
+
+        @media (max-width: 600px) {
+            .email-container {
+                width: 95%;
+            }
+
+            .plans {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Welcome to Vipra DAM</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <h2>Hello {{User}},</h2>
+            <p>We received a request to reset your password. Click the link below to set a new password for your account.</p>
+
+
+            <p>Here is your temporary password. Please change it after logging in for the first time:</p>
+            <div class="temp-password">{{Password}}</div>
+
+            <p>Click the button below to log in to your account:</p>
+            <a href="{{LoginUrl}}" class="btn">Login to Your Account</a>
+
+            <!-- Free User Features -->
+            <div class="features">
+                <h3>Your Free User Access Includes:</h3>
+                <ul>
+                    <li>Upload limit: 100 MB</li>
+                    <li>Unable to share files</li>
+                    <li>Access to limited features only</li>
+                </ul>
+            </div>
+
+            <!-- Subscription Plans -->
+            <!-- Subscription Plans -->
+            <div class="plans">
+                <div class="plan-box gold" style="background: linear-gradient(135deg, #FFC857, #FFB236); color: #000; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+                    <h4>Gold</h4>
+                    <p>$10 / month</p>
+                    <p>Enhanced storage & sharing</p>
+                </div>
+                <div class="plan-box diamond" style="background: linear-gradient(135deg, #89D4CF, #61C0BF); color: #000; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+                    <h4>Diamond</h4>
+                    <p>$30 / month</p>
+                    <p>Priority support & larger uploads</p>
+                </div>
+                <div class="plan-box sapphire" style="background: linear-gradient(135deg, #4B79A1, #283E51); color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+                    <h4>Sapphire</h4>
+                    <p>$50 / month</p>
+                    <p>Full access to all features</p>
+                </div>
+            </div>
+
+
+            <p>If you did not request this account, please ignore this email.</p>
+            <p>Best regards,<br>Team DAM</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            &copy; 2025 DAM. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>

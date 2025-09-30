@@ -1,0 +1,13 @@
+﻿<div id="toast-container" style="position: fixed; top: 10px; right: 10px; z-index: 1050;">
+	@{
+		var toastType = ViewBag.ToastType ?? "success"; // success, danger, warning, info
+
+		<div class="alert alert-@toastType alert-dismissible fade in" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<span id="ToastData"></span>
+		</div>
+														
+	}
+</div>

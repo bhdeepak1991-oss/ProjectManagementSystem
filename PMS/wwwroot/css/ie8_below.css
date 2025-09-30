@@ -1,0 +1,100 @@
+/* CSS Document */
+body {
+}
+.prd-block {
+	
+}
+header .search-block #searchSubmit {
+	right:1px;
+}
+.searchResult, .cartResult {
+	background-color:#dbdcde;
+}
+.col_1, .col_1_noPad {
+	width:150px;
+	margin-right:10px
+}
+.col_3, .col_3_noPad {
+	width:49.48368421052632%;
+	max-width:470px;
+	margin-right:10px
+}
+.left_Col_1 {
+	left:16.84210526315789%;
+}
+.col_2, .col_2_noPad {
+	width:32.63157894736842%;
+	max-width:310px;
+	margin-right:10px
+}
+.col_4_noPad {
+	margin-right:10px
+}
+.col_6, .col_6_noPad {
+	width:100%
+}
+#banner aside a:hover {
+    left: 0;
+    width: 38px;
+}
+.cartResult:before {
+    right: 365px;
+}
+.cartResult .cartRecomends article, .cartResult div.subTotal {
+	background:#ccc;
+}
+.cartResult a.checkOut, .wishListAddToCart .addToCart {
+    right: 0px;
+}
+.cartResult .wishListAddToCart {
+	right: -10px;
+}
+
+nav ul li ul {
+	max-width:950px;
+}
+nav ul li ul li {
+	width:130px;
+}
+footer ul li h5 {
+	font-family: 'Neue Helvetica Paneuropean W1G 75 Bold';
+	font-weight:bold;
+}
+
+/* page level */
+.bg_RadialProduct, .row.col_bg_RadialProduct *[class^=col]{
+	/*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfcfe', endColorstr='#becad3');
+	background: -webkit-radial-gradient(center center, closest-corner, #fdfcfe 0%, #dce1e8 70%, #becad3);
+	background: -o-radial-gradient(center center, closest-corner, #fdfcfe 0%, #dce1e8 70%, #becad3);
+	background: -moz-radial-gradient(center center, closest-corner, #fdfcfe 0%, #dce1e8 70%, #becad3);
+	background: radial-gradient(center center, closest-corner, #fdfcfe 0%, #dce1e8 70%, #becad3);	*/
+	margin-right:10px;
+	overflow:hidden !important
+}
+.bg_LinearContent3 {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfcfe', endColorstr='#becad3')
+}
+figcaption {
+    background: rgb(44,87,145);
+}
+#videos figcaption {
+    background: rgb(255,255,255);
+}
+.last {
+	margin-right:0 !important
+}
+.col_4.h362, .col_4 {
+	margin-right:10px	
+}
+#box .subNav .active {
+	padding-top:14px
+}
+#box .col_2 {
+	margin-right:10px	
+}
+.toolTip {
+	background-color:rgb(32,59,109);
+}
+.toolTip:after {
+	border-top:solid 20px rgb(32,59,109);
+}

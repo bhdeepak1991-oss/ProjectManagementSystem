@@ -1,0 +1,1072 @@
+/* CSS Document */
+
+/* text case and wraping */
+.low {
+    text-transform: lowercase;
+}
+
+.cap {
+    text-transform: uppercase;
+}
+
+.noCap, h2.title.noCap {
+    text-transform: none;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.brAll {
+    word-break: break-all;
+}
+
+.b {
+    font-weight: bold !important;
+}
+
+.normal {
+    font-weight: normal !important;
+}
+
+.noB, .thNoBold th {
+    font-weight: normal !important;
+}
+
+.i {
+    font-style: italic;
+}
+
+.noI, address {
+    font-style: normal !important;
+}
+
+.u {
+    text-decoration: underline;
+}
+
+.noU {
+    text-decoration: none !important;
+}
+/* floating */
+.noFloat {
+    float: none !important;
+    display: inline !important;
+}
+
+.floatL {
+    float: left;
+}
+
+.floatR {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+.clearL {
+    clear: left;
+}
+
+.clearR {
+    clear: right;
+}
+
+.clearfix:before, .clearfix:after, ul.newsUpdate li:before, ul.newsUpdate li:after, .pagination:before, .pagination:after {
+    content: " ";
+    display: table;
+    clear: both;
+}
+/* alignment */
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right !important;
+}
+
+.center {
+    text-align: center !important;
+}
+
+.justify {
+    text-align: justify !important;
+}
+/* Verticle */
+.vertBottom {
+    vertical-align: bottom;
+}
+/* display */
+.block, .show {
+    display: block !important;
+}
+
+.inline {
+    display: inline;
+}
+
+.hide {
+    display: none;
+}
+
+.hideVisibly {
+    visibility: hidden;
+}
+/* line height */
+.lH20 {
+    line-height: 20px;
+}
+
+.lH24 {
+    line-height: 24px;
+}
+
+.lH28 {
+    line-height: 28px;
+}
+/* margins and Padding */
+.marAuto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.mar5 {
+    margin: 5px;
+}
+
+.mar10 {
+    margin: 10px;
+}
+
+.mar15 {
+    margin: 15px;
+}
+
+.mar20 {
+    margin: 20px;
+}
+
+.marT-2 {
+    margin-top: -2px;
+}
+
+.marT3 {
+    margin-top: 3px;
+}
+
+.marT5 {
+    margin-top: 5px;
+}
+
+.marT10 {
+    margin-top: 10px;
+}
+
+.marT15 {
+    margin-top: 15px;
+}
+
+.marT20 {
+    margin-top: 20px;
+}
+
+.marT25 {
+    margin-top: 25px;
+}
+
+.marT30 {
+    margin-top: 30px;
+}
+
+.marB5 {
+    margin-bottom: 5px;
+}
+
+.marB10 {
+    margin-bottom: 10px;
+}
+
+.marB15 {
+    margin-bottom: 15px;
+}
+
+.marB20 {
+    margin-bottom: 20px;
+}
+
+.marB25 {
+    margin-bottom: 25px;
+}
+
+.marB30 {
+    margin-bottom: 30px;
+}
+
+.marB35 {
+    margin-bottom: 35px;
+}
+
+.marB50 {
+    margin-bottom: 50px;
+}
+
+.marB70 {
+    margin-bottom: 70px;
+}
+
+.marL5 {
+    margin-left: 5px;
+}
+
+.marL10 {
+    margin-left: 10px;
+}
+
+.marL20 {
+    margin-left: 20px;
+}
+
+.marR5 {
+    margin-right: 5px;
+}
+
+.marR10 {
+    margin-right: 10px;
+}
+
+.marR15 {
+    margin-right: 15px;
+}
+
+.marR20 {
+    margin-right: 20px;
+}
+
+.marTB10px {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.marT10B5px {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.noMar {
+    margin: 0px;
+}
+
+.noBMar {
+    margin-bottom: 0px;
+}
+
+.noTMar {
+    margin-top: 0px;
+}
+
+.noLMar {
+    margin-left: 0px;
+}
+
+.noRMar {
+    margin-right: 0px;
+}
+/* Negative Margins */
+.marT-4 {
+    margin-top: -4px;
+}
+
+.marT-5 {
+    margin-top: -5px;
+}
+
+.marT-30 {
+    margin-top: -30px;
+}
+
+.marT-50 {
+    margin-top: -50px;
+}
+/* paddings */
+.pad5 {
+    padding: 5px;
+}
+
+.pad10 {
+    padding: 10px;
+}
+
+.pad15 {
+    padding: 15px;
+}
+
+.pad20 {
+    padding: 20px;
+}
+
+.pad30 {
+    padding: 30px;
+}
+
+.pad40 {
+    padding: 40px;
+}
+
+.padT0 {
+    padding-top: 0px;
+}
+
+.padT1 {
+    padding-top: 1px;
+}
+
+.padT2 {
+    padding-top: 2px;
+}
+
+.padT3 {
+    padding-top: 3px;
+}
+
+.padT4 {
+    padding-top: 3px;
+}
+
+.padT5 {
+    padding-top: 5px;
+}
+
+.padT7 {
+    padding-top: 7px !important; /* for checkboxes labels */
+}
+
+.padT10 {
+    padding-top: 10px;
+}
+
+.padT15 {
+    padding-top: 15px !important;
+}
+
+.padT20 {
+    padding-top: 20px !important;
+}
+
+.padT25 {
+    padding-top: 25px !important;
+}
+
+.padT30 {
+    padding-top: 30px !important;
+}
+
+.padT40 {
+    padding-top: 40px !important;
+}
+
+.padL3 {
+    padding-left: 3px;
+}
+
+.padL5 {
+    padding-left: 5px;
+}
+
+.padL10 {
+    padding-left: 10px !important;
+}
+
+.padL15 {
+    padding-left: 15px;
+}
+
+.padL20 {
+    padding-left: 20px;
+}
+
+.padL25 {
+    padding-left: 25px;
+}
+
+.padR5 {
+    padding-right: 5px;
+}
+
+.padR10 {
+    padding-right: 10px;
+}
+
+.padR15 {
+    padding-right: 15px;
+}
+
+.padR20 {
+    padding-right: 20px;
+}
+
+.padR50 {
+    padding-right: 50px;
+}
+
+.padR100 {
+    padding-right: 100px;
+}
+
+.padB10 {
+    padding-bottom: 10px;
+}
+
+.padB25 {
+    padding-bottom: 25px !important;
+}
+
+.padB30 {
+    padding-bottom: 30px !important;
+}
+
+.padTB5 {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.padTB10 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.noTPad {
+    padding-top: 0px !important;
+}
+
+.noBPad {
+    padding-bottom: 0px !important;
+}
+
+.noLPad {
+    padding-left: 0px !important;
+}
+
+.noRPad {
+    padding-right: 0px !important;
+}
+
+.noPad {
+    padding: 0px !important;
+}
+/* position and overflows */
+.posRel {
+    position: relative;
+}
+
+.posAbs {
+    position: absolute;
+}
+
+.posStatic {
+    position: static;
+}
+
+.posAbsTL {
+    top: 0px;
+    left: 0px;
+}
+
+.posAbsTL2px {
+    top: 2px;
+    left: 2px;
+}
+
+.posAbsTL10px {
+    top: 10px;
+    left: 10px;
+}
+
+.posAbsTL-10px {
+    top: -10px;
+    left: -10px;
+}
+
+.posAbsTR {
+    top: 0px;
+    right: 0px;
+}
+
+.posAbsTR10px {
+    top: 10px;
+    right: 10px;
+}
+
+.posAbsTR-10px {
+    top: -10px;
+    right: -10px;
+}
+
+.posAbsBL {
+    bottom: 0px;
+    left: 0px;
+}
+
+.posAbsBL10px {
+    bottom: 10px;
+    left: 10px;
+}
+
+.posAbsBL-10px {
+    bottom: -10px;
+    left: -10px;
+}
+
+.posAbsBR {
+    bottom: 0px;
+    right: 0px;
+}
+
+.posAbsBR10px {
+    bottom: 10px;
+    right: 10px;
+}
+
+.posAbsB20R10px {
+    bottom: 20px;
+    right: 10px;
+}
+
+.posAbsBR-10px {
+    bottom: -10px;
+    right: -10px;
+}
+
+.overAuto {
+    overflow: auto;
+}
+
+.overHidden {
+    overflow: hidden;
+}
+
+.overVisible {
+    overflow: visible;
+}
+
+.overX {
+    overflow-x: hidden;
+}
+
+.overY {
+    overflow-y: hidden;
+}
+
+/* background color */
+
+.noBg {
+    background: none !important;
+}
+
+/* cursor */
+.curPointer {
+    cursor: pointer;
+}
+
+.curDefault {
+    cursor: default;
+}
+
+/* heights */
+.h15 {
+    height: 15px;
+}
+
+.h20 {
+    height: 20px;
+}
+
+.h25 {
+    height: 25px !important;
+}
+
+.h30 {
+    height: 30px;
+}
+
+.h35 {
+    height: 35px;
+}
+
+.h40 {
+    height: 40px;
+}
+
+.h45, .h45_All .row {
+    height: 45px;
+}
+
+.h50 {
+    height: 50px !important;
+}
+
+.h300 {
+    height: 300px;
+}
+
+.hAuto {
+    height: auto !important;
+}
+
+.noBorder {
+    border: none !important;
+}
+/* widths */
+.w20, .form-inline select.form-control.w20 {
+    width: 20%;
+}
+
+.w20_fl_pad15 {
+    width: 20%;
+    float: left;
+    padding: 15px;
+}
+
+
+.w25_fl_pad15 {
+    width: 25%;
+    float: left;
+    padding: 15px;
+}
+
+/* Utilities */
+.arrowTop, .arrowBot {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+}
+
+.arrowTop {
+    border-bottom: 6px solid;
+    border-top: none;
+}
+
+.arrowBot {
+    border-top: 6px solid;
+    border-bottom: none;
+}
+
+/* Layout Theme - Backgrounds */
+
+.bg_BurnedOrange {
+    background-color: rgb(235,121,6);
+}
+
+.bg_White {
+    background-color: rgb(255,255,255) !important;
+}
+
+.bg_Black {
+    background-color: rgb(0,0,0);
+}
+
+.bg_OffWhite {
+    background-color: rgb(246,246,246);
+}
+
+
+.bg_dGrey {
+    background-color: #7d7d7d;
+}
+
+.bg_lGrey {
+    background-color: #c0c0c0;
+}
+
+.c_BurnedOrange {
+    color: rgb(235,121,6);
+}
+
+.c_White, .c_All_White a {
+    color: rgb(255,255,255);
+}
+
+.c_Black {
+    color: rgb(0,0,0);
+}
+
+.c_OffWhite {
+    color: rgb(246,246,246);
+}
+
+/* ================ */
+.toolTip:after {
+    content: "";
+    border-top: solid 20px rgba(32,59,109,.8);
+    border-left: solid 20px transparent;
+    border-right: solid 20px transparent;
+    position: absolute;
+    bottom: -20px;
+    left: 20px;
+}
+
+.toolTip {
+    background-color: rgba(32,59,109,.8);
+    color: #fff;
+    font-size: 1.6em;
+    width: 270px;
+    height: 100px;
+    max-width: none;
+    max-height: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    padding: 20px;
+}
+/* Form ================ */
+.error, .errorBlock, .field-validation-error {
+    color: #f00;
+}
+
+.errorwhite {
+    color: #fff;
+}
+
+
+.btn input[type=button]:hover, input[type=button].btn:hover, input[type=submit].btn:hover, a.btn:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+/* font sizes */
+.f12 {
+    font-size: 12px;
+}
+
+.f14 {
+    font-size: 14px;
+}
+
+.f15 {
+    font-size: 15px;
+}
+
+.f16 {
+    font-size: 16px;
+}
+
+.f18 {
+    font-size: 18px;
+}
+
+.f20 {
+    font-size: 20px;
+}
+
+.f22 {
+    font-size: 22px;
+}
+
+.f27 {
+    font-size: 27px;
+}
+
+.f30 {
+    font-size: 30px;
+}
+
+.f34 {
+    font-size: 34px;
+}
+
+.f42 {
+    font-size: 42px;
+}
+
+.ff_77 {
+    font-family: 'Helvetica 77 Cond Bold', Arial, Helvetica, sans-serif;
+}
+
+.ff_75 {
+    font-family: 'Neue Helvetica W1G 75 Bold', Arial, Helvetica, sans-serif;
+}
+
+.ff_65, .row.header, .row-.header {
+    font-family: 'Neue Helvetica W1G 65 Medium', Arial, Helvetica, sans-serif;
+}
+
+.ff_55 {
+    font-family: 'Neue Helvetica W1G 55 Roman', Arial, Helvetica, sans-serif;
+}
+
+.ff_45 {
+    font-family: 'Neue Helvetica W1G 45 Light', Arial, Helvetica, sans-serif;
+}
+
+/* pos */
+.top-10 {
+    top: -10px;
+}
+
+/* ul's */
+.ul {
+    list-style: none;
+}
+
+.ulDef li {
+    list-style-position: inside;
+}
+
+.ul1 li, #prodDesc .prodSum h2 + p + ul li {
+    background: url(../../../assets/images/page/ul1Icon.png) left 4px no-repeat;
+    padding-left: 20px;
+}
+
+.ul1VertCenter li {
+    background: url(../../../assets/images/page/ul1Icon.png) left center no-repeat;
+    padding-left: 20px;
+}
+
+.ul1VertTop li {
+    background: url(../../../assets/images/page/ul1Icon.png) left top no-repeat;
+    padding-left: 20px;
+}
+
+.ul_inline {
+    list-style: none;
+}
+
+    .ul_inline li {
+        display: inline;
+        float: left;
+    }
+
+/*.ul.links a {
+    text-decoration: underline;
+}*/
+
+.ul.links li {
+    float: left;
+    margin-bottom: .75em;
+    padding: .15em .25em;
+}
+
+.ul.columns li {
+    padding: 7px 5px;
+    border-bottom: dotted 1px #ddd;
+}
+
+    .ul.columns li label {
+        margin-bottom: 0;
+    }
+
+    .ul.columns li input[type="radio"], .ul.columns li input[type="checkbox"] {
+        float: left;
+        margin-right: 10px;
+        margin-top: 3px;
+    }
+
+/* Common Buttons */
+.btn {
+    font-size: 1em;
+    background: rgba(221,153,18,1);
+    color: #fff;
+    font-family: 'Neue Helvetica W1G 55 Roman';
+    /*border-radius: 4px;*/
+}
+
+    .btn.text {
+        background: none;
+        color: inherit;
+        padding-left: 0;
+    }
+
+.btnRound {
+    border-radius: 20px;
+    padding: 5px 10px;
+}
+
+.btnSocial_sml, .btnSocial_all_sml a {
+    border-radius: 20px;
+    padding: 5px 10px 4px 28px;
+    width: 107px;
+    height: 26px;
+    position: relative;
+    float: left;
+    margin-bottom: 10px;
+}
+
+.btnGrey, .btnSocial_all_sml a {
+    background: rgb(156,155,155);
+    color: #fff;
+}
+
+/* ul's */
+ul.liSelectRound {
+    min-height: 22px;
+}
+
+    ul.liSelectRound li span {
+        display: block;
+        width: 22px;
+        height: 22px;
+        border-radius: 11px;
+        box-shadow: 0 0 2px #999;
+    }
+
+    ul.liSelectRound li {
+        position: relative;
+        cursor: pointer;
+    }
+
+        ul.liSelectRound li.active:before {
+            content: "";
+            width: 28px;
+            height: 28px;
+            border: 1px solid #6c6c6c;
+            border-radius: 25px;
+            position: absolute;
+            left: -4px;
+            top: -4px;
+        }
+
+.z1 {
+    z-index: 1;
+}
+
+.imgFull img {
+    width: 100% !important;
+}
+
+/* border radius */
+.borR50px {
+    border-radius: 50px !important;
+}
+
+.borR5px {
+    border-radius: 5px !important;
+}
+
+.borBotSolidWhite, .row_borBotSolidWhite div.row {
+    border-bottom: solid 1px #fff;
+}
+
+.borBotDottedBlack, .row_borBotDottedBlack div.row {
+    border-bottom: dotted 1px #010206;
+}
+
+.borBotSolid_EEE {
+    border-bottom: solid 1px #eee;
+}
+
+.secBotBorder {
+    border-bottom: solid 5px #ccc
+}
+
+/* custom width's */
+.w35 {
+    width: 35px !important;
+}
+
+.w100 {
+    width: 100% !important;
+}
+
+/* Content Box */
+.contentBox {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+/* Ellipsis */
+.noWrap {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* Added for this project */
+.f- {
+    font-size: .9em;
+}
+
+.c_green, .c_green a {
+    /*color: rgba(114,191,68,1);*/
+    color: rgba(221,153,18,1);
+}
+
+    .c_green a:hover {
+        color: rgba(19,127,195,1);
+    }
+
+.bg_green {
+    background: rgba(114,191,68,1);
+}
+
+/* Margins */
+.marB1em {
+    margin-bottom: 1em;
+}
+
+.marB2em {
+    margin-bottom: 2em;
+}
+
+.marB3em {
+    margin-bottom: 3em;
+}
+
+._table {
+    display: table;
+    width: 100%;
+}
+
+    ._table ._td {
+        display: table-cell;
+        float: none;
+    }
+
+
+
+/* Responsive Css */
+@media only screen and (max-width: 972px) {
+    .md-marB2em {
+        margin-bottom: 2em;
+    }
+}
+
+.dateformat {
+    opacity: .75;
+}
+
+
+.btngreen {
+    -moz-user-select: none;
+    background: none repeat scroll 0 0 rgba(114, 191, 68, 1);
+    border-radius: 4px;
+    border: 1px solid transparent;
+    color: #fff;
+    font-family: 'Neue Helvetica W1G 55 Roman';
+    font-size: 1em;
+    cursor: pointer;
+}
+
+    .btngreen:hover {
+        background-color: #333;
+        color: #fff;
+    }
+/*added by bhavesh start*/
+.rtl {
+    direction: rtl;
+}
+/*added by bhavesh end*/
+
+/*added by bharat start*/
+.pointer {
+    cursor: pointer;
+}
+/*added by bharat end*/
+
