@@ -42,7 +42,26 @@
 			</div>
 		</div>
 
-		@await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");
+		<div class="modal fade" id="pmModalPopUp" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-left" style="width:95% !important">
+				<div class="modal-content shadow-lg border-0 rounded-3">
+					<!-- Header -->
+					<div class="modal-header bg-primary text-white">
+						
+						<h4 class="modal-title text-center" style="text-align:left; font-weight:bold" id="pmModalPopUpTitle">Share Drive</h4>
+					</div>
+
+					<!-- Body -->
+					<div class="modal-body text-center" id="divData">
+					</div>
+
+					<!-- Footer -->
+					<div class="modal-footer">
+						<button type="btn btn-danger" onclick="fn_CloseModal()" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
 </div>
 

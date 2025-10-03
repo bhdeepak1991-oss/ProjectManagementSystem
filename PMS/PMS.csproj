@@ -20,9 +20,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\UserManagement\ViewModels\" />
-    <Folder Include="Features\UserManagement\Services\" />
-  </ItemGroup>
-
 </Project>

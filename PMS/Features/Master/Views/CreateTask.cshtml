@@ -1,13 +1,13 @@
-﻿@model PMS.Domains.RoleMaster
+﻿@model PMS.Domains.TaskStatusMaster
 
 <div class="content-wrapper" style="min-height: 948px;">
 	<section class="content-header d-flex align-items-center justify-content-between">
 		<h1 class="m-0">
-			Create Role Informaion
-			<small>Role Master</small>
+			Create Task Status Informaion
+			<small>Task Status Information</small>
 		</h1>
-		<a class="btn btn-success" onclick="fn_RoleList()">
-			<i class="fa fa-list"></i> Role List
+		<a class="btn btn-success" onclick="fn_TaskStatusList()">
+			<i class="fa fa-list"></i> Task Status List
 		</a>
 	</section>
 
@@ -16,15 +16,15 @@
 			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-header">
-						<h3 class="box-title">Create Role</h3>
+						<h3 class="box-title">Create Department</h3>
 					</div>
 
-					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess" asp-action="UpsertRole" asp-controller="Master">
+					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess" asp-action="UpsertTask" asp-controller="Master">
 						<div class="box-body" style="height:500px !important">
 							<div class="row">
 								<div class="form-group col-md-6">
 									<input type="hidden" asp-for="Id"/>
-									<label class=" pull-left" asp-for="Name">Role Name</label>
+									<label class=" pull-left" asp-for="Name">Task Status Name</label>
 									<input class="form-control" asp-for="Name" placeholder="Please enter role name!">
 									<span asp-validation-for="Name" class="text-danger"></span>
 								</div>
@@ -43,15 +43,14 @@
 		</div>
 
 		@await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");
-	</section>
 </div>
 
 
 <script>
-	function fn_RoleList() {
+	function fn_TaskStatusList() {
 		$("#pmModalPopUp").modal('show');
-		$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Role List");
-		$.get('/features/Master/RoleList', function(resp){
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Status List");
+		$.get('/features/Master/TaskList', function(resp){
 			$("#divData").html(resp);
 		});
 	}

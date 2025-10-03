@@ -1,0 +1,107 @@
+﻿@model PMS.Domains.Employee
+
+<div class="content-wrapper" style="min-height: 948px;">
+	<section class="content-header d-flex align-items-center justify-content-between">
+		<h1 class="m-0">
+			Create Employee Informaion
+			<small>Employee Master</small>
+		</h1>
+		<a class="btn btn-success" onclick="fn_EmployeeList()">
+			<i class="fa fa-list"></i> Employee List
+		</a>
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">Create Employee</h3>
+					</div>
+
+					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+						  asp-action="CreateEmployeePost" asp-controller="UserManagement">
+						<div class="box-body" style="height:500px !important">
+							<div class="row">
+								<div class="form-group col-md-6">
+									<input type="hidden" asp-for="Id"/>
+									<label class=" pull-left" asp-for="Name">Employee Name</label>
+									<input class="form-control" asp-for="Name" placeholder="Please enter employee name!">
+									<span asp-validation-for="Name" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="EmployeeCode">Employee Code</label>
+									<input class="form-control" asp-for="EmployeeCode" placeholder="Please enter employee code">
+									<span asp-validation-for="EmployeeCode" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="EmailId">Employee Email</label>
+									<input class="form-control" asp-for="EmailId" placeholder="Please enter email Id">
+									<span asp-validation-for="EmailId" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="PhoneNumber">Employee Phone</label>
+									<input class="form-control" asp-for="PhoneNumber" placeholder="Please enter phone number">
+									<span asp-validation-for="PhoneNumber" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="DepartmentId">Select Department</label>
+									<select class="form-control" asp-items="ViewBag.Departments " asp-for="DepartmentId" placeholder="Please enter role description">
+										<option value="">--Select--</option>
+									</select>
+									<span asp-validation-for="DepartmentId" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="DesignationId">Select Designation</label>
+									<select class="form-control" asp-items="ViewBag.Designation" asp-for="DesignationId"
+									placeholder="Please enter role description">
+										<option value="">--Select--</option>
+								</select>
+									<span asp-validation-for="DesignationId" class="text-danger"></span>
+								</div>
+									<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="DateOfBirth">Date of Birth</label>
+									<input class="form-control" type="date" asp-for="DateOfBirth" placeholder="Please enter Date autofocus Birth">
+									<span asp-validation-for="DateOfBirth" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="DateOfJoining">Date of Joining</label>
+									<input class="form-control" type="date" asp-for="DateOfJoining" placeholder="Please enter Date of Joining">
+									<span asp-validation-for="DateOfJoining" class="text-danger"></span>
+								</div>
+							</div>
+
+							<button type="submit" class="btn btn-primary pull-right">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		@await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");	
+	</section>
+</div>
+
+
+<script>
+	function fn_EmployeeList() {
+		$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Employee List");
+		$.get('/features/UserManagement/GetEmployeeList', function(resp){
+			$("#divData").html(resp);
+		});
+	}
+	function fn_CloseModal() {
+		$("#pmModalPopUp").modal('hide');
+	}
+	function fn_OnBegin(){
+	}
+
+	function fn_OnSuccess(resp){
+		toastr.success("Saved successfully!");
+	}
+</script>
+
+
+
+

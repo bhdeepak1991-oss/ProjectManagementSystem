@@ -29,9 +29,10 @@
 			align-items: center; /* vertical alignment */
 			justify-content: space-between; /* spread left and right */
 		}
+
 			.content-header h1 {
 				margin: 0; /* remove default heading margin */
-		}
+			}
 		/* Slide in from left */
 		.modal.modal-left .modal-dialog {
 			position: fixed;
@@ -403,7 +404,10 @@
 							<i class="fa fa-angle-left pull-right"></i>
 						</a>
 						<ul class="treeview-menu">
-							<li><a href="pages/examples/invoice.html"><i class="fa fa-user"></i> User List</a></li>
+							<li><a asp-action="CreateRole" asp-controller="Master" ><i class="fa fa-user-shield"></i> Roles</a></li>
+							<li><a asp-action="CreateDepartment" asp-controller="Master"><i class="fa fa-sitemap"></i> Departments</a></li>
+							<li><a asp-action="CreateDesignation" asp-controller="Master"><i class="fa fa-user-tie"></i> Designations</a></li>
+							<li><a asp-action="CreateTask" asp-controller="Master"><i class="fa fa-check-circle"></i> Task Status</a></li>
 						</ul>
 					</li>
 

@@ -1,13 +1,13 @@
-﻿@model PMS.Domains.RoleMaster
+﻿@model PMS.Domains.DesignationMaster
 
 <div class="content-wrapper" style="min-height: 948px;">
 	<section class="content-header d-flex align-items-center justify-content-between">
 		<h1 class="m-0">
-			Create Role Informaion
-			<small>Role Master</small>
+			Create Designation Master
+			<small>Designation Master</small>
 		</h1>
-		<a class="btn btn-success" onclick="fn_RoleList()">
-			<i class="fa fa-list"></i> Role List
+		<a class="btn btn-success" onclick="fn_Designation()">
+			<i class="fa fa-list"></i> DesignationList
 		</a>
 	</section>
 
@@ -16,21 +16,28 @@
 			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-header">
-						<h3 class="box-title">Create Role</h3>
+						<h3 class="box-title">Create Designation</h3>
 					</div>
 
-					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess" asp-action="UpsertRole" asp-controller="Master">
+					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess" asp-action="UpsertDesignation" asp-controller="Master">
 						<div class="box-body" style="height:500px !important">
 							<div class="row">
 								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="DepartmentId">Select Department</label>
+									<select class="form-control" asp-for="DepartmentId" asp-items="ViewBag.DepartmentList" placeholder="Please enter role description">
+										<option value="">--Select ---</option>
+									</select>
+									<span asp-validation-for="DepartmentId" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
 									<input type="hidden" asp-for="Id"/>
-									<label class=" pull-left" asp-for="Name">Role Name</label>
-									<input class="form-control" asp-for="Name" placeholder="Please enter role name!">
+									<label class=" pull-left" asp-for="Name">Designation Name</label>
+									<input class="form-control" asp-for="Name" placeholder="Please enter Designation name!">
 									<span asp-validation-for="Name" class="text-danger"></span>
 								</div>
 								<div class="form-group col-md-6">
 									<label class=" pull-left" asp-for="Description">Description</label>
-									<input class="form-control" asp-for="Description" placeholder="Please enter role description">
+									<input class="form-control" asp-for="Description" placeholder="Please enter description">
 									<span asp-validation-for="Description" class="text-danger"></span>
 								</div>
 							</div>
@@ -48,10 +55,10 @@
 
 
 <script>
-	function fn_RoleList() {
+	function fn_Designation() {
 		$("#pmModalPopUp").modal('show');
-		$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Role List");
-		$.get('/features/Master/RoleList', function(resp){
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Designation List");
+		$.get('/features/Master/DeasignationList', function(resp){
 			$("#divData").html(resp);
 		});
 	}

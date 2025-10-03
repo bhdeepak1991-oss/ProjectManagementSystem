@@ -1,0 +1,89 @@
+﻿@model PMS.Domains.TaskStatusMaster
+
+<div class="content-wrapper" style="min-height: 948px;">
+	<section class="content-header d-flex align-items-center justify-content-between">
+		<h1 class="m-0">
+			Create Task Status Informaion
+			<small>Task Status Information</small>
+		</h1>
+		<a class="btn btn-success" onclick="fn_TaskStatusList()">
+			<i class="fa fa-list"></i> Task Status List
+		</a>
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">Create Department</h3>
+					</div>
+
+					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess" asp-action="UpsertTask" asp-controller="Master">
+						<div class="box-body" style="height:500px !important">
+							<div class="row">
+								<div class="form-group col-md-6">
+									<input type="hidden" asp-for="Id"/>
+									<label class=" pull-left" asp-for="Name">Task Status Name</label>
+									<input class="form-control" asp-for="Name" placeholder="Please enter role name!">
+									<span asp-validation-for="Name" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="Description">Description</label>
+									<input class="form-control" asp-for="Description" placeholder="Please enter role description">
+									<span asp-validation-for="Description" class="text-danger"></span>
+								</div>
+							</div>
+
+							<button type="submit" class="btn btn-primary pull-right">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="pmModalPopUp" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-left" style="width:95% !important">
+				<div class="modal-content shadow-lg border-0 rounded-3">
+					<!-- Header -->
+					<div class="modal-header bg-primary text-white">
+						<h4 class="modal-title text-center" style="text-align:left; font-weight:bold" id="pmModalPopUpTitle">Share Drive</h4>
+					</div>
+
+					<!-- Body -->
+					<div class="modal-body text-center" id="divData">
+					</div>
+
+					<!-- Footer -->
+					<div class="modal-footer">
+						<button type="btn btn-danger" onclick="fn_CloseModal()" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+
+<script>
+	function fn_TaskStatusList() {
+		$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Status List");
+		$.get('/features/Master/TaskList', function(resp){
+			$("#divData").html(resp);
+		});
+	}
+	function fn_CloseModal() {
+		$("#pmModalPopUp").modal('hide');
+	}
+	function fn_OnBegin(){
+	}
+
+	function fn_OnSuccess(resp){
+		toastr.success("Saved successfully!");
+	}
+</script>
+
+
+
+
