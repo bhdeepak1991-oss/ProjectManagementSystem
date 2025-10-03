@@ -29,7 +29,7 @@
 								<td>@item.DateOfJoining</td>
 								<td>@item.DateOfBirth</td>
 								<td>
-									<a asp-action="CreateDepartment" asp-route-id="@item.Id" asp-controller="Master" class="btn btn-success" title="Edit">
+									<a asp-action="CreateEmployee" asp-route-empId="@item.Id" asp-controller="UserManagement" class="btn btn-success" title="Edit">
 										<i class="fa fa-edit"></i>
 									</a>
 									<a href="#" class="btn btn-danger" title="Delete" onclick="confirmDelete('@item.Id')">
@@ -66,9 +66,10 @@
 			cancelText: 'No, keep it'
 		}).then((result) => {
 			if (result.isConfirmed) {
-				$.get('/Features/Master/DeleteRole', {id:id},function(resp){
+				$.get('/Features/UserManagement/DeleteEmployee', {id:id},function(resp){
 					toastr.success("Deleted successfully!");
-					fn_RoleList();
+					fn_EmployeeList();
+					hideLoader();
 				});
 			}
 		});

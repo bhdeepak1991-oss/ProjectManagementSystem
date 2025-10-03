@@ -30,4 +30,12 @@ public partial class Project
     public int? UpdatedBy { get; set; }
 
     public DateTime? UpdatedDate { get; set; }
+
+    public string? VersionControlURL { get; set; }
+    public string? DevelopmentUIURL { get; set; }
+    public string? QAUIURL { get; set; }
+    public string? ProductionURL { get; set; }
+
+    public string? ProjectStatus { get; set; }
+    public string? Reason { get; set; }
 }

@@ -61,6 +61,7 @@
 				$.get('/Features/Master/DeleteRole', {id:id},function(resp){
 					toastr.success("Deleted successfully!");
 					fn_RoleList();
+						hideLoader();
 				});
 			}
 		});

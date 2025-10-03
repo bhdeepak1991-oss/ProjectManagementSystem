@@ -1,0 +1,166 @@
+﻿@model PMS.Domains.Project
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+
+<div class="content-wrapper" style="min-height: 948px;">
+	<section class="content-header d-flex align-items-center justify-content-between">
+		<h1 class="m-0">
+			Create Project
+			<small>Project Information</small>
+		</h1>
+		<a class="btn btn-success" onclick="fn_ProjectList()">
+			<i class="fa fa-list"></i> Project List
+		</a>
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">Create Project</h3>
+					</div>
+
+					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+						  asp-action="CreateProject" asp-controller="Project">
+						<div class="box-body" style="height:900px !important">
+							<div class="row">
+								<div class="form-group col-md-6">
+									<input type="hidden" asp-for="Id" />
+									<label class=" pull-left" asp-for="Name">Project Name</label>
+									<input class="form-control" asp-for="Name" placeholder="Please enter project name!">
+									<span asp-validation-for="Name" class="text-danger"></span>
+								</div>
+
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="ProjectStartDate">Project Start Date</label>
+									<input type="date" class="form-control" asp-for="ProjectStartDate" placeholder="Please enter project start date">
+									<span asp-validation-for="ProjectStartDate" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="ProjectEndDate">Project End Date</label>
+									<input type="date" class="form-control" asp-for="ProjectEndDate" placeholder="Please enter project end date">
+									<span asp-validation-for="ProjectEndDate" class="text-danger"></span>
+								</div>
+
+								
+
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="VersionControlURL">Version Control URL</label>
+									<input class="form-control" asp-for="VersionControlURL" placeholder="Please enter project version control">
+									<span asp-validation-for="VersionControlURL" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="DevelopmentUIURL">Development (URL)</label>
+									<input class="form-control" asp-for="DevelopmentUIURL" placeholder="Please enter Development Url">
+									<span asp-validation-for="DevelopmentUIURL" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="QAUIURL">QA (URL)</label>
+									<input class="form-control" asp-for="QAUIURL" placeholder="Please enter QA Url">
+									<span asp-validation-for="QAUIURL" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="ProductionURL">Production (URL)</label>
+									<input class="form-control" asp-for="ProductionURL" placeholder="Please enter Production url">
+									<span asp-validation-for="ProductionURL" class="text-danger"></span>
+								</div>
+
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="ProjectHead">Project Head</label>
+									<select class="form-control select2" asp-for="ProjectHead" placeholder="Please enter project head"
+											asp-items="ViewBag.Employee">
+										<option value="">--select--</option>
+									</select>
+									<span asp-validation-for="ProjectHead" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="DeliveryHead">Delivery Head</label>
+									<select class="form-control select2" asp-for="DeliveryHead" placeholder="Please enter Delivery Head" asp-items="ViewBag.Employee">
+										<option value="">--select--</option>
+									</select>
+									<span asp-validation-for="DeliveryHead" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="ProjectManager">Project Manager</label>
+									<select class="form-control select2" asp-for="ProjectManager" placeholder="Please enter project manager" asp-items="ViewBag.Employee">
+										<option value="">--select--</option>
+									</select>
+									<span asp-validation-for="ProjectManager" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-12">
+									<label class=" pull-left" asp-for="Description">Project Details</label>
+									<br />
+									<br />
+									<textarea class="form-control" asp-for="Description" id="editor1" placeholder="Please enter project details"></textarea>
+
+									<span asp-validation-for="Description" class="text-danger"></span>
+								</div>
+							</div>
+
+							<button type="submit" class="btn btn-primary pull-right">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		@await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml")
+	</section>
+</div>
+
+
+<script>
+	// Show employee list in modal
+	function fn_ProjectList() {
+		$("#pmModalPopUp").modal('show');
+		$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Project List List");
+
+		$.get('/features/Project/GetProjectList', function (resp) {
+			$("#divData").html(resp);
+		});
+	}
+
+	// Close the modal
+	function fn_CloseModal() {
+		$("#pmModalPopUp").modal('hide');
+	}
+
+	function fn_OnBegin() {
+		// Optional: show loader or disable button
+	}
+
+	function fn_OnSuccess(resp) {
+		toastr.success("Saved successfully!");
+	}
+
+	// Document ready
+	$(document).ready(function () {
+		// Initialize CKEditor
+		if (document.getElementById('editor1')) {
+			CKEDITOR.replace('editor1', {
+				height: 200,
+				toolbar: 'Full'
+			});
+		}
+
+		// Update CKEditor content before form submit (AJAX forms)
+		$('form[data-ajax="true"]').on('submit', function () {
+			for (var instance in CKEDITOR.instances) {
+				CKEDITOR.instances[instance].updateElement();
+			}
+		});
+
+		// Initialize Select2
+		$('.select2').select2({
+			placeholder: "Please enter project manager",
+			allowClear: true
+		});
+	});
+</script>
+
+
+
+
+

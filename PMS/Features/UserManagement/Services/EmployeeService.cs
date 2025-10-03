@@ -43,6 +43,7 @@ namespace PMS.Features.UserManagement.Services
 
             var responseModels = employeeModels.empModels.ToList().Select(emp => new EmployeeViewModel()
             {
+                Id=emp.Id,
                 Name = emp.Name,
                 DepartmentName = departmentModels.model.FirstOrDefault(x => x.Id == emp.DepartmentId)?.Name ?? string.Empty,
                 DesignationName = designationModels.model.FirstOrDefault(x => x.Id == emp.DesignationId)?.Name ?? string.Empty,

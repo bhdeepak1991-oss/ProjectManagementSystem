@@ -37,9 +37,16 @@ namespace PMS.Features.UserManagement
         [HttpPost]
         public async Task<IActionResult> CreateEmployeePost(Employee model)
         {
-            var response = await _employeeService.CreateEmployee(model);
+            if (model.Id == 0)
+            {
+                var response = await _employeeService.CreateEmployee(model);
 
-            return Json(response);
+                return Json(response);
+            }
+
+            var updateResponse = await _employeeService.UpdateEmployee(model);
+
+            return Json(updateResponse);
         }
 
         public async Task<IActionResult> GetEmployeeList()
@@ -47,6 +54,12 @@ namespace PMS.Features.UserManagement
             var response = await _employeeService.GetEmployees(default);
 
             return PartialView("~/Features/UserManagement/Views/EmployeeList.cshtml", response.models);
+        }
+
+        public async Task<IActionResult> DeleteEmployee(int id)
+        {
+            var response = await _employeeService.DeleteEmployee(id);
+            return Json(response);
         }
     }
 }

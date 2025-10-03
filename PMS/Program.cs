@@ -5,11 +5,14 @@ using PMS.Domains;
 using PMS.Extensions;
 using PMS.Features.Master.Validators;
 using PMS.Helpers;
+using PMS.Notification;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<FeatureRouteTransformer>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<PmsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -44,6 +47,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.MapDynamicControllerRoute<FeatureRouteTransformer>(
     "Features/{featureName}/{action=Index}/{id?}");

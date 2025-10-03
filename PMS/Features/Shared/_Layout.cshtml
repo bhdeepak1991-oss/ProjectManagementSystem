@@ -213,44 +213,20 @@
 						<li class="dropdown notifications-menu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<i class="fa fa-bell-o"></i>
-								<span class="label label-warning">10</span>
+								<span class="label label-warning" id="notificationCount">0</span>
 							</a>
 							<ul class="dropdown-menu">
-								<li class="header">You have 10 notifications</li>
+								<li class="header" id="notificationHeader">You have 0 notifications</li>
 								<li>
 									<!-- inner menu: contains the actual data -->
-									<ul class="menu">
-										<li>
-											<a href="#">
-												<i class="fa fa-users text-aqua"></i> 5 new members joined today
-											</a>
-										</li>
-										<li>
-											<a href="#">
-												<i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the page and may cause design problems
-											</a>
-										</li>
-										<li>
-											<a href="#">
-												<i class="fa fa-users text-red"></i> 5 new members joined
-											</a>
-										</li>
-
-										<li>
-											<a href="#">
-												<i class="fa fa-shopping-cart text-green"></i> 25 sales made
-											</a>
-										</li>
-										<li>
-											<a href="#">
-												<i class="fa fa-user text-red"></i> You changed your username
-											</a>
-										</li>
+									<ul class="menu" id="notificationList">
+										<!-- Dynamic notifications will be added here -->
 									</ul>
 								</li>
 								<li class="footer"><a href="#">View all</a></li>
 							</ul>
 						</li>
+
 						<!-- Tasks: style can be found in dropdown.less -->
 						<li class="dropdown tasks-menu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -456,8 +432,55 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 	<!-- Your custom scripts should come LAST -->
 	<script src="~/pmsjs/custom.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+	<script>
+		const connection = new signalR.HubConnectionBuilder()
+			.withUrl("/notificationHub")
+			.build();
+
+		// 🔔 Status Changed
+		connection.on("ReceiveProjectStatusUpdate", function (projectId, newStatus) {
+			showNotification(`Project #${projectId} status changed to: ${newStatus}`, 'fa-tasks', 'text-blue');
+		});
+
+		// 🆕 Project Created
+		connection.on("ProjectCreated", function (projectId, name) {
+			showNotification(`New project created: ${name} (#${projectId})`, 'fa-plus', 'text-green');
+		});
+
+		// ⚠️ Project Deleted
+		connection.on("ProjectDeleted", function (projectId) {
+			showNotification(`Project #${projectId} has been deleted.`, 'fa-trash', 'text-red');
+		});
+
+		// Shared function to add to bell dropdown
+		function showNotification(message, icon, color) {
+			const itemHtml = `
+				<li>
+					<a href="#">
+						<i class="fa ${icon} ${color}"></i> ${message}
+					</a>
+				</li>`;
+
+			$('#notificationList').prepend(itemHtml);
+
+			// Update count
+			let count = parseInt($('#notificationCount').text()) || 0;
+			count++;
+			$('#notificationCount').text(count);
+			$('#notificationHeader').text(`You have ${count} notification${count !== 1 ? 's' : ''}`);
+		}
+
+		connection.start().catch(function (err) {
+			console.error(err.toString());
+		});
+
+	</script>
 
 
 </body>
