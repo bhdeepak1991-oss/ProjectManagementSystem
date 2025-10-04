@@ -1,0 +1,97 @@
+﻿
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+
+<div class="content-wrapper" style="min-height: 948px;">
+	<section class="content-header d-flex align-items-center justify-content-between">
+		<h1 class="m-0">
+			Mapped Employee To Project
+			<small>Employee Mapped to Project</small>
+		</h1>
+		<a class="btn btn-success" onclick="fn_ProjectList()">
+			<i class="fa fa-list"></i> Employee Mapped with Project
+		</a>
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">Project Employee Mapping</h3>
+					</div>
+
+					<div class="box-body" style="height:900px !important">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label class=" pull-left">Select Project</label>
+								<select class="form-control select2" id="ddlProject" onchange="fn_mappedEmployee()" placeholder="Please enter project name!" asp-items="ViewBag.ProjectDetails">
+									<option value="">--Select Project--</option>
+								</select>
+							</div>
+						</div>
+
+						<div id="divDataMapped"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		@await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml")
+	</section>
+</div>
+
+
+<script>
+	var selectedValue = 0;
+
+	// Show employee list in modal
+	function fn_ProjectList() {
+		if (selectedValue == 0) {
+			toastr.success("Please select a project to map employees!");
+		} else {
+			$.get('/features/ProjectEmployee/UnMappedEmployee', { projectId: selectedValue }, function (resp) {
+				$("#divData").html(resp);
+				$("#pmModalPopUp").modal('show');
+				$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Unmapped Employees for Project (" + selectedValue + ")");
+			});
+		}
+	}
+
+	// Close the modal
+	function fn_CloseModal() {
+		$("#pmModalPopUp").modal('hide');
+	}
+
+	function fn_OnBegin() {
+		// Optional: show loader or disable button
+	}
+
+	function fn_OnSuccess(resp) {
+		toastr.success("Saved successfully!");
+	}
+
+	// Document ready
+	$(document).ready(function () {
+		// Initialize Select2 dropdown
+		$('.select2').select2({
+			placeholder: "Please enter project manager",
+			allowClear: true
+		});
+	});
+
+	// Fetch mapped employees
+	function fn_mappedEmployee() {
+		selectedValue = $("#ddlProject").val();
+
+		$.get('/features/ProjectEmployee/MappedEmployee', { projectId: selectedValue }, function (resp) {
+			$("#divDataMapped").html(resp);
+		});
+	}
+</script>
+
+
+
+
+
+

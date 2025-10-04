@@ -31,10 +31,10 @@ public partial class Project
 
     public DateTime? UpdatedDate { get; set; }
 
-    public string? VersionControlURL { get; set; }
-    public string? DevelopmentUIURL { get; set; }
-    public string? QAUIURL { get; set; }
-    public string? ProductionURL { get; set; }
+    public string? ClientName { get; set; }
+    public string? ClientContactNumber { get; set; }
+    public string? ClientContactPerson { get; set; }
+    public string? ClientUrl { get; set; }
 
     public string? ProjectStatus { get; set; }
     public string? Reason { get; set; }

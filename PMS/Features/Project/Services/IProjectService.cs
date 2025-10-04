@@ -11,5 +11,7 @@ namespace PMS.Features.Project.Services
         Task<(string message, bool isSuccess, Domains.Project? model)> GetProjectById(int project, CancellationToken cancellationToken);
 
         Task<(string message, bool isSuccess, string content)> GetProjectDetail(int projectId);
+
+        Task<(string message, bool isSuccess)> UpdateProjectStatus(int id, string reason, string status);
     }
 }

@@ -50,11 +50,13 @@ namespace PMS.Features.Project.Services
                 ProjectManager= empModels.empModels.FirstOrDefault(x=>x.Id== proj.ProjectManager)?.Name ?? string.Empty,
                 DeliveryHead= empModels.empModels.FirstOrDefault(x=>x.Id== proj.DeliveryHead)?.Name ?? string.Empty,
                 ProjectHead= empModels.empModels.FirstOrDefault(x=>x.Id== proj.ProjectHead)?.Name ?? string.Empty,
-                DevelopmentUIURL= proj.DevelopmentUIURL,
-                QAUIURL= proj.QAUIURL,
-                ProductionURL= proj.ProductionURL,
-                VersionControlURL= proj.VersionControlURL,
-                EmployeeCount=0 // Todo
+                ClientUrl= proj.ClientUrl,
+                ClientContactNumber= proj.ClientContactNumber,
+                ClientContactPerson= proj.ClientContactPerson,
+                ClientName= proj.ClientName,
+                ProjectStatus= proj.ProjectStatus,
+                Reason= proj.Reason,
+                EmployeeCount =0 // Todo
             }).ToList();
 
             return ("Project Detail fetched", true, responseModel);
@@ -63,6 +65,11 @@ namespace PMS.Features.Project.Services
         public async  Task<(string message, bool isSuccess)> UpdateProject(Domains.Project model, CancellationToken cancellationToken)
         {
             return await _projectRepository.UpdateProject(model, cancellationToken);
+        }
+
+        public async Task<(string message, bool isSuccess)> UpdateProjectStatus(int id, string reason, string status)
+        {
+            return await _projectRepository.UpdateProjectStatus(id, reason, status);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using PMS.Features.Master.Services;
 using PMS.Features.Project.Services;
+using PMS.Features.ProjectEmployee.Services;
 using PMS.Features.UserManagement.Services;
 
 namespace PMS.Extensions
@@ -19,6 +20,8 @@ namespace PMS.Extensions
             services.AddScoped<IEmployeeService, EmployeeService>();
 
             services.AddScoped<IProjectService, ProjectService>();
+
+            services.AddScoped<IProjectEmployeeServices, ProjectEmployeeServices>();
 
             return services;
         }

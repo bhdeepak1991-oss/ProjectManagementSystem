@@ -102,9 +102,10 @@ namespace PMS.Features.Project
             return File(pdf, "application/pdf", $"{dbModel.model.Name}.pdf");
         }
 
-        public async Task<IActionResult> UpdateProjectStatus(int id, string reason)
+        public async Task<IActionResult> UpdateProjectStatus(int id, string reason, string status)
         {
-
+            var response = await _projectService.UpdateProjectStatus(id, reason, status);
+            return Json(response);
         }
     }
 }

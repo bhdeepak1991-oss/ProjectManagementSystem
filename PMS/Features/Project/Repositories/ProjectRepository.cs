@@ -92,6 +92,7 @@ namespace PMS.Features.Project.Repositories
             var dbModel = await _dbContext.Projects.FindAsync(id);
 
             dbModel.ProjectStatus = status;
+
             dbModel.Reason = reason;
 
             _dbContext.Projects.Update(dbModel);

@@ -10,6 +10,6 @@ namespace PMS.Features.Project.Repositories
         Task<(string message, bool isSuccess, Domains.Project? model)> GetProjectById(int projectId, CancellationToken cancellationToken);
         Task<(string message, bool isSuccess, IEnumerable<Domains.Project> models)> GetProjectList(CancellationToken cancellationToken);
         Task<(string message, bool isSuccess, string content)> GetProjectDetail(int projectId);
-        Task<(string message, bool isSuccess)> UpdateProjectStatus(int id, string reason);
+        Task<(string message, bool isSuccess)> UpdateProjectStatus(int id, string reason, string status);
     }
 }

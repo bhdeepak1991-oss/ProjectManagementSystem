@@ -1,0 +1,88 @@
+﻿@model IEnumerable<PMS.Features.UserManagement.ViewModels.EmployeeViewModel>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-body">
+				<table id="documentTable" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Emp Code</th>
+							<th>Email</th>
+							<th>Department Name</th>
+							<th>Designation </th>
+							<th>Action</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<td>@item.Name</td>
+								<td>@item.EmployeeCode</td>
+								<td>@item.EmailId</td>
+								<td>@item.DepartmentName</td>
+								<td>@item.DesignationName</td>
+
+								<td>
+									<button onclick="ConfirmMapped('@item.Id')" class="btn btn-success">
+										<i class="fa fa-plus">Add Employee</i>
+									</button>
+								</td>
+
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+
+	var projectId=0
+	var status=''
+
+	$(document).ready(function () {
+		$('#documentTable').DataTable({
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			"autoWidth": false,
+			"responsive": true,
+			"scrollY": "450px",
+		   "scrollCollapse": true
+		});
+	});
+
+		function ConfirmMapped(id) {
+		confirmAction({
+			title: 'Mapped Employee To Project',
+			text: 'Are you sure you want to Add Employee To project?',
+			confirmText: 'Yes, add it!',
+			cancelText: 'No, keep it'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.get('/Features/ProjectEmployee/MappedUnMappedEmployee', {empId:id,isMapped:true},function(resp){
+					toastr.success("Employee removed from project!");
+					fn_ProjectList();
+					fn_mappedEmployee();
+					hideLoader();
+				});
+			}
+		});
+	}
+	
+</script>
+
+
+
+
+

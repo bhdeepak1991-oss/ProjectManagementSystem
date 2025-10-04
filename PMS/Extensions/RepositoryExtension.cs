@@ -1,5 +1,6 @@
 ﻿using PMS.Features.Master.Respositories;
 using PMS.Features.Project.Repositories;
+using PMS.Features.ProjectEmployee.Repositories;
 using PMS.Features.UserManagement.Respositories;
 
 namespace PMS.Extensions
@@ -19,6 +20,8 @@ namespace PMS.Extensions
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             services.AddScoped<IProjectRepository, ProjectRepository>();
+
+            services.AddScoped<IProjectEmployeeRepository, ProjectEmployeeRepository>();
 
             return services;
         }

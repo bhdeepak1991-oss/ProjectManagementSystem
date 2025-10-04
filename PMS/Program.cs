@@ -20,6 +20,14 @@ builder.Services.AddDbContext<PmsDbContext>(options =>
 builder.Services.AddControllersWithViews()
     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RoleValidator>());
 
+builder.Services.AddDistributedMemoryCache(); // Required
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Optional
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddFluentValidationAutoValidation(); 
 builder.Services.AddFluentValidationClientsideAdapters();
 
@@ -39,10 +47,10 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
+app.UseSession();
+
 app.UseStaticFiles();
-
-
-
 
 app.UseRouting();
 
