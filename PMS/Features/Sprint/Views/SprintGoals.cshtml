@@ -1,0 +1,101 @@
+﻿
+<style>
+	@@media (max-width: 576px) {
+		.content {
+			padding: 10px;
+		}
+
+		.box {
+			padding: 15px;
+		}
+
+		.box-title {
+			font-size: 18px;
+		}
+	}
+
+	/* Base layout styles */
+	.content {
+		padding: 20px;
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		background-color: #f8f9fa;
+	}
+
+	/* Responsive row/column */
+	.row {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0 -15px;
+	}
+
+	.col-xs-12 {
+		flex: 0 0 100%;
+		max-width: 100%;
+		padding: 0 15px;
+	}
+
+	/* Box styles */
+	.box {
+		background-color: #fff;
+		border: 1px solid #dee2e6;
+		border-radius: 8px;
+		padding: 20px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		transition: box-shadow 0.3s ease;
+	}
+
+		.box:hover {
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+		}
+
+	/* Header styles */
+	.box-header {
+		border-bottom: 1px solid #dee2e6;
+		margin-bottom: 15px;
+		padding-bottom: 10px;
+	}
+
+	.box-title {
+		font-size: 22px;
+		font-weight: 600;
+		color: #343a40;
+		margin: 0;
+	}
+
+
+</style>
+
+<div class="content-wrapper" style="min-height: 948px;">
+	<section class="content-header d-flex align-items-center justify-content-between">
+		<h1 class="m-0">
+			Sprint Goals
+			<small>Project Sprint</small>
+		</h1>
+	
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">Goal Details</h3>
+					</div>
+
+					<div>
+						@Html.Raw(ViewBag.goals)
+					</div>
+					
+				</div>
+			</div>
+		</div>
+
+	</section>
+</div>
+
+
+
+
+
+
+

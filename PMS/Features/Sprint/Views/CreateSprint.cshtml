@@ -1,0 +1,131 @@
+﻿@model PMS.Domains.Sprint
+
+<div class="content-wrapper" style="min-height: 948px;">
+	<section class="content-header d-flex align-items-center justify-content-between">
+		<h1 class="m-0">
+			Create Sprint Informaion
+			<small>Project Sprint</small>
+		</h1>
+		<a class="btn btn-success" onclick="fn_EmployeeList()">
+			<i class="fa fa-list"></i> Sprint List
+		</a>
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">Create Sprint</h3>
+					</div>
+
+					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+						  asp-action="CreateSprint" asp-controller="Sprint">
+						<div class="box-body" style="height:900px !important">
+							<div class="row">
+								<div class="form-group col-md-6">
+									<input type="hidden" asp-for="Id"/>
+									<label class=" pull-left" asp-for="SprintName">Sprint Name</label>
+									<input class="form-control" asp-for="SprintName" placeholder="Please enter sprint name!">
+									<span asp-validation-for="SprintName" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="StartDate">Start Date</label>
+									<input class="form-control" type="date" asp-for="StartDate" placeholder="Please enter start date">
+									<span asp-validation-for="StartDate" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="EndDate">End Date</label>
+									<input class="form-control" type="date" asp-for="EndDate" placeholder="Please enter end date">
+									<span asp-validation-for="EndDate" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="DemoDate">Sprint Demo Date</label>
+									<input class="form-control" type="date" asp-for="DemoDate" placeholder="Please enter demo date">
+									<span asp-validation-for="DemoDate" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="DepartmentId">Select Department</label>
+									<select class="form-control select2" asp-items="ViewBag.Departments" asp-for="DepartmentId" placeholder="Please select department">
+										<option value="">--Select--</option>
+									</select>
+									<span asp-validation-for="DepartmentId" class="text-danger"></span>
+								</div>
+									<div class="form-group col-md-12">
+									<label class=" pull-left" asp-for="SprintGoal">Sprint Goal</label>
+									<br/>
+									<textarea class="form-control" id="editor1" asp-for="SprintGoal" placeholder="Please enter Date autofocus Birth"></textarea>
+									<span asp-validation-for="SprintGoal" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-12">
+									<label class=" pull-left" asp-for="BusinessGoal">Business Goal</label>
+									<br />
+									<textarea class="form-control" id="editor2" type="date" asp-for="BusinessGoal" placeholder="Please enter Date of Joining"></textarea>
+									<span asp-validation-for="BusinessGoal" class="text-danger"></span>
+								</div>
+							</div>
+
+							<button type="submit" class="btn btn-primary pull-right">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		@await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");	
+	</section>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+
+<script>
+	function fn_EmployeeList() {
+	
+		$.get('/features/Sprint/SprintList', function(resp){
+			$("#divData").html(resp);
+			$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Sprint List");
+		});
+	}
+	function fn_CloseModal() {
+		$("#pmModalPopUp").modal('hide');
+	}
+	function fn_OnBegin(){
+	}
+
+	function fn_OnSuccess(resp){
+		toastr.success("Saved successfully!");
+	}
+
+		$(document).ready(function () {
+		// Initialize CKEditor
+		if (document.getElementById('editor1')) {
+			CKEDITOR.replace('editor1', {
+				height: 150,
+				toolbar: 'Full'
+			});
+
+			CKEDITOR.replace('editor2', {
+				height: 150,
+				toolbar: 'Full'
+			});
+		}
+
+		// Update CKEditor content before form submit (AJAX forms)
+		$('form[data-ajax="true"]').on('submit', function () {
+			for (var instance in CKEDITOR.instances) {
+				CKEDITOR.instances[instance].updateElement();
+			}
+		});
+
+		// Initialize Select2
+		$('.select2').select2({
+			placeholder: "Please enter project manager",
+			allowClear: true
+		});
+	});
+</script>
+
+
+
+

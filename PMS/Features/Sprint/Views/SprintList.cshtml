@@ -1,0 +1,140 @@
+﻿@model IEnumerable<PMS.Features.Sprint.ViewModels.SprintViewModel>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-body">
+				<table id="documentTable" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>Sprint Name</th>
+							<th>Start Date</th>
+							<th>End Date</th>
+							<th>Department Name</th>
+							<th>Demo Date </th>
+							<th>Details</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<td>@item.SprintName</td>
+								<td>@item.StartDate?.ToString("yyyy-MM-dd")</td>
+								<td>@item.EndDate?.ToString("yyyy-MM-dd")</td>
+								<td>@item.DepartmentName</td>
+								<td>@item.DemoDate?.ToString("yyyy-MM-dd")</td>
+								<td>
+									<a onclick="fn_BusinessGoal('@item.Id')" class="btn btn-success" title="Edit">
+										<i class="fa fa-eye"> Business Goal</i>
+									</a>
+									<a  onclick="fn_SprintGoal('@item.Id')" class="btn btn-success" title="Edit">
+										<i class="fa fa-eye"> Sprint Goal</i>
+									</a>
+								</td>
+								<td>
+									<a asp-action="CreateSprint" asp-route-id="@item.Id" asp-controller="Sprint" class="btn btn-success" title="Edit">
+										<i class="fa fa-edit"></i>
+									</a>
+									<a href="#" class="btn btn-danger" title="Delete" onclick="confirmDelete('@item.Id')">
+										<i class="fa fa-trash"></i>
+									</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="pmModalPopUpGoal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-left" style="width:95% !important">
+		<div class="modal-content shadow-lg border-0 rounded-3">
+
+			<!-- Header -->
+			<div class="modal-header bg-primary text-white" style="position:relative;">
+				<h4 class="modal-title text-center" style="text-align:left; font-weight:bold" id="pmModalPopUpTitle">Share Drive</h4>
+				<button type="button" data-bs-dismiss="modal" aria-label="Close" onclick="fn_CloseModal()"
+						style="position:absolute;
+                 top:10px;
+                 right:10px;
+                 width:30px;
+                 height:30px;
+                 border-radius:50%;
+                 background-color:white;
+                 color:black;
+                 font-size:20px;
+                 font-weight:bold;
+                 border:none;
+                 cursor:pointer;">
+					×
+				</button>
+			</div>
+
+			<!-- Body with fixed height and scroll -->
+			<div class="modal-body text-center" id="divData" style="max-height:500px; overflow-y:auto;">
+				<!-- Your dynamic content will appear here -->
+			</div>
+
+			<!-- Footer -->
+			<div class="modal-footer">
+				<button type="button" onclick="fn_CloseModal()" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function () {
+		$('#documentTable').DataTable({
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			"autoWidth": false,
+			"responsive": true
+		});
+	});
+
+	function confirmDelete(id) {
+		confirmAction({
+			title: 'Delete Record',
+			text: 'Are you sure you want to delete this records?',
+			confirmText: 'Yes, delete it!',
+			cancelText: 'No, keep it'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.get('/Features/Sprint/DeleteEmployee', {id:id},function(resp){
+					toastr.success("Deleted successfully!");
+					fn_EmployeeList();
+					hideLoader();
+				});
+			}
+		});
+	}
+
+	function fn_BusinessGoal(id){
+		$.get('/Sprint/GetGoals', {id:id, type: 'Business'}, function(resp){
+			$("#divData").html(resp);
+			$("#pmModalPopUpGoal").modal('show')
+		})
+	}
+
+	function fn_SprintGoal(id){
+		$.get('/Sprint/GetGoals', {id:id, type: ''}, function(resp){
+			$("#divData").html(resp);
+			$("#pmModalPopUpGoal").modal('show')
+		})
+	}
+</script>
+
+
+
+
+

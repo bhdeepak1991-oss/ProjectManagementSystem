@@ -1,6 +1,7 @@
 ﻿using PMS.Features.Master.Services;
 using PMS.Features.Project.Services;
 using PMS.Features.ProjectEmployee.Services;
+using PMS.Features.Sprint.Services;
 using PMS.Features.UserManagement.Services;
 
 namespace PMS.Extensions
@@ -23,7 +24,9 @@ namespace PMS.Extensions
 
             services.AddScoped<IProjectEmployeeServices, ProjectEmployeeServices>();
 
-            services.AddTransient<IUserService, UserService>();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<ISprintService, SprintService>();
 
             services.AddTransient<EmailService>();
 
