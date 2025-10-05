@@ -1,9 +1,8 @@
 ﻿using PMS.Features.UserManagement.ViewModels;
-using System.Threading.Tasks;
 
-namespace PMS.Features.UserManagement.Respositories
+namespace PMS.Features.UserManagement.Services
 {
-    public interface IUserRepository
+    public interface IUserService
     {
         Task<(string message, bool isSuccess)> CreateUser(Domain.UserManagement model, CancellationToken cancellationToken);
         Task<(string message, bool isSuccess)> UpdateUser(Domain.UserManagement model, CancellationToken cancellationToken);
@@ -11,6 +10,7 @@ namespace PMS.Features.UserManagement.Respositories
         Task<(string message, bool isSuccess, Domain.UserManagement model)> GetUserById(int userId, CancellationToken cancellationToken);
         Task<(string message, bool isSuccess, IEnumerable<UserViewModel> models)> GetUserList(CancellationToken cancellationToken);
         Task<(string message, bool isSuccess)> LockedUser(int userId, CancellationToken cancellationToken);
+
         Task<Domain.UserManagement> Authenticate(Domain.UserManagement model);
     }
 }

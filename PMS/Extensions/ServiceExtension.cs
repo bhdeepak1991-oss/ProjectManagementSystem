@@ -23,6 +23,12 @@ namespace PMS.Extensions
 
             services.AddScoped<IProjectEmployeeServices, ProjectEmployeeServices>();
 
+            services.AddTransient<IUserService, UserService>();
+
+            services.AddTransient<EmailService>();
+
+            services.AddTransient<PasswordService>();
+
             return services;
         }
     }

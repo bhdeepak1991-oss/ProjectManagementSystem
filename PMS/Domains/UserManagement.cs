@@ -26,4 +26,7 @@ public partial class UserManagement
     public DateTime? UpdatedDate { get; set; }
 
     public int? EmployeeId { get; set; }
+
+    public bool? IsTempPassword { get; set; }
+    public string? AuthenticatorKey { get; set; }
 }

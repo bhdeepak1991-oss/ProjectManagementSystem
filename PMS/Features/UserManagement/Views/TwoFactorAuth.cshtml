@@ -1,0 +1,122 @@
+﻿@{
+    Layout = null;
+}
+
+@model PMS.Features.UserManagement.ViewModels.AuthenticatorCode
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Vipra DAM | 2 Factor Authenticate</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/plugins/iCheck/square/blue.css" rel="stylesheet" type="text/css" />
+    <style>
+        /* Input field with validation error - professional look */
+        .input-validation-error {
+            border: 2px solid #d9534f; /* Muted red (Bootstrap's danger color) */
+            background-color: #f9e6e6; /* Light reddish background */
+            border-radius: 4px; /* Rounded corners for a modern look */
+            padding: 6px 10px;
+            outline: none;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+
+            /* Optional: subtle shadow on focus */
+            .input-validation-error:focus {
+                border-color: #c12e2a; /* Slightly darker red on focus */
+                box-shadow: 0 0 5px rgba(209, 83, 79, 0.5);
+            }
+
+        .qr-code {
+            display: block; /* Makes it act like a block element */
+            margin: 20px auto; /* Centers the image horizontally with top/bottom spacing */
+            width: 200px; /* Set a fixed width */
+            height: 200px; /* Set a fixed height */
+            padding: 10px; /* Optional inner spacing */
+            background-color: #f9f9f9; /* Light background for contrast */
+            border: 2px solid #ddd; /* Subtle border */
+            border-radius: 12px; /* Rounded corners for modern look */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow for depth */
+        }
+
+    </style>
+
+</head>
+<body class="login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="../../index2.html"><b>Vipra |</b>DAM</a>
+        </div><!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">2 Factor Authenticate</p>
+            <form asp-action="TwoFactorAuthPost" asp-controller="UserManagement" method="post">
+                <div class="form-group has-feedback">
+                    <img src="data:image/png;base64,@ViewBag.QRCodeImageAsBase64" class="qr-code" alt="QR Code" />
+                </div>
+
+                <div class="form-group has-feedback">
+                    <input asp-for="AuthenticatorKey" class="form-control" placeholder="Auth Code" />
+                    <span class="glyphicon glyphicon-barcode form-control-feedback"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6">
+                    </div>
+                    <div class="col-xs-6">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Valdiate Code</button>
+                    </div>
+                </div>
+            </form>
+
+
+            <a asp-action="Index" asp-controller="Authenticate" class="text-center">Register a new membership</a>
+
+        </div>
+    </div>
+
+    <div id="toast-container" style="position: fixed; top: 10px; right: 10px; z-index: 1050;">
+        @if (!string.IsNullOrEmpty(ViewBag.message))
+        {
+            var toastType = ViewBag.ToastType ?? "success"; // success, danger, warning, info
+                                                            <div class="alert alert-@toastType alert-dismissible fade in" role="alert">
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                                @ViewBag.message
+                                                            </div>
+        }
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.13/dist/jquery.validate.unobtrusive.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+
+
+
+    <script>
+        $(function () {
+          $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+          });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Auto hide after 3 seconds
+            setTimeout(function () {
+                $(".alert").fadeOut("slow", function () {
+                    $(this).remove();
+                });
+            }, 10000); // 3 seconds
+        });
+    </script>
+</body>
+</html>

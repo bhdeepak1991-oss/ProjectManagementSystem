@@ -63,7 +63,7 @@ app.MapDynamicControllerRoute<FeatureRouteTransformer>(
 
 app.MapGet("/", context =>
 {
-    context.Response.Redirect("/Features/Dashboard/index");
+    context.Response.Redirect("/Features/UserManagement/Authenticate");
     return Task.CompletedTask;
 });
 

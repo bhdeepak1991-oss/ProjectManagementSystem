@@ -1,0 +1,216 @@
+﻿@* @using GoogleDAM.Services.Helpers
+@using GoogleDAM.Domain
+@{
+	var userModel = Context.Session.GetObject<GoogleDAM.Domain.User>("User");
+	var # = $"https://ui-avatars.com/api/?name={userModel.FirstName}+{userModel.LastName}";
+} *@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Vipra | PMS</title>
+	<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+	<link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+	<link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+	<link href="plugins/morris/morris.css" rel="stylesheet" type="text/css" />
+	<link href="~/plugins/jvectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+	<link href="~/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+	<link href="~/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+	<link href="~/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+
+	<style>
+		.content-header {
+			display: flex;
+			align-items: center; /* vertical alignment */
+			justify-content: space-between; /* spread left and right */
+		}
+
+			.content-header h1 {
+				margin: 0; /* remove default heading margin */
+			}
+		/* Slide in from left */
+		.modal.modal-left .modal-dialog {
+			position: fixed;
+			margin: 0;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			height: 100%;
+			transform: translateX(-100%);
+			transition: transform 0.3s ease-out;
+			width: 400px; /* Adjust width as needed */
+		}
+
+		.modal.modal-left.show .modal-dialog {
+			transform: translateX(0);
+		}
+
+		.modal.modal-left .modal-content {
+			height: 100%;
+			border: none;
+			border-radius: 0;
+		}
+
+		/* Optional full screen backdrop */
+		.modal-backdrop.show {
+			opacity: 0.5;
+		}
+
+		.toast-middle-center {
+			top: 50% !important;
+			left: 50% !important;
+			transform: translate(-50%, -50%);
+			position: fixed;
+			z-index: 9999;
+		}
+	</style>
+
+	<style>
+		/* Fullscreen blurred overlay */
+		#loader-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: none;
+			align-items: center;
+			justify-content: center;
+			backdrop-filter: blur(6px);
+			background-color: rgba(0, 0, 0, 0.5); /* Dark transparent background */
+			z-index: 9999;
+		}
+
+		/* Centered loader content */
+		.loader-content {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		/* Custom colored spinner */
+		.spinner {
+			width: 70px;
+			height: 70px;
+			border: 8px solid rgba(255, 255, 255, 0.2);
+			border-top: 8px solid #4caf50; /* 💡 Customize this color */
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
+		}
+
+		/* Spinner animation */
+		@@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+
+	</style>
+
+</head>
+<body class="skin-blue">
+	<div class="wrapper">
+
+
+		<div id="loader-overlay">
+			<div class="loader-content text-center">
+				<div class="spinner mb-3"></div>
+				<div id="loader-percentage" class="text-light fw-bold fs-5">0%</div>
+			</div>
+		</div>
+
+		@RenderBody()
+
+		@RenderSection("Scripts", required: false)
+
+		<footer class="main-footer">
+			<div class="pull-right hidden-xs">
+				<b>Version</b> 2.0
+			</div>
+			<strong>Copyright &copy; 2024-2025 <a href="http://VipraInfotech.com">Vipra InfoTech</a>.</strong> All rights reserved.
+		</footer>
+
+	</div>
+
+	<!-- jQuery FIRST -->
+	<!-- jQuery FIRST -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<!-- Bootstrap depends on jQuery -->
+	<script src="~/bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- AdminLTE core -->
+	<script src="~/dist/js/app.min.js"></script>
+
+	<!-- DataTables depends on jQuery -->
+	<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	<!-- Your custom scripts should come LAST -->
+	<script src="~/pmsjs/custom.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+	<script>
+		const connection = new signalR.HubConnectionBuilder()
+			.withUrl("/notificationHub")
+			.build();
+
+		// 🔔 Status Changed
+		connection.on("ReceiveProjectStatusUpdate", function (projectId, newStatus) {
+			showNotification(`Project #${projectId} status changed to: ${newStatus}`, 'fa-tasks', 'text-blue');
+		});
+
+		// 🆕 Project Created
+		connection.on("ProjectCreated", function (projectId, name) {
+			showNotification(`New project created: ${name} (#${projectId})`, 'fa-plus', 'text-green');
+		});
+
+		// ⚠️ Project Deleted
+		connection.on("ProjectDeleted", function (projectId) {
+			showNotification(`Project #${projectId} has been deleted.`, 'fa-trash', 'text-red');
+		});
+
+		// Shared function to add to bell dropdown
+		function showNotification(message, icon, color) {
+			const itemHtml = `
+				<li>
+					<a href="#">
+						<i class="fa ${icon} ${color}"></i> ${message}
+					</a>
+				</li>`;
+
+			$('#notificationList').prepend(itemHtml);
+
+			// Update count
+			let count = parseInt($('#notificationCount').text()) || 0;
+			count++;
+			$('#notificationCount').text(count);
+			$('#notificationHeader').text(`You have ${count} notification${count !== 1 ? 's' : ''}`);
+		}
+
+		connection.start().catch(function (err) {
+			console.error(err.toString());
+		});
+
+	</script>
+
+
+</body>
+</html>

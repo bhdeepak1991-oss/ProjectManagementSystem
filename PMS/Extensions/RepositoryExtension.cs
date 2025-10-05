@@ -23,6 +23,8 @@ namespace PMS.Extensions
 
             services.AddScoped<IProjectEmployeeRepository, ProjectEmployeeRepository>();
 
+            services.AddScoped<IUserRepository, UserRepository>();
+
             return services;
         }
     }

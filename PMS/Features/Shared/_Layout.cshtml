@@ -1,9 +1,44 @@
-﻿@* @using GoogleDAM.Services.Helpers
-@using GoogleDAM.Domain
+﻿@using PMS.Features.UserManagement.Services
+
 @{
-	var userModel = Context.Session.GetObject<GoogleDAM.Domain.User>("User");
-	var # = $"https://ui-avatars.com/api/?name={userModel.FirstName}+{userModel.LastName}";
-} *@
+    var projectName = Context.Session.GetString("selectedProjectName");
+	var empDetail = Context.Session.GetObject<PMS.Domains.Employee>("employee");
+
+	var name = empDetail?.Name ?? "Super Admin";
+	var colorHex = GetProjectColor(name);
+	var textColor = GetTextColor(colorHex);
+	var colorHexForUrl = colorHex.Replace("#", "");
+}
+
+@functions {
+	// Generate a consistent color from project name
+	string GetProjectColor(string input)
+	{
+		int hash = input.GetHashCode();
+		byte r = (byte)((hash & 0xFF0000) >> 16);
+		byte g = (byte)((hash & 0x00FF00) >> 8);
+		byte b = (byte)(hash & 0x0000FF);
+
+		// Brighten color
+		r = (byte)((r + 200) / 2);
+		g = (byte)((g + 200) / 2);
+		b = (byte)((b + 200) / 2);
+
+		return $"#{r:X2}{g:X2}{b:X2}";
+	}
+
+	// Determine text color (black or white) based on background brightness
+	string GetTextColor(string hex)
+	{
+		hex = hex.Replace("#", "");
+		int r = Convert.ToInt32(hex.Substring(0, 2), 16);
+		int g = Convert.ToInt32(hex.Substring(2, 2), 16);
+		int b = Convert.ToInt32(hex.Substring(4, 2), 16);
+		int brightness = (r * 299 + g * 587 + b * 114) / 1000;
+		return brightness > 160 ? "#000000" : "#FFFFFF"; // black if bright, else white
+	}
+
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,7 +157,7 @@
 
 		<header class="main-header">
 			<!-- Logo -->
-			<a href="index2.html" class="logo"><b>VI</b>DAM</a>
+			<a href="#" class="logo"><b>@projectName</b></a>
 			<!-- Header Navbar: style can be found in header.less -->
 			<nav class="navbar navbar-static-top" role="navigation">
 				<!-- Sidebar toggle button-->
@@ -304,17 +339,17 @@
 						<!-- User Account: style can be found in dropdown.less -->
 						<li class="dropdown user user-menu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<img src="#" class="user-image" alt="User Image" />
-								@* <span class="hidden-xs">@(userModel.FirstName + " " + userModel.LastName)</span> *@
+								<img src="https://ui-avatars.com/api/?name=@(empDetail?.Name)&size=400&background=@colorHexForUrl&color=fff" class="user-image" alt="User Image" />
+								<span class="hidden-xs">@(empDetail?.Name)</span>
 							</a>
 							<ul class="dropdown-menu">
 								<!-- User image -->
 								<li class="user-header">
-									<img src="#" class="img-circle" alt="User Image" />
-									@* 	<p>
-										@(userModel?.FirstName ?? string.Empty + " " + userModel?.LastName ?? string.Empty)
+									<img src="https://ui-avatars.com/api/?name=@(empDetail?.Name)&size=400&background=@colorHexForUrl&color=fff" class="img-circle" alt="User Image" />
+										<p>
+										@(empDetail?.Name)
 										<small></small>
-									</p> *@
+									</p>
 								</li>
 								<!-- Menu Body -->
 								<li class="user-body">
@@ -349,13 +384,13 @@
 				<!-- Sidebar user panel -->
 				<div class="user-panel">
 					<div class="pull-left image">
-						<img src="#" class="img-circle" alt="User Image" />
+						<img src="https://ui-avatars.com/api/?name=@(empDetail?.Name)&size=400&background=@colorHexForUrl&color=fff" class="img-circle" alt="User Image" />
 					</div>
-					@* <div class="pull-left info">
-						<p>@(userModel?.FirstName + " " + userModel?.LastName)</p>
+					<div class="pull-left info">
+						<p>@(empDetail?.Name)</p>
 
 						<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-					</div> *@
+					</div>
 				</div>
 				<ul class="sidebar-menu">
 
@@ -385,6 +420,7 @@
 							<li><a asp-action="CreateDesignation" asp-controller="Master"><i class="fa fa-user-tie"></i> Designations</a></li>
 							<li><a asp-action="CreateTask" asp-controller="Master"><i class="fa fa-check-circle"></i> Task Status</a></li>
 							<li><a asp-action="CreateEmployee" asp-controller="UserManagement"><i class="fa fa-check-circle"></i> Employees</a></li>
+							<li><a asp-action="CreateUser" asp-controller="UserManagement"><i class="fa fa-check-circle"></i> Users</a></li>
 						</ul>
 					</li>
 
