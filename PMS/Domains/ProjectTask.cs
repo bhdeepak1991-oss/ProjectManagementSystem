@@ -36,4 +36,9 @@ public partial class ProjectTask
     public int? EmployeeId { get; set; }
 
     public string? TaskStatus { get; set; }
+    public int SprintId { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? CompletedDate { get; set; }
+    public decimal? EstimatedHour { get; set; }
+    public decimal? LoggedHour { get; set; }
 }

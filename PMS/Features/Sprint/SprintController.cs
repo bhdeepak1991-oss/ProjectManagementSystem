@@ -66,5 +66,10 @@ namespace PMS.Features.Sprint
             }
             return PartialView("~/Features/Sprint/Views/SprintGoals.cshtml");
         }
+
+        //public async Task<IActionResult> DeleteSprint(int id)
+        //{
+            
+        //}
     }
 }
