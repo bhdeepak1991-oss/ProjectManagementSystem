@@ -25,5 +25,35 @@ namespace PMS.Features.ProjectTask
 
             return View("~/Features/ProjectTask/Views/CreateProjectTask.cshtml", response.models);
         }
+        [HttpPost]
+        public async Task<IActionResult> CreateProjectTask(Domains.ProjectTask model)
+        {
+            if (model.Id == 0)
+            {
+                var response = await _projectTaskService.CreateProjectTask(model, default);
+
+                return Json(response);
+            }
+
+            var updateResponse = await _projectTaskService.UpdateProjectTask(model, default);
+
+            return Json(updateResponse);
+        }
+
+        public async Task<IActionResult> GetProjectTask(Domains.ProjectTask model)
+        {
+            var projectId = Convert.ToInt32(HttpContext.Session.GetInt32("selectedProjectId") ?? 1);
+
+            var response = await _projectTaskService.GetProjectTaskList(projectId, default);
+
+            return PartialView("~/Features/ProjectTask/Views/ProjectTaskList.cshtml", response.models);
+        }
+
+        public async Task<IActionResult> DeleteProjectTask(int Id)
+        {
+            var response = await _projectTaskService.DeleteProjectTask(Id, default);
+
+            return Json(response);
+        }
     }
 }

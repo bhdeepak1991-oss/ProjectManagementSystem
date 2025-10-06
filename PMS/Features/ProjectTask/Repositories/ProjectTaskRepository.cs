@@ -18,6 +18,12 @@ namespace PMS.Features.ProjectTask.Repositories
         {
             var responseModel = await _dbContext.ProjectTasks.AddAsync(models);
 
+            var taskId = await _dbContext.ProjectTasks.OrderByDescending(x => x.Id).Select(x => x.Id).FirstOrDefaultAsync();
+
+            int nextId = taskId + 1;
+
+            models.TaskCode = $"Task_{nextId.ToString("D3")}";
+
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return ("Project Task created successfully", true);
@@ -97,7 +103,11 @@ namespace PMS.Features.ProjectTask.Repositories
 
         public async  Task<(string message, bool isSuccess)> UpdateProjectTask(Domains.ProjectTask models, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            _dbContext.Update(models);
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            return ("Task updated successfully !", true);
 
         }
     }

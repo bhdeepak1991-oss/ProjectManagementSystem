@@ -1,7 +1,7 @@
 ﻿@using PMS.Features.UserManagement.Services
 
 @{
-    var projectName = Context.Session.GetString("selectedProjectName");
+	var projectName = Context.Session.GetString("selectedProjectName");
 	var empDetail = Context.Session.GetObject<PMS.Domains.Employee>("employee");
 
 	var name = empDetail?.Name ?? "Super Admin";
@@ -148,6 +148,17 @@
 				transform: rotate(360deg);
 			}
 		}
+
+		.input-validation-error {
+			border: 1px solid #dc3545; /* Bootstrap red */
+			background-color: #fff5f5; /* optional light red background */
+			color: #212529;
+		}
+
+			.input-validation-error:focus {
+				outline: none;
+				box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); /* subtle red shadow */
+			}
 
 	</style>
 
@@ -346,7 +357,7 @@
 								<!-- User image -->
 								<li class="user-header">
 									<img src="https://ui-avatars.com/api/?name=@(empDetail?.Name)&size=400&background=@colorHexForUrl&color=fff" class="img-circle" alt="User Image" />
-										<p>
+									<p>
 										@(empDetail?.Name)
 										<small></small>
 									</p>
@@ -396,7 +407,7 @@
 
 					<li>
 						<a asp-action="Index" asp-controller="Project">
-							<i class="fa fa-th"></i> <span>Projects</span> 
+							<i class="fa fa-th"></i> <span>Projects</span>
 						</a>
 					<li>
 						<a asp-action="Index" asp-controller="ProjectEmployee">
@@ -408,6 +419,11 @@
 							<i class="fa fa-list"></i> <span>Sprint</span>
 						</a>
 					</li>
+					<li>
+						<a asp-action="Index" asp-controller="ProjectTask">
+							<i class="fa fa-list"></i> <span>Project Task</span>
+						</a>
+					</li>
 
 					<li class="treeview">
 						<a href="#">
@@ -415,7 +431,7 @@
 							<i class="fa fa-angle-left pull-right"></i>
 						</a>
 						<ul class="treeview-menu">
-							<li><a asp-action="CreateRole" asp-controller="Master" ><i class="fa fa-user-shield"></i> Roles</a></li>
+							<li><a asp-action="CreateRole" asp-controller="Master"><i class="fa fa-user-shield"></i> Roles</a></li>
 							<li><a asp-action="CreateDepartment" asp-controller="Master"><i class="fa fa-sitemap"></i> Departments</a></li>
 							<li><a asp-action="CreateDesignation" asp-controller="Master"><i class="fa fa-user-tie"></i> Designations</a></li>
 							<li><a asp-action="CreateTask" asp-controller="Master"><i class="fa fa-check-circle"></i> Task Status</a></li>
