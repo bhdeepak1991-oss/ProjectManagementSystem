@@ -14,8 +14,59 @@ namespace PMS.Features.TaskDetail.Respositories
             _dbContext = dbContext;
         }
 
+        public async Task<(string message, bool isSuccess)> CreateDiscussion(TaskDetailViewModel model)
+        {
+            try
+            {
+                var discussionModel = new TaskDiscussionBoard()
+                {
+                    ProjectTaskId = model.TaskId,
+                    Discusion = model.Discussion,
+                    DocumentPath = string.Empty,
+                    EmployeeId = model.EmployeeId,
+                    CreatedBy = model.EmployeeId,
+                    CreatedDate = DateTime.Now,
+                    IsDeleted = false,
+                    UpdatedBy = model.EmployeeId,
+                    UpdatedDate = DateTime.Now
+                };
+
+                await _dbContext.TaskDiscussionBoards.AddAsync(discussionModel);
+
+                await _dbContext.SaveChangesAsync();
+
+                return new("Task Discussion updated successfully", true);
+            }
+            catch (Exception ex)
+            {
+                return new(ex.Message, true);
+            }
+         
+        }
+
+        public async Task<(string message, bool isSuccess, IEnumerable<ProjectDiscussBoard> models)> GetDiscussionBoardList(int taskId)
+        {
+            var result = await (from td in _dbContext.TaskDiscussionBoards
+                                join emp in _dbContext.Employees
+                                    on td.EmployeeId equals emp.Id
+                                where td.ProjectTaskId == 1
+                                select new ProjectDiscussBoard
+                                {
+                                    Id = td.Id,
+                                    Discussion = td.Discusion ?? string.Empty,
+                                    DocumentPath = td.DocumentPath ?? string.Empty,
+                                    CreatedDate = td.CreatedDate,
+                                    EmployeeName = emp.Name ?? string.Empty,
+                                    EmployeeCode = emp.EmployeeCode ?? string.Empty
+                                }).OrderByDescending(x => x.CreatedDate).ToListAsync();
+
+            return ("Task discussion board detail fetched", true, result);
+
+        }
+
         public async Task<(string message, bool isSuccess, TaskDetailViewModel model)> GetTaskDetail(int taskId)
         {
+
             var responseModels = await (from pt in _dbContext.ProjectTasks
                                         join sp in _dbContext.Sprints on pt.SprintId equals sp.Id
                                         join em in _dbContext.Employees on pt.EmployeeId equals em.Id
@@ -39,9 +90,9 @@ namespace PMS.Features.TaskDetail.Respositories
                                             EstimatedHour = pt.EstimatedHour ?? 0,
                                             CompletedDate = pt.CompletedDate,
                                             SprintName = sp.SprintName,
-                                            ReportedBy= $"{ems.Name} ({ems.EmployeeCode})",
+                                            ReportedBy = $"{ems.Name} ({ems.EmployeeCode})",
+                                            TaskId = taskId
                                         }).FirstOrDefaultAsync();
-
 
 
             return ("Project Task Fetched successfully", true, responseModels ?? new());

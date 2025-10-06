@@ -10,7 +10,7 @@ using PMS.Notification;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<FeatureRouteTransformer>();
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 builder.Services.AddSignalR();
 
@@ -57,6 +57,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapHub<NotificationHub>("/notificationHub");
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.MapDynamicControllerRoute<FeatureRouteTransformer>(
     "Features/{featureName}/{action=Index}/{id?}");

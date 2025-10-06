@@ -24,7 +24,7 @@
 						{
 							<tr>
 								<td>
-									<a asp-controller="Project" asp-action="GetProjectDetail" asp-route-id="@item.Id">@item.TaskCode</a>
+									<a asp-controller="TaskDetail" asp-action="TaskDetail" asp-route-taskId="@item.Id">@item.TaskCode</a>
 								</td>
 								<td>@item.TaskName</td>
 								<td>@item.TaskPriority</td>

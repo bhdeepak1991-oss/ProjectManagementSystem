@@ -124,7 +124,9 @@ namespace PMS.Features.UserManagement
 
                 HttpContext.Session.SetObject<Domains.Employee>("employee", empModel.model);
 
-                return RedirectToAction("TwoFactorAuth", "UserManagement", new { totpUri = totpUri });
+                return RedirectToAction("ProjectSelection", "Dashboard");
+
+                // return RedirectToAction("TwoFactorAuth", "UserManagement", new { totpUri = totpUri });
 
             }
 

@@ -400,9 +400,8 @@ public partial class PmsDbContext : DbContext
 
         modelBuilder.Entity<TaskDiscussionBoard>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("TaskDiscussionBoard");
+            entity.HasKey(e => e.Id);
+            entity.ToTable("TaskDiscussionBoard");
 
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.DocumentPath)

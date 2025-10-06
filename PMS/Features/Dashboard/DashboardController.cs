@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PMS.Features.Project.Services;
+using PMS.Features.ProjectEmployee.Services;
+using PMS.Helpers;
 
 namespace PMS.Features.Dashboard
 {
@@ -8,10 +10,13 @@ namespace PMS.Features.Dashboard
     {
         private readonly ILogger<DashboardController> _logger;
         private readonly IProjectService _projectService;
-        public DashboardController(ILogger<DashboardController> logger, IProjectService projectService)
+        private readonly IProjectEmployeeServices _projectEmployeeService;
+        public DashboardController(ILogger<DashboardController> logger,
+            IProjectService projectService, IProjectEmployeeServices projectEmpService)
         {
             _logger = logger;
             _projectService = projectService;
+            _projectEmployeeService = projectEmpService;
         }
 
         public IActionResult Index()
@@ -32,6 +37,24 @@ namespace PMS.Features.Dashboard
             HttpContext.Session.SetString("selectedProjectName", responseModel.model?.Name ?? "PMS");
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> GetMappedEmployee()
+        {
+
+            var responseModel = await _projectEmployeeService.GetMappedProjectEmployee(Convert.ToInt32(HttpContext.GetProjectId()));
+
+            return PartialView("~/Features/Dashboard/Views/ProjectEmployee.cshtml", responseModel.models);
+        }
+
+
+        public async Task<IActionResult> DirectChat()
+        {
+
+            var responseModel = await _projectEmployeeService.GetMappedProjectEmployee(Convert.ToInt32(HttpContext.GetProjectId()));
+
+            return PartialView("~/Features/Dashboard/Views/DirectChat.cshtml", responseModel.models);
+        }
+
 
         public IActionResult Privacy()
         {

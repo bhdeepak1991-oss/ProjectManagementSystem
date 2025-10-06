@@ -1,8 +1,11 @@
 ﻿@using PMS.Features.UserManagement.Services
 
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
 @{
-	var projectName = Context.Session.GetString("selectedProjectName");
-	var empDetail = Context.Session.GetObject<PMS.Domains.Employee>("employee");
+	var projectName = HttpContextAccessor.HttpContext?.Session.GetString("selectedProjectName");
+	var empDetail = HttpContextAccessor.HttpContext?.Session.GetObject<PMS.Domains.Employee>("employee");
 
 	var name = empDetail?.Name ?? "Super Admin";
 	var colorHex = GetProjectColor(name);
@@ -174,7 +177,7 @@
 
 		<header class="main-header">
 			<!-- Logo -->
-			<a href="#" class="logo"><b>@projectName</b></a>
+			<a asp-action="Index" asp-controller="Dashboard" class="logo"><b>@projectName</b></a>
 			<!-- Header Navbar: style can be found in header.less -->
 			<nav class="navbar navbar-static-top" role="navigation">
 				<!-- Sidebar toggle button-->
@@ -512,6 +515,10 @@
 			showNotification(`New project created: ${name} (#${projectId})`, 'fa-plus', 'text-green');
 		});
 
+		connection.on("DiscussionAdded", function (TaskName, AddedBy) {
+			showNotification(`New Comment has been added for Task: ${TaskName} Added By  (#${AddedBy})`, 'fa-plus', 'text-green');
+		});
+
 		// ⚠️ Project Deleted
 		connection.on("ProjectDeleted", function (projectId) {
 			showNotification(`Project #${projectId} has been deleted.`, 'fa-trash', 'text-red');
@@ -543,4 +550,17 @@
 
 
 </body>
+
+<script>
+	// Backup original
+	const originalWarn = console.warn;
+
+	// Override and filter specific warning
+	console.warn = function (message, ...args) {
+		if (typeof message === 'string' && message.includes('CKEditor')) {
+			return; // suppress
+		}
+		originalWarn.apply(console, [message, ...args]);
+	};
+</script>
 </html>

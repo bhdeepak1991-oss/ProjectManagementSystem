@@ -18,7 +18,20 @@
         public DateTime? CompletedDate { get; set; }
         public decimal EstimatedHour { get; set; }
         public decimal LoggedHour { get; set; }
-        public string  ReportedBy { get; set; }
-        public List<string> Comments { get; set; } = new List<string>() { "A", "B" };
+        public string ReportedBy { get; set; }
+        public string Discussion { get; set; }
+        public int EmployeeId { get; set; }
+        public int TaskId { get; set; }
+
+    }
+
+    public class ProjectDiscussBoard
+    {
+        public int Id { get; set; }
+        public string Discussion { get; set; }
+        public string EmployeeName { get; set; }
+        public string EmployeeCode { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public string DocumentPath { get; set; }
     }
 }
