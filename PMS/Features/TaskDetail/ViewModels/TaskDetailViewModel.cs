@@ -18,5 +18,7 @@
         public DateTime? CompletedDate { get; set; }
         public decimal EstimatedHour { get; set; }
         public decimal LoggedHour { get; set; }
+        public string  ReportedBy { get; set; }
+        public List<string> Comments { get; set; } = new List<string>() { "A", "B" };
     }
 }

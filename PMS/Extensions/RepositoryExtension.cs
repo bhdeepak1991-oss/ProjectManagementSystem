@@ -3,6 +3,7 @@ using PMS.Features.Project.Repositories;
 using PMS.Features.ProjectEmployee.Repositories;
 using PMS.Features.ProjectTask.Repositories;
 using PMS.Features.Sprint.Repositories;
+using PMS.Features.TaskDetail.Respositories;
 using PMS.Features.UserManagement.Respositories;
 
 namespace PMS.Extensions
@@ -30,6 +31,8 @@ namespace PMS.Extensions
             services.AddScoped<IProjectTaskRepository, ProjectTaskRepository>();
 
             services.AddScoped<ISprintRepository, SprintRepository>();
+
+            services.AddScoped<ITaskDetailRepository, TaskDetailRepository>();
 
             return services;
         }
