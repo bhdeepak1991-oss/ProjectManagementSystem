@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PMS.Attributes;
 using PMS.Constants;
 using PMS.Domains;
 using PMS.Features.Master.Services;
 
 namespace PMS.Features.Master
 {
+    [PmsAuthorize]
     public class MasterController : Controller
     {
         private readonly IRoleService _roleService;

@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PMS.Attributes;
 using PMS.Features.ProjectTask.Services;
 
 namespace PMS.Features.ProjectTask
 {
+
+    [PmsAuthorize]
     public class ProjectTaskController : Controller
     {
         private readonly IProjectTaskService _projectTaskService;

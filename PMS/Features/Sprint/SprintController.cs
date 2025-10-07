@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PMS.Attributes;
 using PMS.Domains;
 using PMS.Features.Master.Services;
 using PMS.Features.Sprint.Services;
 
 namespace PMS.Features.Sprint
 {
+
+    [PmsAuthorize]
     public class SprintController : Controller
     {
         private readonly ISprintService _sprintService;

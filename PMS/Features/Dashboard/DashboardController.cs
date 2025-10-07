@@ -1,11 +1,15 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PMS.Attributes;
 using PMS.Features.Project.Services;
 using PMS.Features.ProjectEmployee.Services;
 using PMS.Helpers;
 
 namespace PMS.Features.Dashboard
 {
+
+ 
     public class DashboardController : Controller
     {
         private readonly ILogger<DashboardController> _logger;
@@ -18,12 +22,14 @@ namespace PMS.Features.Dashboard
             _projectService = projectService;
             _projectEmployeeService = projectEmpService;
         }
-
+        [PmsAuthorize]
         public IActionResult Index()
         {
             return View();
         }
 
+
+        [AllowAnonymous]
         public async Task<IActionResult> ProjectSelection()
         {
             var response = await _projectService.GetProjectList(default);
@@ -38,6 +44,7 @@ namespace PMS.Features.Dashboard
             return RedirectToAction("Index");
         }
 
+        [PmsAuthorize]
         public async Task<IActionResult> GetMappedEmployee()
         {
 
@@ -46,7 +53,7 @@ namespace PMS.Features.Dashboard
             return PartialView("~/Features/Dashboard/Views/ProjectEmployee.cshtml", responseModel.models);
         }
 
-
+        [PmsAuthorize]
         public async Task<IActionResult> DirectChat()
         {
 

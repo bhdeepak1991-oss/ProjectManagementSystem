@@ -1,15 +1,20 @@
 ﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OtpNet;
+using PMS.Attributes;
 using PMS.Domains;
 using PMS.Features.Master.Services;
 using PMS.Features.UserManagement.Services;
 using PMS.Features.UserManagement.ViewModels;
+using PMS.Helpers;
 using QRCoder;
 
 namespace PMS.Features.UserManagement
 {
+
+
     public class UserManagementController : Controller
     {
         private readonly IEmployeeService _employeeService;
@@ -28,6 +33,7 @@ namespace PMS.Features.UserManagement
             _roleService = roleService;
         }
 
+        [PmsAuthorize]
         public async Task<IActionResult> CreateEmployee(int empId)
         {
             var empModel = await _employeeService.GetEmployeeById(empId);
@@ -44,6 +50,7 @@ namespace PMS.Features.UserManagement
         }
 
         [HttpPost]
+        [PmsAuthorize]
         public async Task<IActionResult> CreateEmployeePost(Employee model)
         {
             if (model.Id == 0)
@@ -58,6 +65,7 @@ namespace PMS.Features.UserManagement
             return Json(updateResponse);
         }
 
+        [PmsAuthorize]
         public async Task<IActionResult> GetEmployeeList()
         {
             var response = await _employeeService.GetEmployees(default);
@@ -65,12 +73,14 @@ namespace PMS.Features.UserManagement
             return PartialView("~/Features/UserManagement/Views/EmployeeList.cshtml", response.models);
         }
 
+        [PmsAuthorize]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
             var response = await _employeeService.DeleteEmployee(id);
             return Json(response);
         }
 
+        [PmsAuthorize]
         public async Task<IActionResult> CreateUser(int userId)
         {
             var responseModel = await _userService.GetUserById(userId, default);
@@ -94,12 +104,15 @@ namespace PMS.Features.UserManagement
             return Json(responseModels);
         }
 
+
+        [AllowAnonymous]
         public async Task<IActionResult> Authenticate()
         {
             return await Task.Run(() => View("~/Features/UserManagement/Views/Login.cshtml", new Domain.UserManagement()));
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> AuthenticatePost(Domain.UserManagement model)
         {
             var response = await _userService.Authenticate(model);
@@ -124,8 +137,15 @@ namespace PMS.Features.UserManagement
 
                 HttpContext.Session.SetObject<Domains.Employee>("employee", empModel.model);
 
-                return RedirectToAction("ProjectSelection", "Dashboard");
 
+
+                if (response.IsTempPassword == true)
+                {
+                    return RedirectToAction("ChangePassword");
+                }
+
+
+                return RedirectToAction("ProjectSelection", "Dashboard");
                 // return RedirectToAction("TwoFactorAuth", "UserManagement", new { totpUri = totpUri });
 
             }
@@ -145,6 +165,7 @@ namespace PMS.Features.UserManagement
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> TwoFactorAuthPost(AuthenticatorCode model)
         {
             var authCode = Base32Encoding.ToBytes(HttpContext.Session.GetString("authCode"));
@@ -171,16 +192,43 @@ namespace PMS.Features.UserManagement
             return await Task.Run(() => RedirectToAction("TwoFactorAuth", "UserManagement", new { totpUri = totpUri }));
         }
 
+        [PmsAuthorize]
         public async Task<IActionResult> UserListDetail()
         {
             var response = await _userService.GetUserList(default);
             return PartialView("~/Features/UserManagement/Views/UserList.cshtml", response.models);
         }
 
+        [PmsAuthorize]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var response = await _userService.DeleteUser(id, default);
             return Json(response);
+        }
+
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ChangePassword()
+        {
+            return await Task.Run(() => PartialView("~/Features/UserManagement/Views/ChangePassword.cshtml", new ChangePasswordVm()));
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ChangePassword(ChangePasswordVm model)
+        {
+            model.UserId = Convert.ToInt32(HttpContext.GetUserId());
+
+            var response = await _userService.ChangesPassword(model);
+
+            return RedirectToAction("Authenticate");
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            HttpContext.Session.Clear();
+
+            return await Task.Run(() => RedirectToAction("Authenticate"));
         }
     }
 }

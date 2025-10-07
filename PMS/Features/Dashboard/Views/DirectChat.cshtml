@@ -141,29 +141,29 @@
 <script>
 	(function () {
 		let chatConnection = null;
-		const currentUserId = '@name'; // Injected user ID from Razor
-		const senderName = '@name';;    // Sender display name
-		
-		// Prevent duplicate connections
+		const currentUserId = '@name'; // Injected user ID
+		const senderName = '@name'; // Display name
+
 		if (!window.chatSignalRInitialized) {
 			window.chatSignalRInitialized = true;
 
 			chatConnection = new signalR.HubConnectionBuilder()
 				.withUrl("/chatHub?userId=" + encodeURIComponent(currentUserId))
 				.configureLogging(signalR.LogLevel.Information)
+				.withAutomaticReconnect() // Auto-reconnect added
 				.build();
 
-			chatConnection.keepAliveIntervalInMilliseconds = 1500000;
+			// Optional: Set keep-alive (default is 15s)
+			chatConnection.serverTimeoutInMilliseconds = 60000; // 60 seconds
+			chatConnection.keepAliveIntervalInMilliseconds = 15000; // 15 seconds
 
+			// Handle incoming messages
 			chatConnection.on("ReceiveMessage", function (sender, message) {
 				const chatBox = document.querySelector(".direct-chat-messages");
 				if (!chatBox) return;
 
 				const messageDiv = document.createElement("div");
-				messageDiv.classList.add("direct-chat-msg");
-				if (sender === senderName) {
-					messageDiv.classList.add("right");
-				}
+				messageDiv.classList.add("direct-chat-msg", sender === senderName ? "right" : "");
 
 				messageDiv.innerHTML = `
 					<div class='direct-chat-info clearfix'>
@@ -178,12 +178,24 @@
 				chatBox.scrollTop = chatBox.scrollHeight;
 			});
 
+			// Connection lifecycle logging
+			chatConnection.onclose(error => {
+				console.warn("⚠️ Chat disconnected", error);
+			});
+			chatConnection.onreconnected(connectionId => {
+				console.log("🔄 Chat reconnected:", connectionId);
+			});
+			chatConnection.onreconnecting(error => {
+				console.log("⏳ Chat reconnecting...", error);
+			});
+
+			// Start connection
 			chatConnection.start()
 				.then(() => console.log("✅ SignalR Chat connected"))
-				.catch(err => console.error("❌ SignalR Chat error:", err));
+				.catch(err => console.error("❌ SignalR Chat connection failed:", err));
 		}
 
-		// Delegate the click event for dynamically loaded partial
+		// Delegate the click event to work with partial views
 		document.addEventListener("click", function (e) {
 			if (e.target && e.target.classList.contains("btn-flat")) {
 				const messageInput = document.querySelector("input[name='message']");
@@ -200,5 +212,6 @@
 		});
 	})();
 </script>
+ 
 
 

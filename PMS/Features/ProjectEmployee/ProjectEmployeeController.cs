@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PMS.Attributes;
 using PMS.Features.Project.Services;
 using PMS.Features.ProjectEmployee.Services;
 
 namespace PMS.Features.ProjectEmployee
 {
+
+    [PmsAuthorize]
     public class ProjectEmployeeController : Controller
     {
         private readonly IProjectEmployeeServices _projectEmployeeServices;

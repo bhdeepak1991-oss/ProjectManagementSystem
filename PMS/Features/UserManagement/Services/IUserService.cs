@@ -12,5 +12,7 @@ namespace PMS.Features.UserManagement.Services
         Task<(string message, bool isSuccess)> LockedUser(int userId, CancellationToken cancellationToken);
 
         Task<Domain.UserManagement> Authenticate(Domain.UserManagement model);
+
+        Task<(string message, bool isSuccess)> ChangesPassword(ChangePasswordVm model);
     }
 }

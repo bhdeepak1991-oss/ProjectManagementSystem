@@ -27,13 +27,23 @@ namespace PMS.Features.UserManagement.Services
             return responseModel;
         }
 
+        public async Task<(string message, bool isSuccess)> ChangesPassword(ChangePasswordVm model)
+        {
+            return await _userRepository.ChangesPassword(new Domain.UserManagement()
+            {
+                Id = model.UserId,
+                IsTempPassword = false,
+                Password = _passwordService.Encrypt(model.NewPassword),
+            });
+        }
+
         public async Task<(string message, bool isSuccess)> CreateUser(Domain.UserManagement model, CancellationToken cancellationToken)
         {
             model.AuthenticatorKey = Base32Encoding.ToString(KeyGeneration.GenerateRandomKey(20));
 
-            var tempPassword= _passwordService.GenerateTempPassword(7);
+            var tempPassword = _passwordService.GenerateTempPassword(7);
 
-            model.Password= _passwordService.Encrypt(tempPassword);
+            model.Password = _passwordService.Encrypt(tempPassword);
 
             model.IsTempPassword = true;
 
@@ -41,10 +51,10 @@ namespace PMS.Features.UserManagement.Services
 
             var empDetail = await _employeeService.GetEmployeeById(Convert.ToInt32(model.EmployeeId));
 
-            _emailService.RegistrationEmail(empDetail.model?.EmailId ?? string.Empty, "PMS Registration",$"{model.UserName}", tempPassword);
+            _emailService.RegistrationEmail(empDetail.model?.EmailId ?? string.Empty, "PMS Registration", $"{model.UserName}", tempPassword);
 
             return ("User created successfully", true);
-           
+
         }
 
         public async Task<(string message, bool isSuccess)> DeleteUser(int userId, CancellationToken cancellationToken)
@@ -59,12 +69,12 @@ namespace PMS.Features.UserManagement.Services
 
         public async Task<(string message, bool isSuccess, IEnumerable<UserViewModel> models)> GetUserList(CancellationToken cancellationToken)
         {
-            return await _userRepository.GetUserList( cancellationToken);
+            return await _userRepository.GetUserList(cancellationToken);
         }
 
         public async Task<(string message, bool isSuccess)> LockedUser(int userId, CancellationToken cancellationToken)
         {
-            return await _userRepository.LockedUser(userId,cancellationToken);
+            return await _userRepository.LockedUser(userId, cancellationToken);
         }
 
         public async Task<(string message, bool isSuccess)> UpdateUser(Domain.UserManagement model, CancellationToken cancellationToken)

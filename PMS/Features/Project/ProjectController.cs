@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
+using PMS.Attributes;
 using PMS.Domains;
 using PMS.Features.Project.Services;
 using PMS.Features.UserManagement.Services;
@@ -9,6 +10,7 @@ using SelectPdf;
 
 namespace PMS.Features.Project
 {
+    [PmsAuthorize]
     public class ProjectController : Controller
     {
         private readonly IProjectService _projectService;

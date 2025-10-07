@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
+using PMS.Attributes;
 using PMS.Features.ProjectEmployee.Services;
 using PMS.Features.TaskDetail.Services;
 using PMS.Features.TaskDetail.ViewModels;
@@ -9,6 +10,8 @@ using PMS.Notification;
 
 namespace PMS.Features.TaskDetail
 {
+
+    [PmsAuthorize]
     public class TaskDetailController : Controller
     {
         private readonly ITaskDetailService _taskDetailService;
