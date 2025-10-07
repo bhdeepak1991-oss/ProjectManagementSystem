@@ -1,0 +1,73 @@
+﻿@using System.Globalization
+@model PMS.Features.EmployeeTimeSheet.ViewModels.TimeSheetVm
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-body" style="height:600px !important">
+
+				<form data-ajax="true" id="timeSheetForm" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+					  method="post" asp-action="UpdateTimeSheet" asp-asp-controller="EmployeeTimeSheet">
+					<div style="max-height: 500px; overflow-y: auto;">
+						<table class="table table-bordered  table-striped">
+							<thead>
+								<tr>
+									<th style="position: sticky; top: 0; color:white; background-color: #343a40; z-index: 2;">Time Sheet Date</th>
+									<th style="position: sticky; top: 0; color:white; background-color: #343a40; z-index: 2;">Time Sheet Day</th>
+									<th style="position: sticky; top: 0; color:white; background-color: #343a40; z-index: 2;">Working HR</th>
+									<th style="position: sticky; top: 0; color:white; background-color: #343a40; z-index: 2;">Task Detail</th>
+								</tr>
+							</thead>
+							<tbody>
+								@for (int i = 0; i < Model.models.Count(); i++)
+								{
+									<tr>
+										<td>
+											@Model.models[i].TimeSheetDate
+											<input type="hidden" name="TimeSheetDate" value="@Model.models[i].TimeSheetDate" />
+											<input type="hidden" name="EmployeeTimeSheetTaskId" value="@Model.models[i].EmployeeTimeSheetTaskId" />
+											<input type="hidden" name="Id" value="@Model.models[i].Id" />
+										</td>
+										<td>
+											@Model.models[i].DayName
+											<input type="hidden" name="DayName" value="@Model.models[i].DayName" />
+										</td>
+										<td>
+											<input type="number" class="form-control" name="WorkingHour" value="@Model.models[i].WorkingHour" />
+										</td>
+										<td>
+											<input type="text" class="form-control" name="TaskDetail"
+												   value="@( (@Model.models[i].DayName == "Saturday" || @Model.models[i].DayName == "Sunday") ? "Week Off" : Model.models[i].TaskDetail )" />
+										</td>
+									</tr>
+								}
+
+							</tbody>
+						</table>
+					</div>
+					<button type="submit" class="btn btn-success pull-right">Add Time Sheet</button>
+				</form>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<script>
+		function fn_OnBegin(){
+	}
+
+	function fn_OnSuccess(resp){
+		toastr.success("Saved successfully!");
+	}
+
+
+</script>
+
+
+
+
+

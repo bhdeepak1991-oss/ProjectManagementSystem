@@ -22,4 +22,6 @@ public partial class EmployeeTimeSheetTaskDetail
     public string? WorkingHour { get; set; }
 
     public string? TaskDetail { get; set; }
+
+    public string? DayName { get; set; }
 }

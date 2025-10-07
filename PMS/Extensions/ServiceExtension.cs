@@ -1,5 +1,6 @@
 ﻿using PMS.Features.Master.Services;
 using PMS.Features.Project.Services;
+using PMS.Features.EmployeeTimeSheet.Services;
 using PMS.Features.ProjectEmployee.Services;
 using PMS.Features.ProjectTask.Services;
 using PMS.Features.Sprint.Services;
@@ -36,6 +37,8 @@ namespace PMS.Extensions
             services.AddScoped<ITaskDetailService, TaskDetailService>();
 
             services.AddScoped<IStatusHelperService, StatusHelperService>();
+
+            services.AddScoped<ITimeSheetService, TimeSheetService>();
 
             services.AddTransient<EmailService>();
 

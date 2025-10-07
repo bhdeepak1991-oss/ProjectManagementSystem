@@ -1,0 +1,120 @@
+﻿@model PMS.Domains.EmployeeTimeSheet
+
+<div class="content-wrapper" style="min-height: 948px;">
+	<section class="content-header d-flex align-items-center justify-content-between">
+		<h1 class="m-0">
+			Employee TimeSheet
+			<small>Add Time Sheet </small>
+		</h1>
+		<a class="btn btn-success" onclick="fn_TimeSheetList()">
+			<i class="fa fa-list"></i> List
+		</a>
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">Add Employee Time Sheet</h3>
+					</div>
+
+					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+						  asp-action="CreateTimeSheet" asp-controller="EmployeeTimeSheet" enctype="multipart/form-data">
+						<div class="box-body" style="height:900px !important">
+							<div class="row">
+								<div class="form-group col-md-4">
+									<label class=" pull-left" asp-for="TimeSheetYear">Please select Year</label>
+									<select class="form-control" asp-for="TimeSheetYear" placeholder="Please enter sprint name!">
+										<option value="">--select--</option>
+										@for (int i = 2025; i < 2050; i++)
+										{
+											<option value="@i">@i</option>
+										}
+									</select>
+									<span asp-validation-for="TimeSheetYear" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-4">
+									<label class=" pull-left" asp-for="TimeSheetMonth">Please select Month</label>
+									<select class="form-control select2" asp-for="TimeSheetMonth" placeholder="Please select month">
+										<option value="">--select--</option>
+										@for (int month = 1; month <= 12; month++)
+										{
+											var monthName = new DateTime(1, month, 1).ToString("MMMM");
+											<option value="@month">@monthName</option>
+										}
+									</select>
+									<span asp-validation-for="TimeSheetMonth" class="text-danger"></span>
+								</div>
+
+								<div class="form-group col-md-4">
+									<label class=" pull-left" asp-for="TimeSheetName">Time Sheet Name</label>
+									<input class="form-control" asp-for="TimeSheetName" placeholder="Please enter Time Sheet Name" />
+									<span asp-validation-for="TimeSheetName" class="text-danger"></span>
+								</div>
+							</div>
+
+							<button type="submit" class="btn btn-primary pull-right">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		@await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");
+	</section>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+
+<script>
+	function fn_TimeSheetList() {
+
+		$.get('/features/EmployeeTimeSheet/GetTimeSheet', function(resp){
+			$("#divData").html(resp);
+			$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Time Sheet List");
+		});
+	}
+	function fn_CloseModal() {
+		$("#pmModalPopUp").modal('hide');
+	}
+	function fn_OnBegin(){
+	}
+
+	function fn_OnSuccess(resp){
+		toastr.success("Saved successfully!");
+	}
+
+		$(document).ready(function () {
+		// Initialize CKEditor
+		if (document.getElementById('editor1')) {
+			CKEDITOR.replace('editor1', {
+				height: 150,
+				toolbar: 'Full'
+			});
+
+			CKEDITOR.replace('editor2', {
+				height: 150,
+				toolbar: 'Full'
+			});
+		}
+
+		// Update CKEditor content before form submit (AJAX forms)
+		$('form[data-ajax="true"]').on('submit', function () {
+			for (var instance in CKEDITOR.instances) {
+				CKEDITOR.instances[instance].updateElement();
+			}
+		});
+
+		// Initialize Select2
+		$('.select2').select2({
+			placeholder: "Please enter project manager",
+			allowClear: true
+		});
+	});
+</script>
+
+
+
+
