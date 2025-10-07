@@ -87,7 +87,7 @@ namespace PMS.Features.EmployeeTimeSheet
 
             var response = await _timeSheetService.UploadTimeSheet(timeSheetModel, default);
 
-            return Json("");
+            return Json(response);
         }
     }
 }

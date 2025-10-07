@@ -14,7 +14,7 @@
 								<tr>
 									<th style="position: sticky; top: 0; color:white; background-color: #343a40; z-index: 2;">Time Sheet Date</th>
 									<th style="position: sticky; top: 0; color:white; background-color: #343a40; z-index: 2;">Time Sheet Day</th>
-									<th style="position: sticky; top: 0; color:white; background-color: #343a40; z-index: 2;">Working HR</th>
+									<th style="position: sticky; top: 0; color:white; background-color: #343a40; z-index: 2;">Hour</th>
 									<th style="position: sticky; top: 0; color:white; background-color: #343a40; z-index: 2;">Task Detail</th>
 								</tr>
 							</thead>
@@ -32,12 +32,12 @@
 											@Model.models[i].DayName
 											<input type="hidden" name="DayName" value="@Model.models[i].DayName" />
 										</td>
-										<td>
+										<td style="width:70px !important">
 											<input type="number" class="form-control" name="WorkingHour" value="@Model.models[i].WorkingHour" />
 										</td>
 										<td>
 											<input type="text" class="form-control" name="TaskDetail"
-												   value="@( (@Model.models[i].DayName == "Saturday" || @Model.models[i].DayName == "Sunday") ? "Week Off" : Model.models[i].TaskDetail )" />
+												   value="@( ((@Model.models[i].DayName == "Saturday" || @Model.models[i].DayName == "Sunday") && string.IsNullOrEmpty( Model.models[i].TaskDetail)) ? "Week Off" : Model.models[i].TaskDetail )" />
 										</td>
 									</tr>
 								}

@@ -49,7 +49,7 @@ namespace PMS.Features.TaskDetail.Respositories
             var result = await (from td in _dbContext.TaskDiscussionBoards
                                 join emp in _dbContext.Employees
                                     on td.EmployeeId equals emp.Id
-                                where td.ProjectTaskId == 1
+                                where td.ProjectTaskId == taskId
                                 select new ProjectDiscussBoard
                                 {
                                     Id = td.Id,

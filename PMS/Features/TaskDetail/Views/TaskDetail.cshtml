@@ -402,7 +402,7 @@
 	});
 
 	function GetTaskDiscussionDetail(id){
-		$.get("/TaskDetail/DiscussionBoard",{id: id}, function(resp){
+		$.get("/TaskDetail/DiscussionBoard",{taskId: id}, function(resp){
 			$("#divDiscussionBoard").html(resp);
 		
 		});

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PMS.Attributes;
 using PMS.Features.ProjectTask.Services;
+using PMS.Helpers;
 
 namespace PMS.Features.ProjectTask
 {
@@ -33,6 +34,10 @@ namespace PMS.Features.ProjectTask
         {
             if (model.Id == 0)
             {
+                model.CreatedBy = Convert.ToInt32(HttpContext.GetEmployeeId());
+
+                model.ProjectId = Convert.ToInt32(HttpContext.GetProjectId());
+
                 var response = await _projectTaskService.CreateProjectTask(model, default);
 
                 return Json(response);
