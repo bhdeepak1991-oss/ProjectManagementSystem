@@ -43,13 +43,22 @@ namespace PMS.Features.ProjectTask
             return Json(updateResponse);
         }
 
-        public async Task<IActionResult> GetProjectTask(Domains.ProjectTask model)
+        public async Task<IActionResult> GetProjectTask()
         {
             var projectId = Convert.ToInt32(HttpContext.Session.GetInt32("selectedProjectId") ?? 1);
 
             var response = await _projectTaskService.GetProjectTaskList(projectId, default);
 
             return PartialView("~/Features/ProjectTask/Views/ProjectTaskList.cshtml", response.models);
+        }
+
+        public async Task<IActionResult> ProjectTaskList()
+        {
+            var projectId = Convert.ToInt32(HttpContext.Session.GetInt32("selectedProjectId") ?? 1);
+
+            var response = await _projectTaskService.GetProjectTaskList(projectId, default);
+
+            return View("~/Features/ProjectTask/Views/ProjectTaskList.cshtml", response.models);
         }
 
         public async Task<IActionResult> DeleteProjectTask(int Id)

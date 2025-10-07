@@ -163,16 +163,17 @@
 				box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); /* subtle red shadow */
 			}
 
-		body{
+		body {
 			font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 		}
-		p{
+
+		p {
 			font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 		}
 	</style>
 
 </head>
-<body class="skin-blue">
+<body class="skin-blue" id="pmsBody">
 	<div class="wrapper">
 
 		<header class="main-header">
@@ -371,9 +372,9 @@
 										<small></small>
 									</p>
 								</li>
-								
-								
-								
+
+
+
 								<li class="user-footer">
 									<div class="pull-left">
 										<a href="#" class="btn btn-default btn-flat">Profile</a>
@@ -410,9 +411,10 @@
 						</a>
 					<li>
 						<a asp-action="Index" asp-controller="ProjectEmployee">
-							<i class="fa fa-upload"></i> <span>Project Employee</span>
+							<i class="fa fa-users"></i> <span>Project Employee</span>
 						</a>
 					</li>
+
 					<li>
 						<a asp-action="CreateSprint" asp-controller="Sprint">
 							<i class="fa fa-list"></i> <span>Sprint</span>
@@ -421,6 +423,12 @@
 					<li>
 						<a asp-action="Index" asp-controller="ProjectTask">
 							<i class="fa fa-list"></i> <span>Project Task</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="ProjectTaskList" asp-controller="ProjectTask">
+							<i class="fa fa-list"></i> <span>Task List</span>
 						</a>
 					</li>
 
@@ -552,5 +560,9 @@
 		}
 		originalWarn.apply(console, [message, ...args]);
 	};
+
+	$(document).ready(function(){
+	$("#pmsBody").addClass('skin-blue sidebar-collapse sidebar-open')
+	})
 </script>
 </html>

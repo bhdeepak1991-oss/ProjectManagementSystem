@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PMS.Domains;
 using PMS.Features.ProjectTask.ViewModels;
+using PMS.Helpers;
 using System.Threading.Tasks;
 
 namespace PMS.Features.ProjectTask.Repositories
@@ -82,7 +83,7 @@ namespace PMS.Features.ProjectTask.Repositories
             var responseModels = projectTaskModels.ToList().Select(x => new ProjectTaskViewModel()
             {
                 Id=x.Id,
-                TaskName= x.TaskName,
+                TaskName= x.TaskName.TruncateWithEllipsis(),
                 TaskCode= x.TaskCode,
                 TaskDetail= x.TaskDetail,
                 TaskPriority= x.TaskPriority,
