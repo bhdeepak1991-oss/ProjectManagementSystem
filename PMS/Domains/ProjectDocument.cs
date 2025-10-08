@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PMS.Domains;
 
@@ -24,4 +25,8 @@ public partial class ProjectDocument
     public int? UpdatedBy { get; set; }
 
     public DateTime? UpdatedDate { get; set; }
+    public string  UploadFileName { get; set; }
+
+    [NotMapped]
+    public string CreatedByName { get; set; }
 }

@@ -7,6 +7,7 @@ using PMS.Features.Sprint.Repositories;
 using PMS.Features.TaskDetail.Respositories;
 using PMS.Features.UserManagement.Respositories;
 using PMS.Features.Utilities.Repositories;
+using PMS.Features.Document.Repositories;
 
 namespace PMS.Extensions
 {
@@ -39,6 +40,7 @@ namespace PMS.Extensions
             services.AddScoped<IStatusHelperRepository, StatusHelperRepository>();
 
             services.AddScoped<ITimeSheetRepository, TimeSheetRepository>();
+            services.AddScoped<IProjectDocumentRepository, ProjectDocumentRepository>();
 
             return services;
         }

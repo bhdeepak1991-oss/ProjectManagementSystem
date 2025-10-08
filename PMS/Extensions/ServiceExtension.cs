@@ -7,6 +7,8 @@ using PMS.Features.Sprint.Services;
 using PMS.Features.TaskDetail.Services;
 using PMS.Features.UserManagement.Services;
 using PMS.Features.Utilities.Services;
+using PMS.Helpers;
+using PMS.Features.Document.Services;
 
 namespace PMS.Extensions
 {
@@ -40,9 +42,13 @@ namespace PMS.Extensions
 
             services.AddScoped<ITimeSheetService, TimeSheetService>();
 
+            services.AddScoped<IProjectDocumentService, ProjectDocumentService>();
+
             services.AddTransient<EmailService>();
 
             services.AddTransient<PasswordService>();
+
+            services.AddTransient<BlobHelper>();
 
             return services;
         }

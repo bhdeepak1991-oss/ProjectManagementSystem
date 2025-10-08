@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Document\Validators\" />
     <Folder Include="Features\ProjectEmployee\Validators\" />
     <Folder Include="Features\TaskDetail\Validators\" />
   </ItemGroup>
