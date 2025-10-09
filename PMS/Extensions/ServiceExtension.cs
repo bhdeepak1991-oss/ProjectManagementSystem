@@ -9,6 +9,7 @@ using PMS.Features.UserManagement.Services;
 using PMS.Features.Utilities.Services;
 using PMS.Helpers;
 using PMS.Features.Document.Services;
+using PMS.Features.Vacation.Services;
 
 namespace PMS.Extensions
 {
@@ -43,6 +44,8 @@ namespace PMS.Extensions
             services.AddScoped<ITimeSheetService, TimeSheetService>();
 
             services.AddScoped<IProjectDocumentService, ProjectDocumentService>();
+
+            services.AddScoped<IVacationService, VacationService>();
 
             services.AddTransient<EmailService>();
 

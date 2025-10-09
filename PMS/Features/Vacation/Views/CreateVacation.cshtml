@@ -1,0 +1,131 @@
+﻿@model PMS.Domains.VacationDetail
+
+<div class="content-wrapper" style="min-height: 948px;">
+    <section class="content-header d-flex align-items-center justify-content-between">
+        <h1 class="m-0">
+            Create Vacation Informaion
+            <small>Vacation Information</small>
+        </h1>
+        <a class="btn btn-success" onclick="fn_EmployeeList()">
+            <i class="fa fa-list"></i> Vacation List
+        </a>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Create Vacation</h3>
+                    </div>
+
+                    <form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+                          asp-action="CreateVacation" asp-controller="Vacation">
+                        <div class="box-body" style="height:900px !important">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <input type="hidden" asp-for="Id" />
+                                    <label class=" pull-left" asp-for="VacationName">Vacation Name</label>
+                                    <input class="form-control" asp-for="VacationName" placeholder="Please enter Vacation name!">
+                                    <span asp-validation-for="VacationName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="VacationType">Vacation Type</label>
+                                    <select class="form-control" asp-for="VacationType" placeholder="Please enter Vacation Type">
+                                        <option value="">--select--</option>
+                                        <option value="Holiday">Holiday</option>
+                                        <option value="Public Holiday">Public Holiday</option>
+                                        <option value="Training">Training</option>
+                                    </select>
+                                    <span asp-validation-for="VacationType" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="FromDate">From Date</label>
+                                    <input class="form-control" type="date" asp-for="FromDate" placeholder="Please enter from date">
+                                    <span asp-validation-for="FromDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="ToDate">To Date</label>
+                                    <input class="form-control" type="date" asp-for="ToDate" placeholder="Please enter to date">
+                                    <span asp-validation-for="ToDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="ProjectInvolved">Select Project</label>
+                                    <select class="form-control select2" asp-items="ViewBag.Project" asp-for="ProjectInvolved" placeholder="Please select department">
+                                        <option value="All">--All--</option>
+                                    </select>
+                                    <span asp-validation-for="ProjectInvolved" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="Reason">Vacation Detail</label>
+                                    <input class="form-control" asp-for="Reason" placeholder="Please enter from date">
+                                    <span asp-validation-for="Reason" class="text-danger"></span>
+                                    <span asp-validation-for="Reason" class="text-danger"></span>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                            </div>
+                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        @await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");
+    </section>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+
+<script>
+    function fn_EmployeeList() {
+
+        $.get('/features/Vacation/GetVacationList', function(resp){
+            $("#divData").html(resp);
+            $("#pmModalPopUp").modal('show');
+            $("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Vacation List");
+        });
+    }
+    function fn_CloseModal() {
+        $("#pmModalPopUp").modal('hide');
+    }
+    function fn_OnBegin(){
+    }
+
+    function fn_OnSuccess(resp){
+        toastr.success("Saved successfully!");
+    }
+
+        $(document).ready(function () {
+        // Initialize CKEditor
+        if (document.getElementById('editor1')) {
+            CKEDITOR.replace('editor1', {
+                height: 150,
+                toolbar: 'Full'
+            });
+
+            CKEDITOR.replace('editor2', {
+                height: 150,
+                toolbar: 'Full'
+            });
+        }
+
+        // Update CKEditor content before form submit (AJAX forms)
+        $('form[data-ajax="true"]').on('submit', function () {
+            for (var instance in CKEDITOR.instances) {
+                CKEDITOR.instances[instance].updateElement();
+            }
+        });
+
+        // Initialize Select2
+        $('.select2').select2({
+            placeholder: "Please enter project manager",
+            allowClear: true
+        });
+    });
+</script>
+
+
+
+

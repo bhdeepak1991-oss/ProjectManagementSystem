@@ -8,6 +8,7 @@ using PMS.Features.TaskDetail.Respositories;
 using PMS.Features.UserManagement.Respositories;
 using PMS.Features.Utilities.Repositories;
 using PMS.Features.Document.Repositories;
+using PMS.Features.Vacation.Repositories;
 
 namespace PMS.Extensions
 {
@@ -40,7 +41,10 @@ namespace PMS.Extensions
             services.AddScoped<IStatusHelperRepository, StatusHelperRepository>();
 
             services.AddScoped<ITimeSheetRepository, TimeSheetRepository>();
+
             services.AddScoped<IProjectDocumentRepository, ProjectDocumentRepository>();
+
+            services.AddScoped<IVacationRepository, VacationRepository>();
 
             return services;
         }
