@@ -9,6 +9,7 @@ using PMS.Features.UserManagement.Respositories;
 using PMS.Features.Utilities.Repositories;
 using PMS.Features.Document.Repositories;
 using PMS.Features.Vacation.Repositories;
+using PMS.Features.Notification.Repositories;
 
 namespace PMS.Extensions
 {
@@ -45,6 +46,8 @@ namespace PMS.Extensions
             services.AddScoped<IProjectDocumentRepository, ProjectDocumentRepository>();
 
             services.AddScoped<IVacationRepository, VacationRepository>();
+
+            services.AddScoped<INotificationRepository, NotificationRepository>();
 
             return services;
         }

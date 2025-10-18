@@ -15,6 +15,15 @@ namespace PMS.Features.ProjectTask.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<(string message, bool isSuccess)> CreateBulkProjectTask(List<Domains.ProjectTask> models, CancellationToken cancellationToken)
+        {
+            await _dbContext.AddRangeAsync(models);
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            return ("Task uploaded successfully", true);
+        }
+
         public async Task<(string message, bool isSuccess)> CreateProjectTask(Domains.ProjectTask models, CancellationToken cancellationToken)
         {
             var responseModel = await _dbContext.ProjectTasks.AddAsync(models);

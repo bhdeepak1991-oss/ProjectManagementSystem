@@ -1,6 +1,8 @@
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using PMS.Domains;
 using PMS.Extensions;
 using PMS.Features.Master.Validators;
@@ -11,6 +13,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<FeatureRouteTransformer>();
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+//open telemtry on to the application
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing =>
+    {
+        tracing
+            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("ProjectManagementSystemApplication"))
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddJaegerExporter(jaegerOptions =>
+            {
+                jaegerOptions.AgentHost = "localhost"; // or container name if using Docker Compose
+                jaegerOptions.AgentPort = 6831;        // default for Jaeger agent
+            });
+    });
+
 
 builder.Services.AddSignalR();
 

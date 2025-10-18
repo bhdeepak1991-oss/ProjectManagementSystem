@@ -1,4 +1,5 @@
 ﻿using PMS.Domains;
+using PMS.Features.Notification.Services;
 using PMS.Features.ProjectTask.Repositories;
 using PMS.Features.ProjectTask.ViewModels;
 using System.Threading.Tasks;
@@ -8,14 +9,30 @@ namespace PMS.Features.ProjectTask.Services
     public class ProjectTaskService : IProjectTaskService
     {
         private readonly IProjectTaskRepository _projectTaskRepository;
-
-        public ProjectTaskService(IProjectTaskRepository projectTaskRepository)
+        private readonly INotificationService _notificationService;
+        public ProjectTaskService(IProjectTaskRepository projectTaskRepository, INotificationService notificationService)
         {
             _projectTaskRepository = projectTaskRepository;
+            _notificationService = notificationService;
+        }
+
+        public async Task<(string message, bool isSuccess)> CreateBulkProjectTask(List<Domains.ProjectTask> models, CancellationToken cancellationToken)
+        {
+            var response = await _projectTaskRepository.CreateBulkProjectTask(models, cancellationToken);
+            return response;
         }
 
         public async Task<(string message, bool isSuccess)> CreateProjectTask(Domains.ProjectTask models, CancellationToken cancellationToken)
         {
+            await _notificationService.AddNotification(new NotificationDetail()
+            {
+                NotificationMessage = $"New Task has been assigned to you ! {models.TaskName}",
+                NotifiedUserId = models.EmployeeId,
+                NotificationStatus = "New Notification",
+                IsActive = true,
+                IsDeleted= false
+            }, cancellationToken);
+
             return await _projectTaskRepository.CreateProjectTask(models, cancellationToken);
         }
 

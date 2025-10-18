@@ -1,52 +1,26 @@
 ﻿@model PMS.Features.Utilities.ViewModels.StatusHelperUploadVm
 
-<div class="content-wrapper" style="min-height: 948px;">
-	<section class="content-header d-flex align-items-center justify-content-between">
-		<h1 class="m-0">
-			Upload Status Helper File
-			<small>Upload File</small>
-		</h1>
-		<a class="btn btn-success" onclick="fn_StatusList()">
-			<i class="fa fa-list"></i> Status Helper List
-		</a>
-	</section>
-
-	<section class="content">
+<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+	  asp-action="UploadFile" asp-controller="Utilities" enctype="multipart/form-data">
+	<div class="box-body" style="height:400px !important">
 		<div class="row">
-			<div class="col-xs-12">
-				<div class="box">
-					<div class="box-header">
-						<h3 class="box-title">Upload File (Status Helper)</h3>
-					</div>
-
-					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
-						  asp-action="UploadFile" asp-controller="Utilities" enctype="multipart/form-data">
-						<div class="box-body" style="height:900px !important">
-							<div class="row">
-								<div class="form-group col-md-6">
-									<label class=" pull-left" asp-for="UploadFile">Please upload File :</label>
-									<input class="form-control" type="file" asp-for="UploadFile" placeholder="Please enter sprint name!">
-									<span asp-validation-for="UploadFile" class="text-danger"></span>
-								</div>
-								<div class="form-group col-md-6">
-									<a class="btn btn-success pull-right" style="margin-top:25px" asp-action="DownloadStausFile" asp-controller="Utilities">
-										<i class="fa fa-download"> Download Template</i>
-									</a>
-									
-								</div>
-								
-							</div>
-
-							<button type="submit" class="btn btn-primary pull-right">Submit</button>
-						</div>
-					</form>
-				</div>
+			<div class="form-group col-md-6">
+				<label class=" pull-left" asp-for="UploadFile">Please upload File :</label>
+				<input class="form-control" type="file" asp-for="UploadFile" placeholder="Please enter sprint name!">
+				<span asp-validation-for="UploadFile" class="text-danger"></span>
 			</div>
+			<div class="form-group col-md-6">
+				<a class="btn btn-success pull-right" style="margin-top:25px" asp-action="DownloadStausFile" asp-controller="Utilities">
+					<i class="fa fa-download"> Download Template</i>
+				</a>
+
+			</div>
+
 		</div>
 
-		@await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");	
-	</section>
-</div>
+		<button type="submit" class="btn btn-primary pull-right">Submit</button>
+	</div>
+</form>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
 

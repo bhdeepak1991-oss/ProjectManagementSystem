@@ -22,6 +22,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.13.0" />
+    <PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.5.1" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.13.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
     <PackageReference Include="Otp.NET" Version="1.4.0" />
     <PackageReference Include="QRCoder" Version="1.6.0" />
     <PackageReference Include="Select.HtmlToPdf.NetCore" Version="25.2.0" />
@@ -29,6 +34,8 @@
 
   <ItemGroup>
     <Folder Include="Features\Document\Validators\" />
+    <Folder Include="Features\Notification\Validators\" />
+    <Folder Include="Features\Notification\ViewModels\" />
     <Folder Include="Features\ProjectEmployee\Validators\" />
     <Folder Include="Features\TaskDetail\Validators\" />
     <Folder Include="Features\Vacation\Validators\" />

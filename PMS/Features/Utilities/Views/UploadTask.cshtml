@@ -1,0 +1,137 @@
+﻿@model PMS.Features.Utilities.ViewModels.StatusHelperUploadVm
+
+<section class="content">
+	<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+		  asp-action="UploadTask" asp-controller="Utilities" enctype="multipart/form-data">
+		<div class="box-body" style="height:900px !important">
+			<div class="row">
+				<div class="form-group col-md-6">
+					<label class=" pull-left" asp-for="UploadFile">Please upload File :</label>
+					<input class="form-control" type="file" asp-for="UploadFile" placeholder="Please enter sprint name!">
+					<span asp-validation-for="UploadFile" class="text-danger"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<a class="btn btn-success pull-right" style="margin-top:25px" asp-action="DownloadTaskTemplate" asp-controller="Utilities">
+						<i class="fa fa-download"> Download Template</i>
+					</a>
+
+				</div>
+
+				<table id="errorTable" border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Field Name</th>
+							<th>Cell Number</th>
+							<th>Error Message</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- JavaScript will insert rows here -->
+					</tbody>
+				</table>
+
+			</div>
+
+			<button type="submit" class="btn btn-primary pull-right">Submit</button>
+		</div>
+	</form>
+
+
+</section>
+<!-- jQuery (required by DataTables) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+
+<script>
+	function fn_StatusList() {
+	
+		$.get('/features/Utilities/GetStatusHelper', function(resp){
+			$("#divData").html(resp);
+			$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Status Type List");
+		});
+	}
+	function fn_CloseModal() {
+		$("#pmModalPopUp").modal('hide');
+	}
+	function fn_OnBegin(){
+	}
+
+	function fn_OnSuccess(resp){
+		$("#tbl_ErrorList").add('style','display:none')
+		if(resp.success){
+			toastr.success(resp.message);
+		}
+		else{
+			toastr.error(resp.message);
+			renderErrorTable(resp.models);
+			$("#tbl_ErrorList").remove('style');
+				$(document).ready(function () {
+				$('#errorTable').DataTable({
+					pageLength: 10,         // Optional: how many rows per page
+					lengthChange: false,    // Optional: disable page size dropdown
+					ordering: true,         // Enable sorting
+					searching: true         // Enable search box
+				});
+			});
+		}
+		
+	}
+
+		function renderErrorTable(errors) {
+		const tableBody = document.querySelector("#errorTable tbody");
+		tableBody.innerHTML = ''; // Clear previous rows if any
+
+		errors.forEach((item, index) => {
+			const row = document.createElement("tr");
+
+			row.innerHTML = `
+				<td>${index + 1}</td>
+				<td>${item.columnName}</td>
+				<td>${item.cellNumber}</td>
+				<td>${item.errorMessage}</td>
+			`;
+
+			tableBody.appendChild(row);
+		});
+	}
+
+		$(document).ready(function () {
+		// Initialize CKEditor
+		if (document.getElementById('editor1')) {
+			CKEDITOR.replace('editor1', {
+				height: 150,
+				toolbar: 'Full'
+			});
+
+			CKEDITOR.replace('editor2', {
+				height: 150,
+				toolbar: 'Full'
+			});
+		}
+
+		// Update CKEditor content before form submit (AJAX forms)
+		$('form[data-ajax="true"]').on('submit', function () {
+			for (var instance in CKEDITOR.instances) {
+				CKEDITOR.instances[instance].updateElement();
+			}
+		});
+
+		// Initialize Select2
+		$('.select2').select2({
+			placeholder: "Please enter project manager",
+			allowClear: true
+		});
+	});
+</script>
+
+
+
+

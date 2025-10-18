@@ -1,0 +1,71 @@
+﻿@model PMS.Features.Utilities.ViewModels.StatusHelperUploadVm
+
+
+<div class="content-wrapper" style="min-height: 948px;">
+    <section class="content-header d-flex align-items-center justify-content-between">
+        <h1 class="m-0">
+            Utilities Helper
+            <small>Utilities Master (Where we have upload the Excel File)</small>
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <div class="col-md-12">
+                            <!-- Custom Tabs -->
+                            <div class="nav-tabs-custom">
+                                <ul class="nav nav-tabs">
+                                    <li><a onclick="fn_utilities(this,'US')" data-toggle="tab" aria-expanded="true">Upload Status</a></li>
+                                    <li><a onclick="fn_utilities(this,'USL')" data-toggle="tab" aria-expanded="true">Upload Status List</a></li>
+                                    <li><a onclick="fn_utilities(this,'UT')" data-toggle="tab" aria-expanded="false">Upload Task</a></li>
+                                    <li><a onclick="fn_utilities(this,'TL')" data-toggle="tab" aria-expanded="false">Task List</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="utilitiesData"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml")
+    </section>
+</div>
+
+
+<script>
+    function fn_OnBegin(){
+    }
+    function fn_OnSuccess(resp){
+        toastr.success("Saved successfully!");
+    }
+
+    function fn_utilities(eData, name){
+        $("#utilitiesData").html('');
+        $(eData).addClass('active');
+        if(name==='US'){
+            $.get('/Utilities/Index', function(resp){
+                $("#utilitiesData").html(resp);
+            });
+        }
+         if(name==='USL'){
+            $.get('/Utilities/GetStatusHelper', function(resp){
+                $("#utilitiesData").html(resp);
+            });
+        }
+        if(name==='UT'){
+            $.get('/Utilities/TaskUpload', function(resp){
+                $("#utilitiesData").html(resp);
+            });
+        }
+    }
+</script>
+
+
+
+

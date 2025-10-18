@@ -60,5 +60,11 @@ namespace PMS.Features.Vacation
 
             return Json(response);
         }
+
+        public async Task<IActionResult> GetCalendardetail()
+        {
+            var responseModels = await _vacationService.GetVacationDetail(default);
+            return Json(responseModels.models);
+        }
     }
 }

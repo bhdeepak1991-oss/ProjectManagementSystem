@@ -31,7 +31,7 @@ namespace PMS.Attributes
 
             var projectId = httpContext.GetProjectId();
 
-            if (userId is null || projectId is null)
+            if (userId is null && projectId is null)
             {
                 context.Result = new RedirectToActionResult("ProjectSelection", "Dashboard", null);
                 return;
