@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PMS.Attributes;
+using PMS.Features.Dashboard.Services;
 using PMS.Features.ProjectTask.Services;
 using PMS.Helpers;
 
@@ -11,10 +12,12 @@ namespace PMS.Features.ProjectTask
     public class ProjectTaskController : Controller
     {
         private readonly IProjectTaskService _projectTaskService;
+        private readonly IDashboardService _dashboardService;
 
-        public ProjectTaskController(IProjectTaskService projectTaskService)
+        public ProjectTaskController(IProjectTaskService projectTaskService, IDashboardService dashboardService)
         {
             _projectTaskService = projectTaskService;
+            _dashboardService = dashboardService;
         }
 
         public async Task<IActionResult> Index(int id)

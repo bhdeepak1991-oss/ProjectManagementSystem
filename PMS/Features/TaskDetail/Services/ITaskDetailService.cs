@@ -8,5 +8,10 @@ namespace PMS.Features.TaskDetail.Services
         Task<(string message, bool isSuccess, TaskDetailViewModel model)> GetTaskDetail(int taskId);
         Task<(string message, bool isSuccess)> CreateDiscussion(TaskDetailViewModel model);
         Task<(string message, bool isSuccess, IEnumerable<ProjectDiscussBoard> models)> GetDiscussionBoardList(int taskId);
+        Task<(string message, bool isSuccess)> ChangeTaskStatus(int taskId, int userId, string status);
+        Task<(string message, bool isSuccess)> ChangeTaskPriority(int taskId, int userId, string priority);
+        Task<(string message, bool isSuccess)> ChangeTaskStartDate(int taskId, int userId, DateTime startDate);
+        Task<(string message, bool isSuccess)> ChangeTaskCompletedDate(int taskId, int userId, DateTime completedDate);
+        Task<(string message, bool isSuccess)> AssignToEmployee(int taskId, int userId, int empId);
     }
 }

@@ -356,9 +356,8 @@ public partial class PmsDbContext : DbContext
 
         modelBuilder.Entity<ProjectTaskStatusHistory>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("ProjectTaskStatusHistory");
+            entity.HasKey(e => e.Id);
+            entity.ToTable("ProjectTaskStatusHistory");
 
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.TaskStatus)

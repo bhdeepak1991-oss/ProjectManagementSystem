@@ -12,6 +12,31 @@ namespace PMS.Features.TaskDetail.Services
             _taskDetailRepository = taskDetailRepository;
         }
 
+        public async Task<(string message, bool isSuccess)> AssignToEmployee(int taskId, int userId, int empId)
+        {
+            return await _taskDetailRepository.AssignToEmployee(taskId, userId, empId);
+        }
+
+        public async Task<(string message, bool isSuccess)> ChangeTaskCompletedDate(int taskId, int userId, DateTime completedDate)
+        {
+            return await _taskDetailRepository.ChangeTaskCompletedDate(taskId, userId, completedDate);
+        }
+
+        public async Task<(string message, bool isSuccess)> ChangeTaskPriority(int taskId, int userId, string priority)
+        {
+            return await _taskDetailRepository.ChangeTaskPriority(taskId, userId, priority);
+        }
+
+        public async  Task<(string message, bool isSuccess)> ChangeTaskStartDate(int taskId, int userId, DateTime startDate)
+        {
+            return await _taskDetailRepository.ChangeTaskStartDate(taskId, userId, startDate);
+        }
+
+        public async Task<(string message, bool isSuccess)> ChangeTaskStatus(int taskId, int userId, string status)
+        {
+            return await _taskDetailRepository.ChangeTaskStatus(taskId, userId, status);
+        }
+
         public async Task<(string message, bool isSuccess)> CreateDiscussion(TaskDetailViewModel model)
         {
             return await _taskDetailRepository.CreateDiscussion(model);

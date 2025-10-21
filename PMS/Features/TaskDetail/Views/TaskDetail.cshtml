@@ -294,8 +294,8 @@
 						<button class="btn" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
 					</div>
 
-					<select asp-for="EmployeeId" asp-items="ViewBag.Employees" class="form-control" style="margin-top: 10px; width: 100%;">
-						<option>Select</option>
+					<select asp-for="EmployeeId" onchange="fn_AssignToEmployee(this)" asp-items="ViewBag.Employees" class="form-control" style="margin-top: 10px; width: 100%;">
+						<option>-select</option>
 					</select>
 				</div>
 				<div class="TaskDetail-sidebarSection">
@@ -305,7 +305,7 @@
 				</div>
 				<div class="TaskDetail-sidebarSection">
 					<h4>Start Date</h4>
-					<input type="date" class="form-control" asp-for="StartDate" />
+					<input type="date" onchange="fn_changeStartDate(this)" class="form-control" asp-for="StartDate" />
 
 				</div>
 				<div class="TaskDetail-sidebarSection">
@@ -324,7 +324,18 @@
 						<button class="btn" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
 					</div>
 
-					<select asp-for="TaskStatus" class="form-control" style="margin-top: 10px; width: 100%;">
+					<select asp-for="TaskStatus" onchange="fn_changeStatus(this)" asp-items="ViewBag.Status" class="form-control" style="margin-top: 10px; width: 100%;">
+						<option>Select</option>
+					</select>
+				</div>
+
+				<div class="TaskDetail-sidebarSection">
+					<div style="display: flex; justify-content: space-between; align-items: center;">
+						<h4 style="margin: 0;">Change Priority</h4>
+						<button class="btn" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
+					</div>
+
+					<select asp-for="TaskPriority" asp-items="ViewBag.Priority" class="form-control" style="margin-top: 10px; width: 100%;">
 						<option>Select</option>
 					</select>
 				</div>
@@ -416,5 +427,23 @@
 		GetTaskDiscussionDetail('@Model.Id');
 	}
 
+
+	function fn_changeStartDate(eData){
+		$.get("/TaskDetail/ChangeStartDate",{startDate:$(eData).val(), taskId:'@Model.Id'}, function(resp){
+			alert(resp.message)
+		})
+	}
+
+	function fn_changeStatus(eData){
+		$.get("/TaskDetail/ChangeStatus",{status:$(eData).val(), taskId:'@Model.Id'}, function(resp){
+			alert(resp.message)
+		})
+	}
+
+	function fn_AssignToEmployee(eData){
+		$.get("/TaskDetail/AssignToEmployee",{empId:$(eData).val(), taskId:'@Model.Id'}, function(resp){
+			alert(resp.message)
+		})
+	}
 </script>
 

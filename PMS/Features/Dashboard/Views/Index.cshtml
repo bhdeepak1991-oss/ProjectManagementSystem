@@ -3,6 +3,7 @@
 }
 
 @model PMS.Features.Dashboard.ViewModels.DashboardVm
+@using PMS.Features.Dashboard.ViewModels
 @using PMS.Features.UserManagement.Services
 
 @using Microsoft.AspNetCore.Http
@@ -127,14 +128,6 @@
         </div><!-- /.row -->
 
         <div class='row'>
-            <div class='col-md-5'>
-                <div id="pmsDirectChat"></div>
-            </div>
-
-            <div id="divUserList"></div>
-        </div>
-
-        <div class='row'>
             <div class='col-md-6'>
                 <!-- USERS LIST -->
                 <div class="box box-danger">
@@ -232,8 +225,86 @@
             </div>
         </div>
 
-        <div class='row'>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- TABLE: LATEST ORDERS -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Task Details</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+
+                            <div id="taskDrilldownChart" style="width: 100%; height: 600px;"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- TABLE: LATEST ORDERS -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Task Details</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row" id="filterContainer">
+
+                            <div class="form-group col-md-3">
+                                <label class="pull-left">Select Task Type</label>
+                                <select class="form-control" id="taskType" asp-items="ViewBag.Type">
+                                    <option value="">--select--</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label class="pull-left">Select Task Status</label>
+                                <select class="form-control" id="taskStatus" asp-items="ViewBag.Status">
+                                    <option value="">--select--</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label class="pull-left">Select Task Priority</label>
+                                <select class="form-control" id="taskPriority" asp-items="ViewBag.Priority">
+                                    <option value="">--select--</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label class="pull-left">Select Employee</label>
+                                <select class="form-control" id="employee" asp-items="ViewBag.Employee">
+                                    <option value="">--select--</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="divDataFiltered"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-md-5'>
+                <div id="pmsDirectChat"></div>
+            </div>
+
+            <div id="divUserList"></div>
+        </div>
+
+   
         <div class="row">
             <div class="col-md-12">
                 <!-- TABLE: LATEST ORDERS -->
@@ -267,6 +338,40 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+<script>
+    function loadFilteredData() {
+        const type = $('#taskType').val();
+        const status = $('#taskStatus').val();
+        const priority = $('#taskPriority').val();
+        const employee = $('#employee').val();
+
+        $.ajax({
+            url: '/Dashboard/FilterData', // Update this to your actual controller/action
+            type: 'GET',
+            data: {
+                taskType: type,
+                taskStatus: status,
+                taskPriority: priority,
+                employeeId: employee
+            },
+            success: function (result) {
+                $('#divDataFiltered').html(result); // inject partial view into div
+            },
+            error: function () {
+                $('#divDataFiltered').html('<p class="text-danger">Something went wrong.</p>');
+            }
+        });
+    }
+
+    // Trigger AJAX on any dropdown change
+    $(document).ready(function () {
+        $('#filterContainer select').on('change', loadFilteredData);
+    });
+</script>
+
 
 @{
     var employeeTasksHC = Model.EmployeeTasks.ToList();
@@ -303,7 +408,108 @@
 }
 
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
+
+   @{
+
+    // Helper class for drilldown series
+
+
+    var drilldownSeriesDD = new List<DrilldownSeries>();
+
+    // Level 1: TaskType group
+    var level1 = Model.TaskModelsDrillDown
+        .GroupBy(t => t.TaskType)
+        .Select(g => new
+        {
+            name = g.Key,
+            y = g.Count(),
+            drilldown = g.Key.ToLower()
+        })
+        .ToList();
+
+    // Level 2 and 3 drilldown series
+    foreach (var typeGroup in Model.TaskModelsDrillDown.GroupBy(t => t.TaskType))
+    {
+        var idLevel2 = typeGroup.Key.ToLower();
+
+        var level2Data = typeGroup
+            .GroupBy(t => t.TaskStatus)
+            .Select(g => new
+            {
+                name = g.Key,
+                y = g.Count(),
+                drilldown = $"{idLevel2}-{g.Key.ToLower()}"
+            })
+            .ToList<object>();
+
+        drilldownSeriesDD.Add(new DrilldownSeries
+        {
+            id = idLevel2,
+            name = $"{typeGroup.Key} Status",
+            data = level2Data
+        });
+
+        foreach (var statusGroup in typeGroup.GroupBy(t => t.TaskStatus))
+        {
+            var idLevel3 = $"{idLevel2}-{statusGroup.Key.ToLower()}";
+
+            // Level 3: TaskPriority with drilldown to employee level
+            var level3Data = statusGroup
+                .GroupBy(t => t.TaskPriority)
+                .Select(g => new
+                {
+                    name = g.Key,
+                    y = g.Count(),
+                    drilldown = $"{idLevel3}-{g.Key.ToLower()}"
+                })
+                .Cast<object>()
+                .ToList();
+
+            drilldownSeriesDD.Add(new DrilldownSeries
+            {
+                id = idLevel3,
+                name = $"{typeGroup.Key} {statusGroup.Key} Priority",
+                data = level3Data
+            });
+
+            // Level 4: EmployeeCode under each Priority
+            foreach (var priorityGroup in statusGroup.GroupBy(t => t.TaskPriority))
+            {
+                var idLevel4 = $"{idLevel3}-{priorityGroup.Key.ToLower()}";
+
+                var level4Data = priorityGroup
+                    .GroupBy(t => t.EmployeeCode)
+                    .Select(g => new object[] { $"{g.Key} ({g.First().EmployeeName})", g.Count() })
+                    .ToList<object>();
+
+              
+
+                drilldownSeriesDD.Add(new DrilldownSeries
+                {
+                    id = idLevel4,
+                    name = $"{typeGroup.Key} {statusGroup.Key} {priorityGroup.Key} Employees",
+                    data = level4Data,
+                    mappingName = $"{typeGroup.Key}||{statusGroup.Key}||{priorityGroup.Key}"
+                });
+            }
+        }
+
+
+       
+    }
+
+    var options = new System.Text.Json.JsonSerializerOptions
+    {
+        PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
+    };
+
+    string level1Json = System.Text.Json.JsonSerializer.Serialize(level1, options);
+    string drilldownSeriesJsonDD = System.Text.Json.JsonSerializer.Serialize(drilldownSeriesDD, options);
+
+
+}
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -369,6 +575,74 @@
         });
     });
 </script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const level1Data = @Html.Raw(level1Json);
+        const drilldownSeries = @Html.Raw(drilldownSeriesJsonDD);
+
+        const chart = Highcharts.chart('taskDrilldownChart', {
+            chart: { type: 'column' },
+            title: { text: 'Task Drilldown Chart' },
+            xAxis: { type: 'category' },
+            yAxis: { title: { text: 'Task Count' }, allowDecimals: false },
+            legend: { enabled: false },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: { enabled: true, format: '{point.y}' },
+                    point: {
+                        events: {
+                            click: function () {
+                                // Only trigger when this is the last drilldown level
+                                if (!this.drilldown) {
+                                    const drilldownLevels = chart.drilldownLevels || [];
+
+                                    // Safely build the drilldown path (e.g. TaskType > Status > Priority)
+                                    const drilldownPath = drilldownLevels
+                                        .map(level => level && level.lowerSeries && level.lowerSeries.name)
+                                        .filter(Boolean); // remove null/undefined
+
+                                    // Add the last clicked point (e.g. Employee)
+                                    drilldownPath.push(this.name);
+
+                                      const breadcrumbs = chart.drilldownLevels.map(level => {
+                                        // Safely extract the clicked point's name or series name
+                                        return level.lowerSeries?.name || level.seriesOptions?.name || 'Unknown';
+                                    });
+
+                                    // Add the current clicked point at the end
+                                    breadcrumbs.push(this.name);
+
+
+                                    console.log("Breadcrumb Path:", breadcrumbs);
+                                
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:14px">{series.name}</span><br>',
+                pointFormat: '<span>{point.name}</span>: <b>{point.y}</b> tasks<br/>'
+            },
+            series: [{
+                name: "Task Types",
+                colorByPoint: true,
+                data: level1Data
+            }],
+            drilldown: {
+                breadcrumbs: { position: { align: 'right' } },
+                series: drilldownSeries
+            }
+        });
+    });
+</script>
+
+
+
 
 
 

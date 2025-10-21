@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.EntityFrameworkCore;
 using PMS.Domains;
+using PMS.Features.Dashboard.ViewModels;
 using PMS.Features.ProjectTask.ViewModels;
 using PMS.Features.TaskDetail.ViewModels;
 
@@ -12,6 +15,119 @@ namespace PMS.Features.TaskDetail.Respositories
         public TaskDetailRepository(PmsDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<(string message, bool isSuccess)> AssignToEmployee(int taskId, int userId, int empId)
+        {
+            var dbModel = new ProjectTaskEmployeeHistory()
+            {
+                ProjectTaskId= taskId,
+                EmployeeId= empId,
+                UpdatedBy= userId,
+                UpdatedDate= DateTime.Now
+            };
+
+            await _dbContext.ProjectTaskEmployeeHistories.AddAsync(dbModel);
+
+            var updateModel = await _dbContext.ProjectTasks.FindAsync(taskId);
+
+            updateModel.EmployeeId = empId;
+            updateModel.UpdatedBy = userId;
+            updateModel.UpdatedDate = DateTime.Now;
+
+            _dbContext.ProjectTasks.Update(updateModel);
+
+            await _dbContext.SaveChangesAsync();
+
+            return ("Task assign to employee", true);
+
+
+
+        }
+
+        public async Task<(string message, bool isSuccess)> ChangeTaskCompletedDate(int taskId, int userId, DateTime completedDate)
+        {
+            var model = await _dbContext.ProjectTasks.FindAsync(taskId);
+
+            model.CompletedDate = completedDate;
+            model.UpdatedBy = userId;
+            model.UpdatedDate = DateTime.Now;
+
+            _dbContext.ProjectTasks.Update(model);
+
+            await _dbContext.SaveChangesAsync();
+
+            return ("Task completed date updated !", true);
+
+        }
+
+        public async Task<(string message, bool isSuccess)> ChangeTaskPriority(int taskId, int userId, string priority)
+        {
+            var dbModel = new ProjectTaskPriorityHistory()
+            {
+                ProjectTaskId = taskId,
+                TaskPriority = priority,
+                UpdatedDate = DateTime.Now,
+                UpdatedBy = userId,
+            };
+
+            await _dbContext.ProjectTaskPriorityHistories.AddAsync(dbModel);
+
+            var updateModel = await _dbContext.ProjectTasks.FindAsync(taskId);
+
+            updateModel.TaskPriority = priority;
+
+            updateModel.UpdatedBy = userId;
+
+            updateModel.UpdatedDate = DateTime.Now;
+
+            _dbContext.ProjectTasks.Update(updateModel);
+
+            await _dbContext.SaveChangesAsync();
+
+            return ("Task Pririty has been updated !", true);
+        }
+
+        public async Task<(string message, bool isSuccess)> ChangeTaskStartDate(int taskId, int userId, DateTime startDate)
+        {
+            var dbModel = await _dbContext.ProjectTasks.FindAsync(taskId);
+
+            dbModel.StartDate = startDate;
+            dbModel.UpdatedDate = startDate;
+            dbModel.UpdatedBy = userId;
+
+            _dbContext.ProjectTasks.Update(dbModel);
+
+            await _dbContext.SaveChangesAsync();
+
+            return ("Project start date has been modified", true);
+        }
+
+        public async Task<(string message, bool isSuccess)> ChangeTaskStatus(int taskId, int userId, string status)
+        {
+            var dbModel = new ProjectTaskStatusHistory()
+            {
+                ProjectTaskId = taskId,
+                TaskStatus = status,
+                UpdatedDate = DateTime.Now,
+                UpdatedBy = userId,
+            };
+
+            await _dbContext.ProjectTaskStatusHistories.AddAsync(dbModel);
+
+            var updateModel = await _dbContext.ProjectTasks.FindAsync(taskId);
+
+            updateModel.TaskStatus = status;
+
+            updateModel.UpdatedBy = userId;
+
+            updateModel.UpdatedDate = DateTime.Now;
+
+            _dbContext.ProjectTasks.Update(updateModel);
+
+            await _dbContext.SaveChangesAsync();
+
+            return ("Task status has been updated !", true);
         }
 
         public async Task<(string message, bool isSuccess)> CreateDiscussion(TaskDetailViewModel model)
@@ -41,7 +157,7 @@ namespace PMS.Features.TaskDetail.Respositories
             {
                 return new(ex.Message, true);
             }
-         
+
         }
 
         public async Task<(string message, bool isSuccess, IEnumerable<ProjectDiscussBoard> models)> GetDiscussionBoardList(int taskId)
@@ -61,6 +177,29 @@ namespace PMS.Features.TaskDetail.Respositories
                                 }).OrderByDescending(x => x.CreatedDate).ToListAsync();
 
             return ("Task discussion board detail fetched", true, result);
+
+        }
+
+        public async Task<(string message, bool isSuccess, IEnumerable<AssignHistoryVm> models)> GetTaskAssignHistory(int taskId)
+        {
+            var responseModels = _dbContext.ProjectTaskEmployeeHistories.Where(x=>x.ProjectTaskId== taskId)
+                        .Join(_dbContext.Employees,
+                              pteh => pteh.EmployeeId,
+                              emp => emp.Id,
+                              (pteh, emp) => new { pteh, AssignTo = emp })
+                        .Join(_dbContext.Employees,
+                              temp => temp.pteh.UpdatedBy,
+                              emps => emps.Id,
+                              (temp, emps) => new AssignHistoryVm
+                              {
+                                  AssignTo = $"{temp.AssignTo.Name} ({temp.AssignTo.EmployeeCode})",
+                                  AssignBy = $"{emps.Name} ({emps.EmployeeCode})",
+                                  AssignDate =Convert.ToDateTime(temp.pteh.UpdatedDate)
+                              })
+                        .OrderByDescending(x => x.AssignDate)
+                        .ToList();
+
+            return ("Employee Task Assign History", true, responseModels);
 
         }
 
@@ -91,7 +230,9 @@ namespace PMS.Features.TaskDetail.Respositories
                                             CompletedDate = pt.CompletedDate,
                                             SprintName = sp.SprintName,
                                             ReportedBy = $"{ems.Name} ({ems.EmployeeCode})",
-                                            TaskId = taskId
+                                            TaskId = taskId,
+                                            EmployeeId = Convert.ToInt32(pt.EmployeeId),
+                                            StartDate = pt.StartDate,
                                         }).FirstOrDefaultAsync();
 
 
@@ -126,6 +267,26 @@ namespace PMS.Features.TaskDetail.Respositories
             }).ToList();
 
             return ("Project Task Fetched successfully", true, responseModels);
+        }
+
+        public async Task<(string message, bool isSuccess, IEnumerable<TaskStatusHistoryVm> models)> GetTaskStatusHistory(int taskId)
+        {
+            var responseModels =await( _dbContext.ProjectTaskStatusHistories
+                                    .Where(ptsh => ptsh.ProjectTaskId == taskId)
+                                        .Join(_dbContext.Employees,
+                                              ptsh => ptsh.UpdatedBy,
+                                              emp => emp.Id,
+                                              (ptsh, emp) => new TaskStatusHistoryVm
+                                              {
+                                                  TaskStatus = ptsh.TaskStatus ?? "N/A",
+                                                  EmpName= $"{emp.Name} ({emp.EmployeeCode})",
+                                                  UpdatedDate = ptsh.UpdatedDate
+                                              })
+                                        .OrderBy(x => x.UpdatedDate))
+                                        .ToListAsync();
+
+            return ("Status History detail", true, responseModels);
+
         }
     }
 }
