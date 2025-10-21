@@ -1,139 +1,406 @@
 ﻿@{
-	ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home Page";
 }
 
+@model PMS.Features.Dashboard.ViewModels.DashboardVm
 @using PMS.Features.UserManagement.Services
 
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
 
 @{
-	var projectName = HttpContextAccessor.HttpContext?.Session.GetString("selectedProjectName");
-	var empDetail = HttpContextAccessor.HttpContext?.Session.GetObject<PMS.Domains.Employee>("employee");
+    var projectName = HttpContextAccessor.HttpContext?.Session.GetString("selectedProjectName");
+    var empDetail = HttpContextAccessor.HttpContext?.Session.GetObject<PMS.Domains.Employee>("employee");
 }
 
 <style>
-	#selectUser {
-		min-width: 200px;
-		padding: 6px 12px;
-		font-size: 14px;
-		border: 1px solid #ccc;
-		border-radius: 4px;
-		background-color: #fff;
-		box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-		transition: border-color 0.3s ease, box-shadow 0.3s ease;
-	}
+    #selectUser {
+        min-width: 200px;
+        padding: 6px 12px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
 
-		#selectUser:focus {
-			border-color: #f39c12; /* matching the warning theme */
-			box-shadow: 0 0 5px rgba(243, 156, 18, 0.5);
-			outline: none;
-		}
+        #selectUser:focus {
+            border-color: #f39c12; /* matching the warning theme */
+            box-shadow: 0 0 5px rgba(243, 156, 18, 0.5);
+            outline: none;
+        }
 
-	.box-tools .form-group {
-		margin-bottom: 0;
-	}
+    .box-tools .form-group {
+        margin-bottom: 0;
+    }
 </style>
 
 <div class="content-wrapper">
-	<!-- Content Header (Page header) -->
-	<section class="content-header">
-		<h1>
-			@projectName Dashboard
-			<small>Dashboard</small>
-		</h1>
-	</section>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            @projectName Dashboard
+            <small>Dashboard</small>
+        </h1>
+    </section>
 
-	<section class="content">
-		<div class="row">
-			<div class="col-md-3 col-sm-6 col-xs-12">
-				<div class="info-box">
-					<span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
-					<div class="info-box-content">
-						<span class="info-box-text">In progress Projects</span>
-						<span class="info-box-file">20<small></small></span>
-					</div><!-- /.info-box-content -->
-				</div><!-- /.info-box -->
-			</div><!-- /.col -->
-			<div class="col-md-3 col-sm-6 col-xs-12">
-				<div class="info-box">
-					<span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
-					<div class="info-box-content">
-						<span class="info-box-text">Completed Projects</span>
-						<span class="info-box-number">100</span>
-					</div><!-- /.info-box-content -->
-				</div><!-- /.info-box -->
-			</div><!-- /.col -->
-			<!-- fix for small devices only -->
-			<div class="clearfix visible-sm-block"></div>
+    <section class="content">
+        <div class="row">
+            @foreach (var data in Model.TaskStatusModels)
+            {
 
-			<div class="col-md-3 col-sm-6 col-xs-12">
-				<div class="info-box">
-					<span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
-					<div class="info-box-content">
-						<span class="info-box-text">On Hold Projects</span>
-						<span class="info-box-number">0</span>
-					</div><!-- /.info-box-content -->
-				</div><!-- /.info-box -->
-			</div><!-- /.col -->
-			<div class="col-md-3 col-sm-6 col-xs-12">
-				<div class="info-box">
-					<span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
-					<div class="info-box-content">
-						<span class="info-box-text">Porject Task</span>
-						<span class="info-box-number">2,000</span>
-					</div><!-- /.info-box-content -->
-				</div><!-- /.info-box -->
-			</div><!-- /.col -->
-		</div><!-- /.row -->
+                string colorClass = "bg-aqua";
+                string iconClass = "ion ion-ios-gear-outline";
 
-		<div class='row'>
-			<div class='col-md-5'>
-				<div id="pmsDirectChat"></div>
-			</div>
+                switch (data.TaskStatus?.ToLower())
+                {
+                    case "in progress":
+                        colorClass = "info-box-icon bg-aqua";
+                        iconClass = "ion ion-play";
+                        break;
 
-			<div id="divUserList"></div>
-		</div><!-- /.row -->
+                    case "not started":
+                        colorClass = "info-box-icon bg-red";
+                        iconClass = "ion ion-pause";
+                        break;
 
-		<div class="row">
-			<div class="col-md-12">
-				<!-- TABLE: LATEST ORDERS -->
-				<div class="box box-info">
-					<div class="box-header with-border">
-						<h3 class="box-title">Vacation Calendar</h3>
-						<div class="box-tools pull-right">
-							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-							<button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-						</div>
-					</div><!-- /.box-header -->
-					<div class="box-body">
-						<div class="table-responsive">
-							@await Html.PartialAsync("~/Features/Vacation/Views/VacationCalendar.cshtml")
-						</div><!-- /.table-responsive -->
-					</div><!-- /.box-body -->
-					<div class="box-footer clearfix">
-						<a href="javascript::;" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
-						<a href="javascript::;" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
-					</div><!-- /.box-footer -->
-				</div><!-- /.box -->
-			</div><!-- /.col -->
-		</div><!-- /.row -->
+                    case "on hold":
+                        colorClass = "info-box-icon bg-yellowgreen";
+                        iconClass = "ion ion-clock";
+                        break;
 
-	</section><!-- /.content -->
+                    case "pending qa":
+                        colorClass = "info-box-icon bg-yellow";
+                        iconClass = "ion ion-help-buoy";
+                        break;
+
+                    case "qa approved":
+                        colorClass = "info-box-icon bg-green";
+                        iconClass = "ion ion-checkmark";
+                        break;
+
+                    case "completed":
+                        colorClass = "info-box-icon bg-green";
+                        iconClass = "ion ion-flag";
+                        break;
+                    default:
+                        colorClass = "info-box-icon bg-red";
+                        iconClass = "ion ion-flag";
+                        break;
+                }
+
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="@colorClass"><i class="@iconClass"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text"><a onclick="fn_TaskDetail('@data.TaskStatus')">@data.TaskStatus</a></span>
+                            <span class="info-box-number">@data.RecordCount</span>
+                            <span class="info-box-text">
+                                @{
+                                    var percentage = ((decimal)data.RecordCount / Model.TaskStatusModels.Sum(x => (decimal)x.RecordCount) * 100);
+
+                                }
+                                @percentage.ToString("0.00")%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-red"><i class="ion ion-flag"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total Task Count</span>
+                        <span class="info-box-number">@Model.TaskStatusModels.Sum(x => x.RecordCount)</span>
+                        <span class="info-box-text">
+                            All Task Count
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /.row -->
+
+        <div class='row'>
+            <div class='col-md-5'>
+                <div id="pmsDirectChat"></div>
+            </div>
+
+            <div id="divUserList"></div>
+        </div>
+
+        <div class='row'>
+            <div class='col-md-6'>
+                <!-- USERS LIST -->
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Employee Task Count</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div><!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <div class="table-responsive">
+                            @{
+                                // Ensure the list is not null or empty
+                                var employeeTasks = Model.EmployeeTasks;
+
+                                // Get all distinct task types (column headers)
+                                var allTaskTypes = employeeTasks
+                                .SelectMany(e => e.TaskTypeCounts.Keys)
+                                .Distinct()
+                                .ToList();
+
+                                // Prepare column totals per task type
+                                var taskTypeTotals = allTaskTypes.ToDictionary(
+                                key => key,
+                                key => employeeTasks.Sum(e => e.TaskTypeCounts.ContainsKey(key) ? e.TaskTypeCounts[key] : 0)
+                                );
+
+                                // Grand total of all task counts
+                                var grandTotal = taskTypeTotals.Values.Sum();
+                            }
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover table-striped align-middle">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Emp Name</th>
+                                            @foreach (var taskType in allTaskTypes)
+                                            {
+                                                <th>@taskType</th>
+                                            }
+                                            <th class="text-primary">Total Count</th> <!-- New Column -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var emp in employeeTasks)
+                                        {
+                                            var rowSum = emp.TaskTypeCounts.Values.Sum();
+
+                                            <tr>
+                                                <td>@emp.EmployeeName (@emp.EmployeeCode)</td>
+                                                @foreach (var taskType in allTaskTypes)
+                                                {
+                                                    <td>
+                                                        <a onclick="fn_EmpTaskDetail('@emp.EmployeeCode','@taskType')">@(emp.TaskTypeCounts.ContainsKey(taskType) ? emp.TaskTypeCounts[taskType] : 0)</a>
+                                                    </td>
+                                                }
+                                                <td class="fw-bold text-primary">@rowSum</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot class="table-light fw-bold">
+                                        <tr>
+                                            <td colspan="2" class="text-end">Total</td>
+                                            @foreach (var total in taskTypeTotals)
+                                            {
+                                                <td>@total.Value</td>
+                                            }
+                                            <td class="text-primary">@grandTotal</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-6'>
+                <!-- USERS LIST -->
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Employee Task Count</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div><!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <div class="table-responsive">
+                            <div class="table-responsive">
+                                <div id="drilldownTaskChart" style="width: 100%; height: 500px; margin-top: 20px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='row'>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- TABLE: LATEST ORDERS -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Vacation Calendar</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            @await Html.PartialAsync("~/Features/Vacation/Views/VacationCalendar.cshtml")
+                        </div><!-- /.table-responsive -->
+                    </div><!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                        <a href="javascript::;" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
+                        <a href="javascript::;" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
+                    </div><!-- /.box-footer -->
+                </div><!-- /.box -->
+            </div><!-- /.col -->
+        </div>
+
+        @await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");
+    </section>
 </div>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+@{
+    var employeeTasksHC = Model.EmployeeTasks.ToList();
+
+    var allTaskTypesHC = employeeTasks
+        .SelectMany(e => e.TaskTypeCounts.Keys)
+        .Distinct()
+        .ToList();
+
+    // Main series: total count per Task Type
+    var mainSeries = allTaskTypesHC.Select(taskType => new
+    {
+        name = taskType,
+        y = employeeTasksHC.Sum(emp => emp.TaskTypeCounts.ContainsKey(taskType) ? emp.TaskTypeCounts[taskType] : 0),
+        drilldown = taskType // use taskType as drilldown ID
+    }).ToList();
+
+    // Drilldown series: for each Task Type, per-employee breakdown
+    var drilldownSeries = allTaskTypesHC.Select(taskType => new
+    {
+        name = taskType,
+        id = taskType,
+        data = employeeTasksHC
+            .Where(emp => emp.TaskTypeCounts.ContainsKey(taskType))
+            .Select(emp => new object[] {
+                emp.EmployeeName,
+                emp.TaskTypeCounts[taskType]
+            })
+            .ToList()
+    }).ToList();
+
+    var mainSeriesJson = System.Text.Json.JsonSerializer.Serialize(mainSeries);
+    var drilldownSeriesJson = System.Text.Json.JsonSerializer.Serialize(drilldownSeries);
+}
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const mainData = @Html.Raw(mainSeriesJson);
+        const drillData = @Html.Raw(drilldownSeriesJson);
+
+        Highcharts.chart('drilldownTaskChart', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Task Type Summary (Click to Drill Down)'
+            },
+            subtitle: {
+                text: 'Click on a task type to see breakdown by employee'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category',
+                title: { text: 'Task Types' }
+            },
+            yAxis: {
+                title: {
+                    text: 'Task Count'
+                },
+                allowDecimals: false
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y}'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:14px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> tasks<br/>'
+            },
+            series: [
+                {
+                    name: 'Task Types',
+                    colorByPoint: true,
+                    data: mainData
+                }
+            ],
+            drilldown: {
+                breadcrumbs: {
+                    position: {
+                        align: 'right'
+                    }
+                },
+                series: drillData
+            }
+        });
+    });
+</script>
+
+
 
 
 <script>
-	$(document).ready(function(){
-		$.get('/Dashboard/GetMappedEmployee', function(resp){
-			$("#divUserList").html(resp)
-		})
-	})
+    $(document).ready(function(){
+        $.get('/Dashboard/GetMappedEmployee', function(resp){
+            $("#divUserList").html(resp)
+        })
+    })
 
-	$(document).ready(function(){
-		$.get('/Dashboard/DirectChat', function(resp){
-			$("#pmsDirectChat").html(resp)
-		})
-	})
+    function fn_TaskDetail(status){
+        $.get('/Dashboard/GetProjectTaskList',{status:status}, function(resp){
+            $("#pmModalPopUp").modal('show');
+            $("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Status List");
+            $("#divData").html(resp);
+        });
+    }
+        function fn_EmpTaskDetail(empCode, taskType){
+        $.get('/Dashboard/GetProjectTaskListByEmpId',{status:taskType, empCode:empCode}, function(resp){
+            $("#pmModalPopUp").modal('show');
+            $("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Status List");
+            $("#divData").html(resp);
+        });
+    }
+    function fn_CloseModal() {
+        $("#pmModalPopUp").modal('hide');
+    }
+
+    $(document).ready(function(){
+        $.get('/Dashboard/DirectChat', function(resp){
+            $("#pmsDirectChat").html(resp)
+        })
+    })
 </script>

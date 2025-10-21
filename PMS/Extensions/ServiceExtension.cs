@@ -11,6 +11,7 @@ using PMS.Helpers;
 using PMS.Features.Document.Services;
 using PMS.Features.Vacation.Services;
 using PMS.Features.Notification.Services;
+using PMS.Features.Dashboard.Services;
 
 namespace PMS.Extensions
 {
@@ -49,6 +50,7 @@ namespace PMS.Extensions
             services.AddScoped<IVacationService, VacationService>();
 
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IDashboardService, DashboardService>();
 
             services.AddTransient<EmailService>();
 

@@ -1,31 +1,42 @@
+using Azure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PMS.Attributes;
+using PMS.Features.Dashboard.Services;
 using PMS.Features.Project.Services;
 using PMS.Features.ProjectEmployee.Services;
+using PMS.Features.ProjectTask.Services;
 using PMS.Helpers;
+using System.Threading.Tasks;
 
 namespace PMS.Features.Dashboard
 {
 
- 
+
     public class DashboardController : Controller
     {
         private readonly ILogger<DashboardController> _logger;
         private readonly IProjectService _projectService;
         private readonly IProjectEmployeeServices _projectEmployeeService;
+        private readonly IDashboardService _dashBoardService;
+        private readonly IProjectTaskService _projectTaskService;
         public DashboardController(ILogger<DashboardController> logger,
-            IProjectService projectService, IProjectEmployeeServices projectEmpService)
+            IProjectService projectService, IProjectEmployeeServices projectEmpService,
+            IDashboardService dashboardService, IProjectTaskService projectTaskService)
         {
             _logger = logger;
             _projectService = projectService;
             _projectEmployeeService = projectEmpService;
+            _dashBoardService = dashboardService;
+            _projectTaskService = projectTaskService;
         }
         [PmsAuthorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var projectId = Convert.ToInt32(HttpContext.GetProjectId());
+            var responseModels = await _dashBoardService.GetDashboradDetails(projectId);
+            return View(responseModels);
         }
 
 
@@ -60,6 +71,22 @@ namespace PMS.Features.Dashboard
             var responseModel = await _projectEmployeeService.GetMappedProjectEmployee(Convert.ToInt32(HttpContext.GetProjectId()));
 
             return PartialView("~/Features/Dashboard/Views/DirectChat.cshtml", responseModel.models);
+        }
+
+        public async Task<IActionResult> GetProjectTaskList(string status)
+        {
+            int projectId = Convert.ToInt32(HttpContext.GetProjectId());
+            var response = await _dashBoardService.GetProjectTaskList(projectId, status, default);
+            return PartialView("~/Features/ProjectTask/Views/ProjectTaskList.cshtml", response);
+        }
+
+        public async Task<IActionResult> GetProjectTaskListByEmpId(string status, string empCode)
+        {
+            int projectId = Convert.ToInt32(HttpContext.GetProjectId());
+
+            var response = await _dashBoardService.GetEmpProjectTaskList(projectId, status, empCode, default);
+
+            return PartialView("~/Features/ProjectTask/Views/ProjectTaskList.cshtml", response);
         }
 
 
