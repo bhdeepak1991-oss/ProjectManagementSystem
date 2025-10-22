@@ -1,0 +1,49 @@
+﻿@model IEnumerable<PMS.Features.Dashboard.ViewModels.AssignHistoryVm>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-body">
+				<table id="documentTable" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>Assign To</th>
+							<th>Assign By</th>
+							<th>Assign Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<td>@item.AssignTo</td>
+								<td>@item.AssignBy</td>
+								<td>@item.AssignDate</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function () {
+		$('#documentTable').DataTable({
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			"autoWidth": false,
+			"responsive": true
+		});
+	});
+
+</script>
+
+
+
+
+

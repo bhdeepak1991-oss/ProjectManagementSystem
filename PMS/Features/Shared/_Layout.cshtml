@@ -170,7 +170,21 @@
 		p {
 			font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 		}
+
+		.custom-hover {
+			transition: background-color 0.3s ease, box-shadow 0.3s ease;
+			cursor: pointer;
+			border-radius: 6px;
+		}
+
+			.custom-hover:hover {
+				background-color: #e9f7ef; /* light green hover */
+				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+			}
 	</style>
+
+
+
 
 </head>
 <body class="skin-blue" id="pmsBody">
@@ -580,23 +594,51 @@
 
 	</script>
 
+	<script>
+		// Backup original
+		const originalWarn = console.warn;
 
+		// Override and filter specific warning
+		console.warn = function (message, ...args) {
+			if (typeof message === 'string' && message.includes('CKEditor')) {
+				return; // suppress
+			}
+			originalWarn.apply(console, [message, ...args]);
+		};
+
+		$(document).ready(function(){
+		$("#pmsBody").addClass('skin-blue sidebar-collapse sidebar-open')
+			
+		})
+		getNotificationDetail();
+		function getNotificationDetail(){
+			$.get('/Dashboard/GetNotificationDetail', function(resp){
+				$("#notificationCount").html(resp.length);
+				$("#notificationHeader").html("You have "+ resp.length+ " notification !")
+
+						const ul = document.getElementById('notificationList'); // your UL element's ID
+
+						resp.forEach(data => {
+							const li = document.createElement('li');
+
+							// Bootstrap styling
+							li.className = 'list-group-item custom-hover d-flex justify-content-between align-items-center';
+
+							// Set content
+							li.innerHTML = `
+								<span><i class="bi bi-check-circle-fill text-success me-2"></i>${data.notificationMessage}</span>
+								<small class="text-muted">ID: ${data.id}</small>
+							`;
+
+							ul.appendChild(li);
+						});
+
+
+			})
+		}
+
+	</script>
 </body>
 
-<script>
-	// Backup original
-	const originalWarn = console.warn;
 
-	// Override and filter specific warning
-	console.warn = function (message, ...args) {
-		if (typeof message === 'string' && message.includes('CKEditor')) {
-			return; // suppress
-		}
-		originalWarn.apply(console, [message, ...args]);
-	};
-
-	$(document).ready(function(){
-	$("#pmsBody").addClass('skin-blue sidebar-collapse sidebar-open')
-	})
-</script>
 </html>

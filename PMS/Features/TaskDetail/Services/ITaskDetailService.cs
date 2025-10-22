@@ -1,4 +1,5 @@
-﻿using PMS.Features.TaskDetail.ViewModels;
+﻿using PMS.Features.Dashboard.ViewModels;
+using PMS.Features.TaskDetail.ViewModels;
 
 namespace PMS.Features.TaskDetail.Services
 {
@@ -13,5 +14,11 @@ namespace PMS.Features.TaskDetail.Services
         Task<(string message, bool isSuccess)> ChangeTaskStartDate(int taskId, int userId, DateTime startDate);
         Task<(string message, bool isSuccess)> ChangeTaskCompletedDate(int taskId, int userId, DateTime completedDate);
         Task<(string message, bool isSuccess)> AssignToEmployee(int taskId, int userId, int empId);
+
+        Task<(string message, bool isSuccess, IEnumerable<AssignHistoryVm> models)> GetTaskAssignHistory(int taskId);
+
+        Task<(string message, bool isSuccess, IEnumerable<TaskStatusHistoryVm> models)> GetTaskStatusHistory(int taskId);
+
+        Task<(string message, bool isSuccess, IEnumerable<TaskPriorityHistoryVm> models)> GetTaskPriorityHistory(int taskId);
     }
 }

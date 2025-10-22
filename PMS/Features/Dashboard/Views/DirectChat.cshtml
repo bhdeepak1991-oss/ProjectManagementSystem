@@ -68,41 +68,7 @@
 		<!-- Chat Messages -->
 		<div class="direct-chat-messages" style="min-height: 300px; max-height: 300px; overflow-y: auto;">
 
-			<!-- Message Left -->
-			<div class="direct-chat-msg">
-				<div class='direct-chat-info clearfix'>
-					<span class='direct-chat-name pull-left'>Alexander Pierce</span>
-					<span class='direct-chat-timestamp pull-right'>23 Jan 2:00 pm</span>
-				</div>
-				<img class="direct-chat-img" src="https://i.pravatar.cc/100?img=1" alt="User Image" />
-				<div class="direct-chat-text">
-					Is this template really for free? That's unbelievable!
-				</div>
-			</div>
-
-			<!-- Message Right -->
-			<div class="direct-chat-msg right">
-				<div class='direct-chat-info clearfix'>
-					<span class='direct-chat-name pull-right'>Sarah Bullock</span>
-					<span class='direct-chat-timestamp pull-left'>23 Jan 2:05 pm</span>
-				</div>
-				<img class="direct-chat-img" src="https://i.pravatar.cc/100?img=3" alt="User Image" />
-				<div class="direct-chat-text">
-					You better believe it!
-				</div>
-			</div>
-
-			<!-- Message Left -->
-			<div class="direct-chat-msg">
-				<div class='direct-chat-info clearfix'>
-					<span class='direct-chat-name pull-left'>Alexander Pierce</span>
-					<span class='direct-chat-timestamp pull-right'>23 Jan 5:37 pm</span>
-				</div>
-				<img class="direct-chat-img" src="https://i.pravatar.cc/100?img=1" alt="User Image" />
-				<div class="direct-chat-text">
-					Working on a great new app. Wanna join?
-				</div>
-			</div>
+	
 
 		</div>
 
@@ -170,7 +136,7 @@
 						<span class='direct-chat-name ${sender === senderName ? "pull-right" : "pull-left"}'>${sender}</span>
 						<span class='direct-chat-timestamp ${sender === senderName ? "pull-left" : "pull-right"}'>${new Date().toLocaleTimeString()}</span>
 					</div>
-					<img class="direct-chat-img" src="https://i.pravatar.cc/100?u=${encodeURIComponent(sender)}" />
+					<img class="direct-chat-img" src="https://ui-avatars.com/api/?name=${encodeURIComponent(sender)}" />
 					<div class="direct-chat-text">${message}</div>
 				`;
 

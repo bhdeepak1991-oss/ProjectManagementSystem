@@ -291,7 +291,7 @@
 				<div class="TaskDetail-sidebarSection">
 					<div style="display: flex; justify-content: space-between; align-items: center;">
 						<h4 style="margin: 0;">Assigned To</h4>
-						<button class="btn" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
+						<button class="btn btn-success" onclick="fn_AssignHisotry('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
 					</div>
 
 					<select asp-for="EmployeeId" onchange="fn_AssignToEmployee(this)" asp-items="ViewBag.Employees" class="form-control" style="margin-top: 10px; width: 100%;">
@@ -321,7 +321,7 @@
 				<div class="TaskDetail-sidebarSection">
 					<div style="display: flex; justify-content: space-between; align-items: center;">
 						<h4 style="margin: 0;">Change Status</h4>
-						<button class="btn" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
+						<button class="btn btn-success" onclick="fn_Status('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
 					</div>
 
 					<select asp-for="TaskStatus" onchange="fn_changeStatus(this)" asp-items="ViewBag.Status" class="form-control" style="margin-top: 10px; width: 100%;">
@@ -332,7 +332,7 @@
 				<div class="TaskDetail-sidebarSection">
 					<div style="display: flex; justify-content: space-between; align-items: center;">
 						<h4 style="margin: 0;">Change Priority</h4>
-						<button class="btn" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
+						<button class="btn btn-success" onclick="fn_Priority('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
 					</div>
 
 					<select asp-for="TaskPriority" asp-items="ViewBag.Priority" class="form-control" style="margin-top: 10px; width: 100%;">
@@ -350,6 +350,35 @@
 <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
 
 <script>
+
+	function fn_AssignHisotry(eData){
+		$.get('/TaskDetail/TaskEmployeeAssignHistory',{taskId:'@Model.Id'}, function(resp){
+			$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Assignment History For : ("+ eData + ")");
+			$("#divData").html(resp);
+		});
+	}
+
+		function fn_Priority(eData){
+		$.get('/TaskDetail/TaskPriorityHistory',{taskId:'@Model.Id'}, function(resp){
+			$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Priority History For : ("+ eData + ")");
+			$("#divData").html(resp);
+		});
+	}
+
+		function fn_Status(eData){
+		$.get('/TaskDetail/GetTaskStatusHistory',{taskId:'@Model.Id'}, function(resp){
+			$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Priority History For : ("+ eData + ")");
+			$("#divData").html(resp);
+		});
+	}
+
+	function fn_CloseModal() {
+		$("#pmModalPopUp").modal('hide');
+	}
+
 		$(document).ready(function () {
 		 setTimeout(()=>{
 			 $(".cke_notification_warning").css("display", "none");

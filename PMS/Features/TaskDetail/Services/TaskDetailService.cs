@@ -1,4 +1,5 @@
-﻿using PMS.Features.TaskDetail.Respositories;
+﻿using PMS.Features.Dashboard.ViewModels;
+using PMS.Features.TaskDetail.Respositories;
 using PMS.Features.TaskDetail.ViewModels;
 
 namespace PMS.Features.TaskDetail.Services
@@ -47,6 +48,10 @@ namespace PMS.Features.TaskDetail.Services
             return await _taskDetailRepository.GetDiscussionBoardList(taskId);
         }
 
+        public async Task<(string message, bool isSuccess, IEnumerable<AssignHistoryVm> models)> GetTaskAssignHistory(int taskId)
+        {
+            return await _taskDetailRepository.GetTaskAssignHistory(taskId);
+        }
         public async  Task<(string message, bool isSuccess, TaskDetailViewModel model)> GetTaskDetail(int taskId)
         {
             return await _taskDetailRepository.GetTaskDetail(taskId);
@@ -55,6 +60,16 @@ namespace PMS.Features.TaskDetail.Services
         public async Task<(string message, bool isSuccess, IEnumerable<TaskDetailViewModel> models)> GetTaskDetails(int projectId)
         {
             return await _taskDetailRepository.GetTaskDetails(projectId);
+        }
+
+        public async  Task<(string message, bool isSuccess, IEnumerable<TaskPriorityHistoryVm> models)> GetTaskPriorityHistory(int taskId)
+        {
+            return await _taskDetailRepository.GetTaskPriorityHistory(taskId);
+        }
+
+        public async Task<(string message, bool isSuccess, IEnumerable<TaskStatusHistoryVm> models)> GetTaskStatusHistory(int taskId)
+        {
+            return await _taskDetailRepository.GetTaskStatusHistory(taskId);
         }
     }
 }

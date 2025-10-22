@@ -194,9 +194,10 @@ namespace PMS.Features.TaskDetail.Respositories
                               {
                                   AssignTo = $"{temp.AssignTo.Name} ({temp.AssignTo.EmployeeCode})",
                                   AssignBy = $"{emps.Name} ({emps.EmployeeCode})",
-                                  AssignDate =Convert.ToDateTime(temp.pteh.UpdatedDate)
+                                  AssignDate = temp.pteh.UpdatedDate,
+                                  Id= temp.pteh.Id
                               })
-                        .OrderByDescending(x => x.AssignDate)
+                        .OrderByDescending(x => x.Id)
                         .ToList();
 
             return ("Employee Task Assign History", true, responseModels);
@@ -267,6 +268,25 @@ namespace PMS.Features.TaskDetail.Respositories
             }).ToList();
 
             return ("Project Task Fetched successfully", true, responseModels);
+        }
+
+        public async Task<(string message, bool isSuccess, IEnumerable<TaskPriorityHistoryVm> models)> GetTaskPriorityHistory(int taskId)
+        {
+            var responseModels = await (_dbContext.ProjectTaskPriorityHistories
+                        .Where(pph => pph.ProjectTaskId == taskId)
+                        .Join(_dbContext.Employees,
+                              pph => pph.UpdatedBy,
+                              emp => emp.Id,
+                              (pph, emp) => new TaskPriorityHistoryVm
+                              {
+                                  Priority = pph.TaskPriority ?? string.Empty,
+                                  UpdateBy = $"{emp.Name} ({emp.EmployeeCode})",
+                                  UpdatedDate = pph.UpdatedDate
+                              }).OrderBy(x=>x.UpdatedDate))
+                        .ToListAsync();
+
+            return ("Priority History Fetched", true, responseModels);
+
         }
 
         public async Task<(string message, bool isSuccess, IEnumerable<TaskStatusHistoryVm> models)> GetTaskStatusHistory(int taskId)

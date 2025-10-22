@@ -72,8 +72,8 @@ namespace PMS.Features.TaskDetail
 
         public async Task<IActionResult> ChangeStartDate(DateTime startDate, int taskId)
         {
-            var response = await _taskDetailService.ChangeTaskStartDate(taskId,Convert.ToInt32(HttpContext.GetEmployeeId()),startDate);
-            return Json(new {isSuccess= response.isSuccess, message= response.message });
+            var response = await _taskDetailService.ChangeTaskStartDate(taskId, Convert.ToInt32(HttpContext.GetEmployeeId()), startDate);
+            return Json(new { isSuccess = response.isSuccess, message = response.message });
         }
 
         public async Task<IActionResult> ChangeCompleteDate(DateTime startDate, int taskId)
@@ -92,6 +92,27 @@ namespace PMS.Features.TaskDetail
         {
             var response = await _taskDetailService.AssignToEmployee(taskId, Convert.ToInt32(HttpContext.GetEmployeeId()), empId);
             return Json(new { isSuccess = response.isSuccess, message = response.message });
+        }
+
+        public async Task<IActionResult> GetTaskStatusHistory(int taskId)
+        {
+            var response= await _taskDetailService.GetTaskStatusHistory(taskId);
+
+            return PartialView("/Features/Dashboard/Views/StatusHistory.cshtml", response.models);
+        }
+
+        public async Task<IActionResult> TaskEmployeeAssignHistory(int taskId)
+        {
+            var response = await _taskDetailService.GetTaskAssignHistory(taskId);
+
+            return PartialView("/Features/Dashboard/Views/EmployeeAssignHistory.cshtml", response.models);
+        }
+
+        public async Task<IActionResult> TaskPriorityHistory(int taskId)
+        {
+            var response = await _taskDetailService.GetTaskPriorityHistory(taskId);
+
+            return PartialView("/Features/Dashboard/Views/PriorityHistory.cshtml", response.models);
         }
     }
 }

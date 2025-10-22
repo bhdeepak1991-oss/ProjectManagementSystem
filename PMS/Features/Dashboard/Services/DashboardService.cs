@@ -309,5 +309,13 @@ namespace PMS.Features.Dashboard.Services
 
             return responseModels;
         }
+
+        public async Task<IEnumerable<NotificationDetail>> GetNotificationDetail(int userId)
+        {
+            var responseModels = await _dbContext.NotificationDetails.Where(x => x.IsDeleted == false
+                            && x.NotificationStatus == "New Notification" && x.NotifiedUserId == userId).OrderByDescending(x=>x.CreatedDate).Take(5).ToListAsync();
+
+            return responseModels;
+        }
     }
 }

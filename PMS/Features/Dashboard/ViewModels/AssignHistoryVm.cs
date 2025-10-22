@@ -4,6 +4,7 @@
     {
         public string AssignTo { get; set; }
         public string AssignBy { get; set; }
-        public DateTime AssignDate { get; set; }
+        public DateTime? AssignDate { get; set; }
+        public int Id { get; set; }
     }
 }

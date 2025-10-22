@@ -20,5 +20,7 @@ namespace PMS.Features.Dashboard.Services
         Task<IEnumerable<MasterModelVm>> GetTaskPriority(int projectId);
         Task<IEnumerable<ProjectTaskViewModel>> GetProjectTaskFilter(int projectId, string taskStatus,
            string priority, string taskType, int empId);
+
+        Task<IEnumerable<PMS.Domains.NotificationDetail>> GetNotificationDetail(int userId);
     }
 }

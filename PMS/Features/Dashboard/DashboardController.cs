@@ -104,13 +104,19 @@ namespace PMS.Features.Dashboard
             return PartialView("~/Features/ProjectTask/Views/ProjectTaskList.cshtml", response);
         }
 
-        public async Task<IActionResult> FilterData(string taskType, string taskStatus,string taskPriority, int employeeId)
+        public async Task<IActionResult> FilterData(string taskType, string taskStatus, string taskPriority, int employeeId)
         {
             int projectId = Convert.ToInt32(HttpContext.GetProjectId());
 
-            var response = await _dashBoardService.GetProjectTaskFilter(projectId,taskStatus, taskPriority, taskType, employeeId);
+            var response = await _dashBoardService.GetProjectTaskFilter(projectId, taskStatus, taskPriority, taskType, employeeId);
 
             return PartialView("~/Features/ProjectTask/Views/ProjectTaskList.cshtml", response);
+        }
+
+        public async Task<IActionResult> GetNotificationDetail()
+        {
+            var response = await _dashBoardService.GetNotificationDetail(Convert.ToInt32(HttpContext.GetEmployeeId()));
+            return Json(response);
         }
 
         public IActionResult Privacy()
