@@ -243,7 +243,10 @@
 				Status: <strong>@Model.TaskStatus</strong> |
 				Priority: <strong>@Model.TaskPriority</strong> |
 				Type: <strong>@Model.TaskType</strong> |
-				Sprint: <strong>@Model.SprintName</strong>
+				Sprint: <strong>@Model.SprintName</strong> |
+				Reported By: <strong>@Model.ReportedBy</strong> |
+				Module Name: <strong>@Model.ModuleName</strong> |
+				Due Date: <strong>@Model.DueDate?.ToString("yyyy-MM-dd")</strong>
 			</div>
 		</div>
 
@@ -284,61 +287,90 @@
 
 			<!-- Sidebar -->
 			<div class="TaskDetail-sidebar">
-				<div class="TaskDetail-sidebarSection">
-					<h4>Reported By :</h4>
-					<p title="@Model.ReportedBy">@Model.ReportedBy</p>
-				</div>
-				<div class="TaskDetail-sidebarSection">
-					<div style="display: flex; justify-content: space-between; align-items: center;">
-						<h4 style="margin: 0;">Assigned To</h4>
-						<button class="btn btn-success" onclick="fn_AssignHisotry('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
+
+				<div class="col-md-12">
+					<!-- Custom Tabs -->
+					<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+							
+							<li class="active"><a href="#tab_1" data-toggle="tab">Task Detail</a></li>
+							<li ><a href="#tab_2" data-toggle="tab">Attachment</a></li>
+						
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane active" id="tab_1">
+								<div class="TaskDetail-sidebarSection">
+									<div style="display: flex; justify-content: space-between; align-items: center;">
+										<h4 style="margin: 0;">Assigned To</h4>
+										<button class="btn btn-success" onclick="fn_AssignHisotry('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
+									</div>
+
+									<select asp-for="EmployeeId" onchange="fn_AssignToEmployee(this)" asp-items="ViewBag.Employees" class="form-control" style="margin-top: 10px; width: 100%;">
+										<option>-select</option>
+									</select>
+								</div>
+								<div class="TaskDetail-sidebarSection">
+									<h4>Start Date</h4>
+									<input type="date" onchange="fn_changeStartDate(this)" class="form-control" asp-for="StartDate" />
+
+								</div>
+								<div class="TaskDetail-sidebarSection">
+									<h4>Completed Date</h4>
+									<input type="date" class="form-control" asp-for="CompletedDate" />
+
+								</div>
+								<div class="TaskDetail-sidebarSection">
+									<div style="display: flex; justify-content: space-between; align-items: center;">
+										<h4 style="margin: 0;">Change Status</h4>
+										<button class="btn btn-success" onclick="fn_Status('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
+									</div>
+
+									<select asp-for="TaskStatus" onchange="fn_changeStatus(this)" asp-items="ViewBag.Status" class="form-control" style="margin-top: 10px; width: 100%;">
+										<option>Select</option>
+									</select>
+								</div>
+
+								<div class="TaskDetail-sidebarSection">
+									<div style="display: flex; justify-content: space-between; align-items: center;">
+										<h4 style="margin: 0;">Change Priority</h4>
+										<button class="btn btn-success" onclick="fn_Priority('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
+									</div>
+
+									<select asp-for="TaskPriority" asp-items="ViewBag.Priority" class="form-control" style="margin-top: 10px; width: 100%;">
+										<option>Select</option>
+									</select>
+								</div>
+							</div><!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_2" style="height:300px !important">
+								<div class="row">
+
+									<div style="display: flex; justify-content: space-between; align-items: center;">
+										<h4 style="margin: 0;">Add Attachment </h4>
+										<button class="btn btn-success" onclick="fn_GetAttachmentList('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
+									</div>
+									<br/>
+									<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+										  asp-action="UploadAttachment" asp-controller="TaskDetail" enctype="multipart/form-data">
+									
+										
+												<div class="form-group col-md-12">
+													<input type="hidden" asp-for="Id" />
+													<input class="form-control" asp-for="Attachment" placeholder="Please upload Attachment!">
+												</div>
+											<button type="submit" class="btn btn-primary pull-right">Submit</button>
+										
+									</form>
+
+									
+								</div>
+							</div>
+						</div>
 					</div>
-
-					<select asp-for="EmployeeId" onchange="fn_AssignToEmployee(this)" asp-items="ViewBag.Employees" class="form-control" style="margin-top: 10px; width: 100%;">
-						<option>-select</option>
-					</select>
-				</div>
-				<div class="TaskDetail-sidebarSection">
-					<h4>Module</h4>
-					<p title="@Model.ModuleName">@Model.ModuleName</p>
-
-				</div>
-				<div class="TaskDetail-sidebarSection">
-					<h4>Start Date</h4>
-					<input type="date" onchange="fn_changeStartDate(this)" class="form-control" asp-for="StartDate" />
-
-				</div>
-				<div class="TaskDetail-sidebarSection">
-					<h4>Due Date</h4>
-					<input type="date" class="form-control" asp-for="DueDate" />
-
-				</div>
-				<div class="TaskDetail-sidebarSection">
-					<h4>Completed Date</h4>
-					<input type="date" class="form-control" asp-for="CompletedDate" />
-
-				</div>
-				<div class="TaskDetail-sidebarSection">
-					<div style="display: flex; justify-content: space-between; align-items: center;">
-						<h4 style="margin: 0;">Change Status</h4>
-						<button class="btn btn-success" onclick="fn_Status('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
-					</div>
-
-					<select asp-for="TaskStatus" onchange="fn_changeStatus(this)" asp-items="ViewBag.Status" class="form-control" style="margin-top: 10px; width: 100%;">
-						<option>Select</option>
-					</select>
 				</div>
 
-				<div class="TaskDetail-sidebarSection">
-					<div style="display: flex; justify-content: space-between; align-items: center;">
-						<h4 style="margin: 0;">Change Priority</h4>
-						<button class="btn btn-success" onclick="fn_Priority('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
-					</div>
+				
 
-					<select asp-for="TaskPriority" asp-items="ViewBag.Priority" class="form-control" style="margin-top: 10px; width: 100%;">
-						<option>Select</option>
-					</select>
-				</div>
+			
 
 			</div>
 		</div>
@@ -371,6 +403,15 @@
 		$.get('/TaskDetail/GetTaskStatusHistory',{taskId:'@Model.Id'}, function(resp){
 			$("#pmModalPopUp").modal('show');
 			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Priority History For : ("+ eData + ")");
+			$("#divData").html(resp);
+		});
+		}
+
+
+		function fn_GetAttachmentList(eData){
+		$.get('/TaskDetail/GetAttachmentList',{taskId:'@Model.Id'}, function(resp){
+			$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Attachment List For : ("+ eData + ")");
 			$("#divData").html(resp);
 		});
 	}

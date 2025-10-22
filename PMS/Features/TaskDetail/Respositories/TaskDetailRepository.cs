@@ -17,14 +17,23 @@ namespace PMS.Features.TaskDetail.Respositories
             _dbContext = dbContext;
         }
 
+        public async Task<(string message, bool isSuccess)> AddAttachmentToTask(ProjectTaskDocument model)
+        {
+            var responseModel = await _dbContext.ProjectTaskDocuments.AddAsync(model);
+
+            await _dbContext.SaveChangesAsync();
+
+            return ("Project Task Document added !", true);
+        }
+
         public async Task<(string message, bool isSuccess)> AssignToEmployee(int taskId, int userId, int empId)
         {
             var dbModel = new ProjectTaskEmployeeHistory()
             {
-                ProjectTaskId= taskId,
-                EmployeeId= empId,
-                UpdatedBy= userId,
-                UpdatedDate= DateTime.Now
+                ProjectTaskId = taskId,
+                EmployeeId = empId,
+                UpdatedBy = userId,
+                UpdatedDate = DateTime.Now
             };
 
             await _dbContext.ProjectTaskEmployeeHistories.AddAsync(dbModel);
@@ -160,6 +169,25 @@ namespace PMS.Features.TaskDetail.Respositories
 
         }
 
+        public async Task<(string message, bool isSuccess, IEnumerable<AttachmentVm> models)> GetAttachmentList(int taskId)
+        {
+            var responseModels = await (from pd in _dbContext.ProjectTaskDocuments
+                                        join emp in _dbContext.Employees on pd.CreatedBy equals emp.Id
+                                        where pd.IsDeleted == false && pd.ProjectTaskId == taskId
+                                        select new AttachmentVm
+                                        {
+                                            CreatedBy = $"{emp.Name} ({emp.EmployeeCode})",
+                                            CreatedDate = pd.CreatedDate,
+                                            DocumentDetail = pd.DocumentDetail ?? string.Empty,
+                                            DocumentName = pd.DocumentName ?? string.Empty,
+                                            DocumentPath = pd.DocumentPath ?? string.Empty
+                                        }).ToListAsync();
+
+
+            return ("Attachement List", true, responseModels);
+
+        }
+
         public async Task<(string message, bool isSuccess, IEnumerable<ProjectDiscussBoard> models)> GetDiscussionBoardList(int taskId)
         {
             var result = await (from td in _dbContext.TaskDiscussionBoards
@@ -182,7 +210,7 @@ namespace PMS.Features.TaskDetail.Respositories
 
         public async Task<(string message, bool isSuccess, IEnumerable<AssignHistoryVm> models)> GetTaskAssignHistory(int taskId)
         {
-            var responseModels = _dbContext.ProjectTaskEmployeeHistories.Where(x=>x.ProjectTaskId== taskId)
+            var responseModels = _dbContext.ProjectTaskEmployeeHistories.Where(x => x.ProjectTaskId == taskId)
                         .Join(_dbContext.Employees,
                               pteh => pteh.EmployeeId,
                               emp => emp.Id,
@@ -195,7 +223,7 @@ namespace PMS.Features.TaskDetail.Respositories
                                   AssignTo = $"{temp.AssignTo.Name} ({temp.AssignTo.EmployeeCode})",
                                   AssignBy = $"{emps.Name} ({emps.EmployeeCode})",
                                   AssignDate = temp.pteh.UpdatedDate,
-                                  Id= temp.pteh.Id
+                                  Id = temp.pteh.Id
                               })
                         .OrderByDescending(x => x.Id)
                         .ToList();
@@ -282,7 +310,7 @@ namespace PMS.Features.TaskDetail.Respositories
                                   Priority = pph.TaskPriority ?? string.Empty,
                                   UpdateBy = $"{emp.Name} ({emp.EmployeeCode})",
                                   UpdatedDate = pph.UpdatedDate
-                              }).OrderBy(x=>x.UpdatedDate))
+                              }).OrderBy(x => x.UpdatedDate))
                         .ToListAsync();
 
             return ("Priority History Fetched", true, responseModels);
@@ -291,7 +319,7 @@ namespace PMS.Features.TaskDetail.Respositories
 
         public async Task<(string message, bool isSuccess, IEnumerable<TaskStatusHistoryVm> models)> GetTaskStatusHistory(int taskId)
         {
-            var responseModels =await( _dbContext.ProjectTaskStatusHistories
+            var responseModels = await (_dbContext.ProjectTaskStatusHistories
                                     .Where(ptsh => ptsh.ProjectTaskId == taskId)
                                         .Join(_dbContext.Employees,
                                               ptsh => ptsh.UpdatedBy,
@@ -299,7 +327,7 @@ namespace PMS.Features.TaskDetail.Respositories
                                               (ptsh, emp) => new TaskStatusHistoryVm
                                               {
                                                   TaskStatus = ptsh.TaskStatus ?? "N/A",
-                                                  EmpName= $"{emp.Name} ({emp.EmployeeCode})",
+                                                  EmpName = $"{emp.Name} ({emp.EmployeeCode})",
                                                   UpdatedDate = ptsh.UpdatedDate
                                               })
                                         .OrderBy(x => x.UpdatedDate))

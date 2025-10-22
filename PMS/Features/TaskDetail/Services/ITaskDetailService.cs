@@ -1,4 +1,5 @@
-﻿using PMS.Features.Dashboard.ViewModels;
+﻿using PMS.Domains;
+using PMS.Features.Dashboard.ViewModels;
 using PMS.Features.TaskDetail.ViewModels;
 
 namespace PMS.Features.TaskDetail.Services
@@ -20,5 +21,9 @@ namespace PMS.Features.TaskDetail.Services
         Task<(string message, bool isSuccess, IEnumerable<TaskStatusHistoryVm> models)> GetTaskStatusHistory(int taskId);
 
         Task<(string message, bool isSuccess, IEnumerable<TaskPriorityHistoryVm> models)> GetTaskPriorityHistory(int taskId);
+
+        Task<(string message, bool isSuccess)> AddAttachmentToTask(TaskDetailViewModel model);
+
+        Task<(string message, bool isSuccess, IEnumerable<AttachmentVm> models)> GetAttachmentList(int taskId);
     }
 }

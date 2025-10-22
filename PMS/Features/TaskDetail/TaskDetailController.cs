@@ -96,7 +96,7 @@ namespace PMS.Features.TaskDetail
 
         public async Task<IActionResult> GetTaskStatusHistory(int taskId)
         {
-            var response= await _taskDetailService.GetTaskStatusHistory(taskId);
+            var response = await _taskDetailService.GetTaskStatusHistory(taskId);
 
             return PartialView("/Features/Dashboard/Views/StatusHistory.cshtml", response.models);
         }
@@ -113,6 +113,20 @@ namespace PMS.Features.TaskDetail
             var response = await _taskDetailService.GetTaskPriorityHistory(taskId);
 
             return PartialView("/Features/Dashboard/Views/PriorityHistory.cshtml", response.models);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadAttachment(TaskDetailViewModel model)
+        {
+            model.EmployeeId = Convert.ToInt32(HttpContext.GetEmployeeId());
+            var response = await _taskDetailService.AddAttachmentToTask(model);
+            return Json(new { isSuccess = response.isSuccess, message = response.message });
+        }
+
+        public async Task<IActionResult> GetAttachmentList(int taskId)
+        {
+            var response = await _taskDetailService.GetAttachmentList(taskId);
+            return PartialView("~/Features/TaskDetail/Views/AttachmentList.cshtml", response.models);
         }
     }
 }

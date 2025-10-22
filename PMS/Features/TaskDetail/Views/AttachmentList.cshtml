@@ -1,5 +1,4 @@
-﻿@using System.Globalization
-@model IEnumerable<PMS.Domains.EmployeeTimeSheet>
+﻿@model IEnumerable<PMS.Features.TaskDetail.ViewModels.AttachmentVm>
 
 <div class="row">
 	<div class="col-xs-12">
@@ -8,39 +7,20 @@
 				<table id="documentTable" class="table table-bordered table-striped">
 					<thead>
 						<tr>
-							<th>Time Sheet Name</th>
-							<th>Year</th>
-							<th>Month</th>
-							<th>Status</th>
-							<th>Action</th>
-							<th>Detail</th>
+							<th>Attachment Name</th>
+							<th>Upload By </th>
+							<th>Upload Date</th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach (var item in Model)
 						{
 							<tr>
-								<td>@item.TimeSheetName</td>
-								<td>@item.TimeSheetYear</td>
 								<td>
-									@(item.TimeSheetMonth.HasValue && item.TimeSheetMonth.Value >= 1 && item.TimeSheetMonth.Value <= 12
-																	? CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(item.TimeSheetMonth.Value)
-																	: "N/A")
+									<a href="/@item.DocumentPath" download="@item.DocumentName">@item.DocumentName</a>
 								</td>
-								<td>@item.TimeSheetStatus</td>
-								<td>
-									<button disabled="@(@item.TimeSheetStatus!="Completed")" class="btn btn-success">Send For Approval</button>
-								</td>
-								<td>
-									<a asp-action="GetTimeSheetDetail" asp-route-id="@item.Id" asp-controller="EmployeeTimeSheet" class="btn btn-success">
-										<i class="fa fa-info-circle"></i>
-									</a>
-
-									<a class="btn btn-success" asp-action="DownloadTimeSheet" 
-												asp-controller="EmployeeTimeSheet" asp-route-id="@item.Id">
-										<i class="fa fa-download"></i>
-									</a>
-								</td>
+								<td>@item.CreatedBy</td>
+								<td>@item.CreatedDate?.ToString("yyyy-MM-dd")</td>
 							</tr>
 						}
 					</tbody>
@@ -110,7 +90,7 @@
 			cancelText: 'No, keep it'
 		}).then((result) => {
 			if (result.isConfirmed) {
-				$.get('/Features/Sprint/DeleteEmployee', {id:id},function(resp){
+				$.get('/Features/Vacation/DeleteVacation', {id:id},function(resp){
 					toastr.success("Deleted successfully!");
 					fn_EmployeeList();
 					hideLoader();

@@ -1,16 +1,40 @@
-﻿using PMS.Features.Dashboard.ViewModels;
+﻿using PMS.Domains;
+using PMS.Features.Dashboard.ViewModels;
 using PMS.Features.TaskDetail.Respositories;
 using PMS.Features.TaskDetail.ViewModels;
+using PMS.Helpers;
 
 namespace PMS.Features.TaskDetail.Services
 {
     public class TaskDetailService : ITaskDetailService
     {
         private readonly ITaskDetailRepository _taskDetailRepository;
+        private readonly IWebHostEnvironment _enviroment;
+        private readonly BlobHelper _blobService;
 
-        public TaskDetailService(ITaskDetailRepository taskDetailRepository)
+        public TaskDetailService(ITaskDetailRepository taskDetailRepository, IWebHostEnvironment enviroment, BlobHelper blobService)
         {
             _taskDetailRepository = taskDetailRepository;
+            _enviroment = enviroment;
+            _blobService = blobService;
+        }
+
+        public async Task<(string message, bool isSuccess)> AddAttachmentToTask(TaskDetailViewModel model)
+        {
+            var uploadFile = await _blobService.UploadFileAsync(model.Attachment);
+            var dbModel = new ProjectTaskDocument()
+            {
+                ProjectTaskId = model.Id,
+                DocumentDetail = model.Attachment.Name,
+                DocumentName = model.Attachment.FileName,
+                CreatedBy = model.EmployeeId,
+                CreatedDate = DateTime.Now,
+                DocumentPath= uploadFile
+            };
+
+            var response = await _taskDetailRepository.AddAttachmentToTask(dbModel);
+
+            return response;
         }
 
         public async Task<(string message, bool isSuccess)> AssignToEmployee(int taskId, int userId, int empId)
@@ -28,7 +52,7 @@ namespace PMS.Features.TaskDetail.Services
             return await _taskDetailRepository.ChangeTaskPriority(taskId, userId, priority);
         }
 
-        public async  Task<(string message, bool isSuccess)> ChangeTaskStartDate(int taskId, int userId, DateTime startDate)
+        public async Task<(string message, bool isSuccess)> ChangeTaskStartDate(int taskId, int userId, DateTime startDate)
         {
             return await _taskDetailRepository.ChangeTaskStartDate(taskId, userId, startDate);
         }
@@ -43,7 +67,12 @@ namespace PMS.Features.TaskDetail.Services
             return await _taskDetailRepository.CreateDiscussion(model);
         }
 
-        public async  Task<(string message, bool isSuccess, IEnumerable<ProjectDiscussBoard> models)> GetDiscussionBoardList(int taskId)
+        public async Task<(string message, bool isSuccess, IEnumerable<AttachmentVm> models)> GetAttachmentList(int taskId)
+        {
+            return await _taskDetailRepository.GetAttachmentList(taskId);
+        }
+
+        public async Task<(string message, bool isSuccess, IEnumerable<ProjectDiscussBoard> models)> GetDiscussionBoardList(int taskId)
         {
             return await _taskDetailRepository.GetDiscussionBoardList(taskId);
         }
@@ -52,7 +81,7 @@ namespace PMS.Features.TaskDetail.Services
         {
             return await _taskDetailRepository.GetTaskAssignHistory(taskId);
         }
-        public async  Task<(string message, bool isSuccess, TaskDetailViewModel model)> GetTaskDetail(int taskId)
+        public async Task<(string message, bool isSuccess, TaskDetailViewModel model)> GetTaskDetail(int taskId)
         {
             return await _taskDetailRepository.GetTaskDetail(taskId);
         }
@@ -62,7 +91,7 @@ namespace PMS.Features.TaskDetail.Services
             return await _taskDetailRepository.GetTaskDetails(projectId);
         }
 
-        public async  Task<(string message, bool isSuccess, IEnumerable<TaskPriorityHistoryVm> models)> GetTaskPriorityHistory(int taskId)
+        public async Task<(string message, bool isSuccess, IEnumerable<TaskPriorityHistoryVm> models)> GetTaskPriorityHistory(int taskId)
         {
             return await _taskDetailRepository.GetTaskPriorityHistory(taskId);
         }
