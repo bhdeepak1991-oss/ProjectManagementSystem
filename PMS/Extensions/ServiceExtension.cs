@@ -12,6 +12,7 @@ using PMS.Features.Document.Services;
 using PMS.Features.Vacation.Services;
 using PMS.Features.Notification.Services;
 using PMS.Features.Dashboard.Services;
+using PMS.Features.KanbanBoard.Services;
 
 namespace PMS.Extensions
 {
@@ -57,6 +58,8 @@ namespace PMS.Extensions
             services.AddTransient<PasswordService>();
 
             services.AddTransient<BlobHelper>();
+
+            services.AddScoped<IBoardService, BoardService>();
 
             return services;
         }

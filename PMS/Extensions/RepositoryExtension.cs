@@ -10,6 +10,7 @@ using PMS.Features.Utilities.Repositories;
 using PMS.Features.Document.Repositories;
 using PMS.Features.Vacation.Repositories;
 using PMS.Features.Notification.Repositories;
+using PMS.Features.KanbanBoard.Repositories;
 
 namespace PMS.Extensions
 {
@@ -48,6 +49,8 @@ namespace PMS.Extensions
             services.AddScoped<IVacationRepository, VacationRepository>();
 
             services.AddScoped<INotificationRepository, NotificationRepository>();
+
+            services.AddScoped<IBoardRepository, BoardRepository>();
 
             return services;
         }

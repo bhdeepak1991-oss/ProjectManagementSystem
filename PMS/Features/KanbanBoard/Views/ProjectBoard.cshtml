@@ -1,0 +1,390 @@
+﻿@model IEnumerable<PMS.Features.KanbanBoard.ViewModels.BoardVm>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    .kanban-board {
+        display: flex;
+        gap: 1.5rem;
+        overflow-x: auto;
+        padding: 1rem;
+        background-color: #f3f4f6;
+        min-height: 90vh;
+    }
+
+    .kanban-column {
+        flex: 0 0 360px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        max-height: 85vh;
+    }
+
+    .kanban-column-header {
+        padding: 1rem 1.2rem;
+        border-bottom: 2px solid #e5e7eb;
+        font-weight: 600;
+        font-size: 1.2rem;
+        color: #1f2937;
+        background-color: #f9fafb;
+        text-transform: capitalize;
+    }
+
+    .kanban-tasks {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+        min-height: 300px;
+    }
+
+    .kanban-card {
+        background-color: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-left: 5px solid #256547; /* Azure blue accent */
+        border-radius: 6px;
+        padding: 1rem 1.1rem;
+        margin-bottom: 1rem;
+        cursor: grab;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .kanban-card:hover {
+            background-color: #f9fafc;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .kanban-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 0.3rem;
+        }
+
+        .kanban-card .card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #111827;
+            margin: 0.3rem 0;
+        }
+
+        .kanban-card .card-description {
+            color: #374151;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+        }
+
+        .kanban-card .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 0.5rem;
+            margin-top: 0.3rem;
+        }
+
+        .kanban-card .tag {
+            display: inline-block;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-left: 4px;
+        }
+
+    .kanban-tasks.drag-over {
+        background-color: #eff6ff;
+        border: 2px dashed #2563eb;
+        border-radius: 8px;
+    }
+
+    .kanban-tasks::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .kanban-tasks::-webkit-scrollbar-thumb {
+        background-color: #a1a1aa;
+        border-radius: 10px;
+    }
+
+    .btn-icon {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        color: #333;
+        transition: color 0.3s ease;
+        position: relative;
+    }
+
+        .btn-icon:hover,
+        .btn-icon:focus {
+            color: #007bff;
+            outline: none;
+        }
+
+    .kanban-card {
+        position: relative; /* for dropdown positioning */
+        padding: 15px;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+        border-radius: 6px;
+    }
+
+    .btn-icon {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        color: #333;
+        transition: color 0.3s ease;
+        position: relative;
+        float: right;
+    }
+
+        .btn-icon:hover,
+        .btn-icon:focus {
+            color: #007bff;
+            outline: none;
+        }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 40px; /* below button */
+        right: 0;
+        background: white;
+        border: 5px solid #ddd;
+        border-radius: 6px;
+        box-shadow: 0 4px 10px rgb(219,85,44);
+        min-width: 160px;
+        z-index: 9999999;
+        padding: 5px 0;
+    }
+
+        .dropdown-menu button {
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+        }
+
+            .dropdown-menu button:hover,
+            .dropdown-menu button:focus {
+                background-color: rgb(219,85,44);
+                color: white;
+                outline: none;
+            }
+
+    .dragging {
+        opacity: 0.6;
+        background-color: #e0f7fa;
+        border: 2px dashed rgb(219,85,44);
+        ;
+    }
+
+    .kanban-tasks {
+        min-height: 200px;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+
+
+</style>
+<div class="content-wrapper" style="min-height: 948px;">
+    <section class="content-header d-flex align-items-center justify-content-between">
+        <h1 class="m-0">
+            Project Board
+            <small>Project Task Board</small>
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Project Board</h3>
+                    </div>
+                    <div class="container-fluid py-4">
+                        <div class="kanban-board">
+
+                            <!-- To Do -->
+                            @foreach (var data in Model.OrderBy(x => x.Sequence).GroupBy(x => x.TaskStatus))
+                            {
+                                    <div class="kanban-column" data-status="@data.Key">
+                                @functions {
+                                    // Simple hash function to generate color from string
+                                    public string GetColorFromString(string input)
+                                    {
+                                        if (string.IsNullOrEmpty(input)) return "#6c757d"; // default gray
+
+                                        int hash = 0;
+                                        foreach (var c in input)
+                                            hash = c + ((hash << 5) - hash);
+
+                                        // Convert hash to 3 bytes for RGB
+                                        var r = (hash & 0xFF0000) >> 16;
+                                        var g = (hash & 0x00FF00) >> 8;
+                                        var b = hash & 0x0000FF;
+
+                                        // Optional: lighten colors so they are not too dark
+                                        r = (r + 128) / 2;
+                                        g = (g + 128) / 2;
+                                        b = (b + 128) / 2;
+
+                                        return $"rgb({r},{g},{b})";
+                                    }
+                                }
+                                <div class="kanban-column-header" style="background-color:@GetColorFromString(data.Key); color: white;">
+                                    @data.Key <span class="badge text-dark">@data.Count()</span>
+                                </div>
+
+
+                                <div class="kanban-tasks" id="@data.Key">
+                                    @foreach (var item in data)
+                                    {
+                                        <div class="kanban-card" data-id="@item.Id" style="position: relative;">
+                                            <button class="btn btn-icon pull-right menu-btn" aria-label="More options">
+                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                            </button>
+
+                                            <div class="dropdown-menu" role="menu" aria-hidden="true" style="overflow-y:auto; height:150px !important">
+                                                @foreach (var grp in Model.GroupBy(x => x.TaskStatus))
+                                                {
+                                                    <button role="menuitem" onclick="fn_ChangeStatus('@grp.Key','@item.Id')">@grp.Key</button>
+                                                }
+                                                <button role="menuitem" onclick="alert('Action 2 for @item.TaskCode')">Add Sub Task</button>
+                                                <button role="menuitem" onclick="alert('Action 3 for @item.TaskCode')">Add Attachment</button>
+                                            </div>
+
+                                            <h4>
+                                                <a asp-action="TaskDetail" asp-controller="TaskDetail" asp-route-taskId="@item.Id">@item.TaskCode</a>
+                                            </h4>
+                                            <p>@item.TaskName.</p>
+                                            <p>Module : @item.ModuleName</p>
+                                            <p>Sprint : @item.SprintName</p>
+                                            <p>Due Date: @item.DueDate?.ToShortDateString()</p>
+                                            <p>Priority : @item.Priority</p>
+                                            <p>Type : @item.TaskType</p>
+                                            <div class="meta"><i class="bi bi-person-circle"></i> @item.AssignedTo</div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                                                        }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        @await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml")
+    </section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+
+<script>
+    function fn_CloseModal() {
+        $("#pmModalPopUp").modal('hide');
+    }
+    function fn_OnBegin(){
+    }
+    function fn_OnSuccess(resp){
+        toastr.success("Saved successfully!");
+    }
+
+    function fn_ChangeStatus(status, id){
+        $.get("/TaskDetail/ChangeStatus",{status: status, taskId: id}, function(resp){
+            location.reload();
+        })
+    }
+
+    document.querySelectorAll('.menu-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.kanban-card');
+        const menu = card.querySelector('.dropdown-menu');
+
+        // Close other menus
+        document.querySelectorAll('.dropdown-menu').forEach(m => {
+          if (m !== menu) m.style.display = 'none';
+        });
+
+        // Toggle current menu
+        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+      });
+    });
+
+    // Close all menus when clicking outside
+    window.addEventListener('click', () => {
+      document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.style.display = 'none';
+      });
+    });
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Apply Sortable to all kanban-tasks containers
+        document.querySelectorAll('.kanban-tasks').forEach(column => {
+            new Sortable(column, {
+                group: 'tasks',       // Allow drag between columns
+                animation: 150,
+                ghostClass: 'dragging', // Optional CSS class while dragging
+                onEnd: function (evt) {
+                    const taskId = evt.item.dataset.id;
+                    const newStatus = evt.to.closest('.kanban-column').dataset.status;
+
+                    console.log(`Task ${taskId} moved to ${newStatus}`);
+                    updateTaskStatus(taskId, newStatus);
+                }
+            });
+        });
+
+        // Handle dropdown menus (toggle open/close)
+        document.querySelectorAll('.menu-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = btn.closest('.kanban-card');
+                const menu = card.querySelector('.dropdown-menu');
+                document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display = 'none');
+                menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        window.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => menu.style.display = 'none');
+        });
+    });
+
+    // Update task status on backend
+    function updateTaskStatus(taskId, newStatus) {
+            fn_ChangeStatus(newStatus,taskId);
+    }
+
+
+</script>
+
+
+
+
+
