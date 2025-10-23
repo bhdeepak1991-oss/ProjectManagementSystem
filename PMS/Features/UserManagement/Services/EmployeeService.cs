@@ -33,6 +33,11 @@ namespace PMS.Features.UserManagement.Services
             return await _employeeRepository.GetEmployeeById(empId, default);
         }
 
+        public async Task<(string message, bool isSuccess, EmployeeVm model)> GetEmployeeDetailById(int empId)
+        {
+            return await _employeeRepository.GetEmployeeDetailById(empId);
+        }
+
         public async Task<(string message, bool isSuccess, IEnumerable<EmployeeViewModel> models)> GetEmployees(CancellationToken cancellationToken)
         {
             var departmentModels = await _departmentRepository.GetAllDepartments(default);

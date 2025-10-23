@@ -1,0 +1,132 @@
+﻿@model PMS.Features.UserManagement.ViewModels.EmployeeVm
+
+<div class="content-wrapper" style="min-height: 948px;">
+	<section class="content-header d-flex align-items-center justify-content-between">
+		<h1 class="m-0">
+			 Employee Profile Detail
+			<small>Employee Profile Information</small>
+		</h1>
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+					</div>
+                    <div class="container mt-4">
+                        <div class="card shadow-sm border-0">
+
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-3 text-center">
+                                        <img src="https://ui-avatars.com/api/?name=@(Model?.EmployeeName)" alt="Profile Picture"
+                                             class="rounded-circle img-thumbnail mb-3"
+                                             style="width: 150px; height: 150px; object-fit: cover;">
+                                        <h5>@Model.EmployeeName</h5>
+                                        <p class="text-muted">@Model.DesignationName</p>
+                                        <span class="badge bg-info text-dark">@Model.DepartmentName</span>
+                                    </div>
+
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong>Employee Code:</strong> @Model.EmployeeCode</p>
+                                                <p><strong>Email:</strong> <a href="mailto:@Model.EmailId">@Model.EmailId</a></p>
+                                                <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+                                                <p><strong>Department:</strong> @Model.DepartmentName</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Date of Birth:</strong> @Model.DateOfBirth?.ToString("dd MMM yyyy")</p>
+                                                <p><strong>Date of Joining:</strong> @Model.DateOfJoining?.ToString("dd MMM yyyy")</p>
+                                                <p><strong>Designation:</strong> @Model.DesignationName</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <h5 class="text-secondary mt-4"><i class="bi bi-briefcase me-2"></i>Assigned Projects</h5>
+                                @if (Model.AssignProjectList != null && Model.AssignProjectList.Any())
+                                {
+                                    <table class="table table-hover align-middle mt-2">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Project Name</th>
+                                                <th>Client Name</th>
+                                                <th>Status</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var project in Model.AssignProjectList)
+                                            {
+                                                <tr>
+                                                    <td>@project.ProjectName</td>
+                                                    <td>@project.ClientName</td>
+                                                    <td>
+                                                        @if (project.ProjectStatus == "Active")
+                                                        {
+                                                            <span class="badge bg-success">@project.ProjectStatus</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-secondary">@project.ProjectStatus</span>
+                                                        }
+                                                    </td>
+                                                    <td>@project.StartDate?.ToString("dd MMM yyyy")</td>
+                                                    <td>@project.EndDate?.ToString("dd MMM yyyy")</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-warning">No projects assigned yet.</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+					
+				</div>
+			</div>
+		</div>
+
+		@await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml")
+	</section>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+	function fn_UserList() {
+		$.get('/features/UserManagement/UserListDetail', function(resp){
+			$("#divData").html(resp);
+			$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> User List");
+		});
+	}
+	function fn_CloseModal() {
+		$("#pmModalPopUp").modal('hide');
+	}
+	function fn_OnBegin(){
+	}
+
+	function fn_OnSuccess(resp){
+		toastr.success("Saved successfully!");
+	}
+
+		$(document).ready(function () {
+		// Initialize Select2 dropdown
+		$('.select2').select2({
+			placeholder: "Please enter project manager",
+			allowClear: true
+		});
+	});
+</script>
+
+
+
+

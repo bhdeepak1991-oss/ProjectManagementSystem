@@ -230,5 +230,15 @@ namespace PMS.Features.UserManagement
 
             return await Task.Run(() => RedirectToAction("Authenticate"));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetEmployeeDetail()
+        {
+            var empId = Convert.ToInt32(HttpContext.GetEmployeeId());
+
+            var response = await _employeeService.GetEmployeeDetailById(empId);
+
+            return View("~/Features/UserManagement/Views/EmployeeProfile.cshtml", response.model);
+        }
     }
 }

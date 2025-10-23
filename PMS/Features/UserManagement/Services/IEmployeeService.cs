@@ -14,5 +14,7 @@ namespace PMS.Features.UserManagement.Services
         Task<(string message, bool isSuccess)> UpdateEmployee(Employee model);
 
         Task<(string message, bool isSuccess)> DeleteEmployee(int empId);
+
+        Task<(string message, bool isSuccess, EmployeeVm model)> GetEmployeeDetailById(int empId);
     }
 }

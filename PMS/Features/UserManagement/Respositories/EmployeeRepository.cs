@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PMS.Domains;
+using PMS.Features.UserManagement.ViewModels;
 
 namespace PMS.Features.UserManagement.Respositories
 {
@@ -52,6 +53,46 @@ namespace PMS.Features.UserManagement.Respositories
             var response = await _dbContext.Employees.AsNoTracking().FirstOrDefaultAsync(x => x.Id == empId);
 
             return ("Employee fetched successfully", true, response ?? new Employee());
+        }
+
+        public async Task<(string message, bool isSuccess, EmployeeVm model)> GetEmployeeDetailById(int empId)
+        {
+            var employees = await (from emp in _dbContext.Employees
+                                   join um in _dbContext.UserManagements on emp.Id equals um.EmployeeId
+                                   join dm in _dbContext.DepartmentMasters on emp.DepartmentId equals dm.Id
+                                   join dsm in _dbContext.DesignationMasters on emp.DesignationId equals dsm.Id
+                                   where emp.IsDeleted == false
+                                   select new EmployeeVm
+                                   {
+                                       EmployeeName = emp.Name ?? string.Empty,
+                                       DepartmentName = dm.Name ?? string.Empty,
+                                       DesignationName = dsm.Name ?? string.Empty,
+                                       EmployeeCode = emp.EmployeeCode ?? string.Empty,
+                                       EmailId = emp.EmailId ?? string.Empty,
+                                       DateOfBirth = emp.DateOfBirth,
+                                       DateOfJoining = emp.DateOfJoining,
+                                       PhoneNumber = emp.PhoneNumber ?? string.Empty,
+                                   }).FirstOrDefaultAsync();
+
+            var assignProjects = await (from pe in _dbContext.ProjectEmployees
+                                        join pm in _dbContext.Projects on pe.ProjectId equals pm.Id
+                                        where pe.EmployeeId == empId
+                                        select new ProjectVm
+                                        {
+                                            ProjectName = pm.Name ?? string.Empty,
+                                            ClientName = pm.ClientName ?? string.Empty,
+                                            ProjectStatus = pm.ProjectStatus ?? string.Empty,
+                                            StartDate = pm.ProjectStartDate,
+                                            EndDate = pm.ProjectEndDate
+                                        }).ToListAsync();
+
+            if (employees is not null)
+            {
+                employees.AssignProjectList = assignProjects;
+            }
+
+            return ("Employee Fetched successfully", true, employees ?? new());
+
         }
 
         public async Task<(string message, bool isSuccess, IEnumerable<Employee> empModels)> GetEmployeeList(CancellationToken cancellationToken)

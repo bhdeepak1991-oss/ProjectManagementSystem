@@ -33,6 +33,17 @@ namespace PMS.Attributes
 
             if (userId is null && projectId is null)
             {
+                context.Result = new RedirectToActionResult("Authenticate", "UserManagement", null);
+                return;
+
+            }
+            else if (userId is null && projectId is not null)
+            {
+                context.Result = new RedirectToActionResult("Authenticate", "UserManagement", null);
+                return;
+            }
+            else if (userId is not null && projectId is  null)
+            {
                 context.Result = new RedirectToActionResult("ProjectSelection", "Dashboard", null);
                 return;
             }
