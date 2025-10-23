@@ -120,6 +120,17 @@ namespace PMS.Features.EmployeeTimeSheet
                     worksheet.Cell(row, 3).Value = item.DayName;
                     worksheet.Cell(row, 4).Value = item.WorkingHour;
                     worksheet.Cell(row, 5).Value = item.TaskDetail;
+
+                    if (item.WorkingHour == "0")
+                    {
+                        var range = worksheet.Range(row, 1, row, 5); // Row from col 1 to 6
+                        range.Style.Fill.BackgroundColor = XLColor.LightPink;
+
+                        if ((item.DayName == "Saturday" || item.DayName == "Sunday") && string.IsNullOrEmpty(item.TaskDetail))
+                        {
+                            worksheet.Cell(row, 5).Value = "Week Off";
+                        }
+                    }
                     row++;
                     count++;
                 }
@@ -127,7 +138,7 @@ namespace PMS.Features.EmployeeTimeSheet
                 // 5. Format header row (bold + background color)
                 var headerRange = worksheet.Range(1, 1, 1, 5);
                 headerRange.Style.Font.Bold = true;
-                headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
+                headerRange.Style.Fill.BackgroundColor = XLColor.DarkBlue;
                 headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
                 // 6. Apply table formatting – convert range to “table”
