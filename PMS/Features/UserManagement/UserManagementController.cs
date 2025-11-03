@@ -22,15 +22,18 @@ namespace PMS.Features.UserManagement
         private readonly IDesignationService _designationService;
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
+        private readonly IRoleMenuMappingService _roleMenuMappingService;
 
         public UserManagementController(IEmployeeService employeeService,
-            IDesignationService designationService, IDepartmentService departmentService, IUserService userService, IRoleService roleService)
+            IDesignationService designationService, IDepartmentService departmentService,
+            IUserService userService, IRoleService roleService, IRoleMenuMappingService roleMenuMappingService)
         {
             _employeeService = employeeService;
             _designationService = designationService;
             _departmentService = departmentService;
             _userService = userService;
             _roleService = roleService;
+            _roleMenuMappingService = roleMenuMappingService;
         }
 
         [PmsAuthorize]
@@ -232,13 +235,42 @@ namespace PMS.Features.UserManagement
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetEmployeeDetail()
+        public async Task<IActionResult> GetEmployeeDetail(int empId = 0)
         {
-            var empId = Convert.ToInt32(HttpContext.GetEmployeeId());
-
+            if (empId == 0)
+            {
+                empId = Convert.ToInt32(HttpContext.GetEmployeeId());
+            }
             var response = await _employeeService.GetEmployeeDetailById(empId);
 
             return View("~/Features/UserManagement/Views/EmployeeProfile.cshtml", response.model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> RoleMenuMapping()
+        {
+            var roleModels = await _roleService.GetRoles(default);
+
+            ViewBag.Role = new SelectList(roleModels, "Id", "Name");
+
+            return View("~/Features/UserManagement/Views/RoleMenuMapping.cshtml");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMappedRoleMenu(int roleId)
+        {
+            var mappedRoleMenuMapping = await _roleMenuMappingService.GetMappedMenu(roleId);
+
+            return PartialView("~/Features/UserManagement/Views/RoleManuMappingList.cshtml", mappedRoleMenuMapping.models);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RolemenuMappingAdd(int roleId, int menuId, bool isChecked)
+        {
+            var response = await _roleMenuMappingService.CreateMappedMenu(new RoleMenuMappingVm() { Id = menuId, IsMapped=isChecked }, roleId);
+
+            return Json("Role menu mapping mappped !");
+        }
+
     }
 }

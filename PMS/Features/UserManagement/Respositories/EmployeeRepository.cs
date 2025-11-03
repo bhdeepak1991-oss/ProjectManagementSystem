@@ -58,10 +58,10 @@ namespace PMS.Features.UserManagement.Respositories
         public async Task<(string message, bool isSuccess, EmployeeVm model)> GetEmployeeDetailById(int empId)
         {
             var employees = await (from emp in _dbContext.Employees
-                                   join um in _dbContext.UserManagements on emp.Id equals um.EmployeeId
+                                   //join um in _dbContext.UserManagements on emp.Id equals um.EmployeeId
                                    join dm in _dbContext.DepartmentMasters on emp.DepartmentId equals dm.Id
                                    join dsm in _dbContext.DesignationMasters on emp.DesignationId equals dsm.Id
-                                   where emp.IsDeleted == false
+                                   where emp.IsDeleted == false && emp.Id== empId
                                    select new EmployeeVm
                                    {
                                        EmployeeName = emp.Name ?? string.Empty,

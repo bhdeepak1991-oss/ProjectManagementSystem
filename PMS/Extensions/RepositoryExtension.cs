@@ -52,6 +52,8 @@ namespace PMS.Extensions
 
             services.AddScoped<IBoardRepository, BoardRepository>();
 
+            services.AddScoped<IRoleMenuMappingRepository, RoleMenuMappingRepository>();
+
             return services;
         }
     }

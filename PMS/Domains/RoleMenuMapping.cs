@@ -13,5 +13,10 @@ public partial class RoleMenuMapping
 
     public int? CreatedBy { get; set; }
 
-    public int? CreatedDate { get; set; }
+    public DateTime CreatedDate { get; set; }= DateTime.Now;
+
+    public bool IsActive { get; set; }
+
+    public bool IsDeleted { get; set; }
+    public int DisplayOrder { get; set; }
 }
