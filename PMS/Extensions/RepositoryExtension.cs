@@ -11,6 +11,7 @@ using PMS.Features.Document.Repositories;
 using PMS.Features.Vacation.Repositories;
 using PMS.Features.Notification.Repositories;
 using PMS.Features.KanbanBoard.Repositories;
+using PMS.Features.LeaveManagement.Repositories;
 
 namespace PMS.Extensions
 {
@@ -53,6 +54,10 @@ namespace PMS.Extensions
             services.AddScoped<IBoardRepository, BoardRepository>();
 
             services.AddScoped<IRoleMenuMappingRepository, RoleMenuMappingRepository>();
+
+            services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
+
+            services.AddScoped<IEmployeeLeaveRepository, EmployeeLeaveRepository>();
 
             return services;
         }

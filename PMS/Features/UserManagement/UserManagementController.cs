@@ -49,6 +49,10 @@ namespace PMS.Features.UserManagement
 
             ViewBag.Designation = new SelectList(designationModels.Item3, "Id", "Name");
 
+            var managerList = await _employeeService.GetEmployees(default);
+
+            ViewBag.Employee = new SelectList(managerList.models, "Id", "Name");
+
             return View("~/Features/UserManagement/Views/CreateEmployee.cshtml", empModel.model ?? new Employee());
         }
 

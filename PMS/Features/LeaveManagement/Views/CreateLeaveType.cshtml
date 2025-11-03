@@ -1,0 +1,115 @@
+﻿@model PMS.Domains.LeaveType
+
+<div class="content-wrapper" style="min-height: 948px;">
+    <section class="content-header d-flex align-items-center justify-content-between">
+        <h1 class="m-0">
+            Create Leave Type
+            <small>Leave Type Details</small>
+        </h1>
+        <a class="btn btn-success" onclick="fn_EmployeeList()">
+            <i class="fa fa-list"></i> Leave Type List
+        </a>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Create Leave Type</h3>
+                    </div>
+
+                    <form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+                          asp-action="CreateLeaveType" asp-controller="LeaveManagement">
+                        <div class="box-body" style="height:500px !important">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <input type="hidden" asp-for="Id" />
+                                    <label class=" pull-left" asp-for="LeaveTypeCode">Leave Code</label>
+                                    <input class="form-control" asp-for="LeaveTypeCode" placeholder="Please enter leave Code!">
+                                    <span asp-validation-for="LeaveTypeCode" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="LeaveTypeName">Leave Name</label>
+                                    <input class="form-control" asp-for="LeaveTypeName" placeholder="Please enter Leave Name">
+                                    <span asp-validation-for="LeaveTypeName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="PermonthAllocatedLeave">Allocated Leave Count (per month)</label>
+                                    <input class="form-control" asp-for="PermonthAllocatedLeave" placeholder="Please enterAllocated Leave Count (per month)">
+                                    <span asp-validation-for="PermonthAllocatedLeave" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="LeaveCalcullationStartDate">Leave Calcullation Start Date (It will take 1st day of Month)</label>
+                                    <input class="form-control" type="date" asp-for="LeaveCalcullationStartDate" placeholder="Please enter phone number">
+                                    <span asp-validation-for="LeaveCalcullationStartDate" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="LeaveCalcullationEndDate">Leave Calcullation End Date (It will take Last day of Month)</label>
+                                    <input class="form-control" type="date" asp-for="LeaveCalcullationEndDate" placeholder="Please enter phone number">
+                                    <span asp-validation-for="LeaveCalcullationEndDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="IsCarryForward">CarryForward ?</label>
+                                    <select class="form-control" asp-for="IsCarryForward" placeholder="Please enter role description">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                    <span asp-validation-for="IsCarryForward" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="CarryForwardLeaveCount">Carry forward leave Count</label>
+                                    <input class="form-control" asp-for="CarryForwardLeaveCount" placeholder="This unused leave will add on next year">
+                                    <span asp-validation-for="CarryForwardLeaveCount" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="EmployementStatus">Employment Status</label>
+                                    <select class="form-control" asp-for="EmployementStatus"
+                                            placeholder="Please enter role description">
+                                        <option value="All">All</option>
+                                        <option value="Confirmed">Confirmed</option>
+                                        <option value="Notice Period">Notice Period</option>
+                                        <option value="Probation Period">Probation Period</option>
+                                    </select>
+                                    <span asp-validation-for="EmployementStatus" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        @await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");
+    </section>
+</div>
+
+
+<script>
+    function fn_EmployeeList() {
+        $("#pmModalPopUp").modal('show');
+            $("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Leave Type List");
+        $.get('/features/LeaveManagement/GetLeaveType', function(resp){
+            $("#divData").html(resp);
+        });
+    }
+    function fn_CloseModal() {
+        $("#pmModalPopUp").modal('hide');
+    }
+    function fn_OnBegin(){
+    }
+
+    function fn_OnSuccess(resp){
+        toastr.success("Saved successfully!");
+    }
+</script>
+
+
+
+

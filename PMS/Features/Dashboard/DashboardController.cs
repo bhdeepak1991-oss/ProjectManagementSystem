@@ -9,6 +9,7 @@ using PMS.Features.Dashboard.Services;
 using PMS.Features.Project.Services;
 using PMS.Features.ProjectEmployee.Services;
 using PMS.Features.ProjectTask.Services;
+using PMS.Features.UserManagement.Services;
 using PMS.Helpers;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
@@ -24,15 +25,17 @@ namespace PMS.Features.Dashboard
         private readonly IProjectEmployeeServices _projectEmployeeService;
         private readonly IDashboardService _dashBoardService;
         private readonly IProjectTaskService _projectTaskService;
+        private readonly IEmployeeService _employeeService;
         public DashboardController(ILogger<DashboardController> logger,
             IProjectService projectService, IProjectEmployeeServices projectEmpService,
-            IDashboardService dashboardService, IProjectTaskService projectTaskService)
+            IDashboardService dashboardService, IProjectTaskService projectTaskService, IEmployeeService employeeService)
         {
             _logger = logger;
             _projectService = projectService;
             _projectEmployeeService = projectEmpService;
             _dashBoardService = dashboardService;
             _projectTaskService = projectTaskService;
+            _employeeService = employeeService;
         }
         [PmsAuthorize]
         public async Task<IActionResult> Index()
@@ -122,6 +125,13 @@ namespace PMS.Features.Dashboard
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public async Task<IActionResult> GetEmployeeList()
+        {
+            var response = await _employeeService.GetEmployees(default);
+
+            return PartialView("~/Features/Dashboard/Views/EmployeeList.cshtml", response.models);
         }
 
 

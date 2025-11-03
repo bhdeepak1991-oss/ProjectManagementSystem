@@ -302,6 +302,8 @@
             </div>
 
             <div id="divUserList"></div>
+
+            <div id="divEmpList"></div>
         </div>
 
    
@@ -321,15 +323,12 @@
                             @await Html.PartialAsync("~/Features/Vacation/Views/VacationCalendar.cshtml")
                         </div><!-- /.table-responsive -->
                     </div><!-- /.box-body -->
-                    <div class="box-footer clearfix">
-                        <a href="javascript::;" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
-                        <a href="javascript::;" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
-                    </div><!-- /.box-footer -->
+                  
                 </div><!-- /.box -->
             </div><!-- /.col -->
         </div>
 
-        @await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");
+        @await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml")
     </section>
 </div>
 
@@ -651,6 +650,10 @@
     $(document).ready(function(){
         $.get('/Dashboard/GetMappedEmployee', function(resp){
             $("#divUserList").html(resp)
+        })
+
+         $.get('/Dashboard/GetEmployeeList', function(resp){
+            $("#divEmpList").html(resp)
         })
     })
 

@@ -1,0 +1,107 @@
+﻿@model PMS.Domains.EmployeeLeave
+<div class="content-wrapper" style="min-height: 948px;">
+    <section class="content-header d-flex align-items-center justify-content-between">
+        <h1 class="m-0">
+            Employee Leave Request
+            <small>Leave Request</small>
+        </h1>
+        <a class="btn btn-success" onclick="fn_EmployeeList()">
+            <i class="fa fa-list"></i> Leave Request List
+        </a>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Create Employee Leave Request</h3>
+                    </div>
+
+                    <form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+                          asp-action="LeaveRequest" asp-controller="LeaveManagement">
+                        <div class="box-body" style="height:500px !important">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <input type="hidden" asp-for="Id" />
+                                    <label class=" pull-left" asp-for="LeaveTypeId">Select Leave Type</label>
+                                    <select onchange="fn_getLeaveType(this)" class="form-control" asp-for="LeaveTypeId" asp-items="ViewBag.LeaveType" placeholder="Please enter leave Code!">
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    <span asp-validation-for="LeaveTypeId" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left">Leave Taken (Till Date)</label>
+                                    <input class="form-control" id="txtLeaveTaken" disabled="disabled" placeholder="Leave Taken (Till Date)">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left">Remaining Leave (Till Date)</label>
+                                    <input class="form-control" id="txtLeaveRemaining" disabled="disabled" placeholder="Remaining Leave (Till Date)">
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left">Percentage Leave Taken (Till Date)</label>
+                                    <input class="form-control" id="txtPercentageRemaining" disabled="disabled" placeholder="Percentage Leave Taken (Till Date)">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="FromDate">From Date</label>
+                                    <input class="form-control" type="date" asp-for="FromDate" placeholder="Please enter Leave Name">
+                                    <span asp-validation-for="FromDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="ToDate">ToDate</label>
+                                    <input class="form-control" type="date" asp-for="ToDate" placeholder="Please enterAllocated Leave Count (per month)">
+                                    <span asp-validation-for="ToDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class=" pull-left" asp-for="Reason">Reason For Leave</label>
+                                    <textarea class="form-control" asp-for="Reason" placeholder="Reason For Leave"></textarea>
+                                    <span asp-validation-for="Reason" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        @await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");
+    </section>
+</div>
+
+
+<script>
+    function fn_EmployeeList() {
+        $("#pmModalPopUp").modal('show');
+            $("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Leave Type List");
+        $.get('/features/LeaveManagement/GetLeaveType', function(resp){
+            $("#divData").html(resp);
+        });
+    }
+    function fn_CloseModal() {
+        $("#pmModalPopUp").modal('hide');
+    }
+    function fn_OnBegin(){
+    }
+
+    function fn_getLeaveType(eData){
+        debugger;
+        $.get("/features/LeaveManagement/GetLeaveTypeDetail",{leaveType:eData.value}, function(resp){
+          $("#txtLeaveTaken").val(resp.leaveTaken);
+            $("#txtLeaveRemaining").val(resp.remainingLeaveCout);
+              $("#txtPercentageRemaining").val(resp.percentageOfLeaveTaken);
+        })
+    }
+
+    function fn_OnSuccess(resp){
+        toastr.success("Saved successfully!");
+    }
+</script>
+
+
+
+

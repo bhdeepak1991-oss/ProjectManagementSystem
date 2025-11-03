@@ -1,0 +1,90 @@
+﻿@model PMS.Domain.UserManagement
+
+<div class="content-wrapper" style="min-height: 948px;">
+	<section class="content-header d-flex align-items-center justify-content-between">
+		<h1 class="m-0">
+			Create User Informaion
+			<small>User Master</small>
+		</h1>
+		<a class="btn btn-success" onclick="fn_UserList()">
+			<i class="fa fa-list"></i> User List
+		</a>
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">Create User</h3>
+					</div>
+
+					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+						  asp-action="CreateUser" asp-controller="UserManagement">
+						<div class="box-body" style="height:500px !important">
+							<div class="row">
+								<div class="form-group col-md-6">
+									<input type="hidden" asp-for="Id"/>
+									<label class=" pull-left" asp-for="UserName">User Name</label>
+									<input class="form-control" asp-for="UserName" placeholder="Please enter employee name!">
+									<span asp-validation-for="UserName" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="EmployeeId">Select Employee</label>
+									<select class="form-control select2" asp-items="ViewBag.Employee" asp-for="EmployeeId" placeholder="Please enter role description">
+										<option value="">--Select--</option>
+									</select>
+									<span asp-validation-for="EmployeeId" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="RoleId">Select Role</label>
+									<select class="form-control select2" asp-items="ViewBag.Role" asp-for="RoleId" placeholder="Please enter role description">
+										<option value="">--Select--</option>
+									</select>
+									<span asp-validation-for="RoleId" class="text-danger"></span>
+								</div>
+							
+							</div>
+
+							<button type="submit" class="btn btn-primary pull-right">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		@await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");	
+	</section>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+	function fn_UserList() {
+		$.get('/features/UserManagement/UserListDetail', function(resp){
+			$("#divData").html(resp);
+			$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> User List");
+		});
+	}
+	function fn_CloseModal() {
+		$("#pmModalPopUp").modal('hide');
+	}
+	function fn_OnBegin(){
+	}
+
+	function fn_OnSuccess(resp){
+		toastr.success("Saved successfully!");
+	}
+
+		$(document).ready(function () {
+		// Initialize Select2 dropdown
+		$('.select2').select2({
+			placeholder: "Please enter project manager",
+			allowClear: true
+		});
+	});
+</script>
+
+
+
+

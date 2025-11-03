@@ -10,6 +10,7 @@
         public DateTime? DateOfBirth { get; set; }
         public DateTime? DateOfJoining { get; set; }
         public string PhoneNumber { get; set; } = string.Empty;
+        public string ManagerName { get; set; }
         public IEnumerable<ProjectVm> AssignProjectList { get; set; } = new List<ProjectVm>();
     }
 

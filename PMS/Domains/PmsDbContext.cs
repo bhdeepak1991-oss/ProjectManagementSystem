@@ -68,7 +68,11 @@ public partial class PmsDbContext : DbContext
 
     public virtual DbSet<VacationDetail> VacationDetails { get; set; }
 
+    public virtual DbSet<LeaveType> LeaveTypes { get; set; }
+
     public virtual DbSet<NotificationDetail> NotificationDetails { get; set; }
+
+    public virtual DbSet<EmployeeLeave> EmployeeLeaves { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.

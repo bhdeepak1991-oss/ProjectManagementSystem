@@ -13,6 +13,7 @@ using PMS.Features.Vacation.Services;
 using PMS.Features.Notification.Services;
 using PMS.Features.Dashboard.Services;
 using PMS.Features.KanbanBoard.Services;
+using PMS.Features.LeaveManagement.Services;
 
 namespace PMS.Extensions
 {
@@ -62,6 +63,10 @@ namespace PMS.Extensions
             services.AddScoped<IBoardService, BoardService>();
 
             services.AddScoped<IRoleMenuMappingService, RoleMenuMappingService>();
+
+            services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+
+            services.AddScoped<IEmployeeLeaveService, EmployeeLeaveService>();
 
             return services;
         }
