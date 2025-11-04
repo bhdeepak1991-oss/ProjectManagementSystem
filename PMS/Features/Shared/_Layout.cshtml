@@ -417,7 +417,106 @@
 						<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
 					</div>
 				</div>
+
 				<ul class="sidebar-menu">
+
+					<li>
+						<a asp-action="Index" asp-controller="Project">
+							<i class="fa fa-folder-open"></i> <span>Projects</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="Index" asp-controller="Document">
+							<i class="fa fa-file-text-o"></i> <span>Documents</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="DocumentRequest" asp-controller="Document">
+							<i class="fa fa-share-square-o"></i> <span>Document Request</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="Index" asp-controller="ProjectEmployee">
+							<i class="fa fa-users"></i> <span>Project Employee</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="CreateSprint" asp-controller="Sprint">
+							<i class="fa fa-bolt"></i> <span>Sprint</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="Index" asp-controller="ProjectTask">
+							<i class="fa fa-tasks"></i> <span>Project Task</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="Index" asp-controller="Board">
+							<i class="fa fa-columns"></i> <span>Board</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="ProjectTaskList" asp-controller="ProjectTask">
+							<i class="fa fa-list-ul"></i> <span>Task List</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="CreateTimeSheet" asp-controller="EmployeeTimeSheet">
+							<i class="fa fa-clock-o"></i> <span>TimeSheet</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="CreateVacation" asp-controller="Vacation">
+							<i class="fa fa-plane"></i> <span>Vacation</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="Index" asp-controller="LeaveManagement">
+							<i class="fa fa-list-alt"></i> <span>Leave Type</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="LeaveRequest" asp-controller="LeaveManagement">
+							<i class="fa fa-envelope-o"></i> <span>Leave Request</span>
+						</a>
+					</li>
+
+					<li>
+						<a asp-action="RequestApproval" asp-controller="LeaveManagement">
+							<i class="fa fa-check-square"></i> <span>Request Approval</span>
+						</a>
+					</li>
+
+					<li class="treeview">
+						<a href="#">
+							<i class="fa fa-users-cog"></i> <span>User Management</span>
+							<i class="fa fa-angle-left pull-right"></i>
+						</a>
+						<ul class="treeview-menu">
+							<li><a asp-action="CreateRole" asp-controller="Master"><i class="fa fa-shield"></i> Roles</a></li>
+							<li><a asp-action="CreateDepartment" asp-controller="Master"><i class="fa fa-sitemap"></i> Departments</a></li>
+							<li><a asp-action="CreateDesignation" asp-controller="Master"><i class="fa fa-user-secret"></i> Designations</a></li>
+							<li><a asp-action="CreateTask" asp-controller="Master"><i class="fa fa-check-circle"></i> Task Status</a></li>
+							<li><a asp-action="CreateEmployee" asp-controller="UserManagement"><i class="fa fa-user-secret"></i> Employees</a></li>
+							<li><a asp-action="CreateUser" asp-controller="UserManagement"><i class="fa fa-users"></i> Users</a></li>
+							<li><a asp-action="UploadMaster" asp-controller="Utilities"><i class="fa fa-wrench"></i> Utilities</a></li>
+						</ul>
+					</li>
+
+				</ul>
+
+			@* 	<ul class="sidebar-menu">
 
 					<li>
 						<a asp-action="Index" asp-controller="Project">
@@ -430,8 +529,8 @@
 						</a>
 					<li>
 					<li>
-						<a asp-action="Index" asp-controller="Document">
-							<i class="fa fa-th"></i> <span>Share Document</span>
+						<a asp-action="DocumentRequest" asp-controller="Document">
+							<i class="fa fa-th"></i> <span>Document Request</span>
 						</a>
 					<li>
 						<a asp-action="Index" asp-controller="ProjectEmployee">
@@ -447,6 +546,11 @@
 					<li>
 						<a asp-action="Index" asp-controller="ProjectTask">
 							<i class="fa fa-list"></i> <span>Project Task</span>
+						</a>
+					</li>
+					<li>
+						<a asp-action="Index" asp-controller="Board">
+							<i class="fa fa-list"></i> <span>Board</span>
 						</a>
 					</li>
 
@@ -474,13 +578,13 @@
 					<li>
 
 					<li>
-						<a asp-action="Index" asp-controller="LeaveManagement">
+						<a asp-action="LeaveRequest" asp-controller="LeaveManagement">
 							<i class="fa fa-th"></i> <span>Leave Request</span>
 						</a>
 					<li>
 
 					<li>
-						<a asp-action="Index" asp-controller="Document">
+						<a asp-action="RequestApproval" asp-controller="LeaveManagement">
 							<i class="fa fa-th"></i> <span>Request Approval</span>
 						</a>
 					<li>
@@ -501,7 +605,7 @@
 						</ul>
 					</li>
 
-				</ul>
+				</ul> *@
 			</section>
 			<!-- /.sidebar -->
 		</aside>
@@ -569,6 +673,10 @@
 
 		connection.on("DiscussionAdded", function (TaskName, AddedBy) {
 			showNotification(`New Comment has been added for Task: ${TaskName} Added By  (#${AddedBy})`, 'fa-plus', 'text-green');
+		});
+
+		connection.on("LeaveRequest", function (message) {
+			showNotification(message, 'fa-plus', 'text-green');
 		});
 
 		// ⚠️ Project Deleted

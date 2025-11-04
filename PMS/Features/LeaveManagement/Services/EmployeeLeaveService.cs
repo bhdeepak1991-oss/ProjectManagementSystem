@@ -12,6 +12,11 @@ namespace PMS.Features.LeaveManagement.Services
             _employeeLeaveRepository = employeeLeaveRepository;
         }
 
+        public async Task<(string message, bool isSuccess)> ApprovedReject(int empId, int managerId, bool isApproved, int requestId)
+        {
+            return await _employeeLeaveRepository.ApprovedReject(empId, managerId, isApproved, requestId);
+        }
+
         public async Task<(string message, bool isSuccess)> CreateEmployeeLeave(EmployeeLeave model, CancellationToken cancellationToken)
         {
             return await _employeeLeaveRepository.CreateEmployeeLeave(model, cancellationToken);
@@ -20,6 +25,11 @@ namespace PMS.Features.LeaveManagement.Services
         public async Task<(string message, bool isSuccess, IEnumerable<EmployeeLeaveVm> models)> GetEmployeeLeaves(int empId, CancellationToken cancellationToken)
         {
             return await _employeeLeaveRepository.GetEmployeeLeaves(empId, cancellationToken);
+        }
+
+        public async Task<(string message, bool isSuccess, IEnumerable<EmployeeLeaveVm> model)> GetEmployeeRequest(int managerId)
+        {
+            return await _employeeLeaveRepository.GetEmployeeRequest(managerId);
         }
 
         public async  Task<(string message, bool isSuccess, LeaveCountVm model)> GetLeaveCountDetail(int leaveType, int empId)

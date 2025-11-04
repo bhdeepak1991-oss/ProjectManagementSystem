@@ -1,0 +1,83 @@
+﻿@model PMS.Features.Document.ViewModels.DocumentRequestVm
+
+<div class="content-wrapper" style="min-height: 948px;">
+	<section class="content-header d-flex align-items-center justify-content-between">
+		<h1 class="m-0">
+			Request For Document Access
+			<small>Document Access Request</small>
+		</h1>
+		<a class="btn btn-success" onclick="fn_EmployeeList()">
+			<i class="fa fa-list"></i> Document List
+		</a>
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title"> Request Document Access</h3>
+					</div>
+
+					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+						  asp-action="PostDocumentRequest" asp-controller="Document" enctype="multipart/form-data">
+						<div class="box-body" style="height:900px !important">
+							<div class="row">
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="DocumentId">Select Document</label>
+									<select class="form-control select2" asp-for="DocumentId" asp-items="ViewBag.DocumentList">
+										<option value="">--Select--</option>
+									</select>
+									<span asp-validation-for="DocumentId" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="RequestReason">Request Reason</label>
+									<textarea  class="form-control" asp-for="RequestReason" placeholder="Please provide the reason for Document request"></textarea>
+									<span asp-validation-for="RequestReason" class="text-danger"></span>
+								</div>
+
+							</div>
+
+							<button type="submit" class="btn btn-primary pull-right">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		@await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");
+	</section>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+	function fn_EmployeeList() {
+
+		$.get('/features/Document/GetDocumentDetail', function(resp){
+			$("#divData").html(resp);
+			$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Upload Documents");
+		});
+	}
+	function fn_CloseModal() {
+		$("#pmModalPopUp").modal('hide');
+	}
+	function fn_OnBegin(){
+	}
+
+	function fn_OnSuccess(resp){
+		toastr.success("Saved successfully!");
+	}
+	$(document).ready(function () {
+		// Initialize Select2 dropdown
+		$('.select2').select2({
+			placeholder: "Please Select Document to Request Access",
+			allowClear: true
+		});
+	});
+</script>
+
+
+
+

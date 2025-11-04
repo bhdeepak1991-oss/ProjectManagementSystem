@@ -1,9 +1,12 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
+﻿using Azure;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using PMS.Domains;
 using PMS.Features.LeaveManagement.Services;
 using PMS.Helpers;
+using PMS.Notification;
 
 namespace PMS.Features.LeaveManagement
 {
@@ -11,10 +14,12 @@ namespace PMS.Features.LeaveManagement
     {
         private readonly ILeaveTypeService _leaveTypeService;
         private readonly IEmployeeLeaveService _employeeLeaveService;
-        public LeaveManagement(ILeaveTypeService leaveTypeService, IEmployeeLeaveService employeeLeaveService)
+        private readonly IHubContext<NotificationHub> _hubContext;
+        public LeaveManagement(ILeaveTypeService leaveTypeService, IEmployeeLeaveService employeeLeaveService, IHubContext<NotificationHub> hubContext)
         {
             _leaveTypeService = leaveTypeService;
             _employeeLeaveService = employeeLeaveService;
+            _hubContext = hubContext;
         }
 
         public async Task<IActionResult> Index(int id)
@@ -76,7 +81,41 @@ namespace PMS.Features.LeaveManagement
         [HttpPost]
         public async Task<IActionResult> LeaveRequest(EmployeeLeave model)
         {
+            model.EmployeeId = Convert.ToInt32(HttpContext.GetEmployeeId());
+
             var response = await _employeeLeaveService.CreateEmployeeLeave(model, default);
+
+            await _hubContext.Clients.All.SendAsync("LeaveRequest", "New Leave Request has been created !");
+
+            return Json(response.message);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetEmployeeLeaveRequest()
+        {
+            var empId = Convert.ToInt32(HttpContext.GetEmployeeId());
+
+            var response = await _employeeLeaveService.GetEmployeeLeaves(empId, default);
+
+            return PartialView("~/Features/LeaveManagement/Views/LeaveRequestList.cshtml", response.models);
+        }
+
+        public async Task<IActionResult> RequestApproval()
+        {
+            var empId = Convert.ToInt32(HttpContext.GetEmployeeId());
+
+            var response = await _employeeLeaveService.GetEmployeeRequest(empId);
+
+            return View("~/Features/LeaveManagement/Views/RequestApprovalList.cshtml", response.model);
+        }
+
+        public async Task<IActionResult> ApproveRejectRequest(int empId, bool isApproved, int requestId)
+        {
+            var managerId = Convert.ToInt32(HttpContext.GetEmployeeId());
+
+            var response = await _employeeLeaveService.ApprovedReject(empId, managerId, isApproved, requestId);
+
+            await _hubContext.Clients.All.SendAsync("LeaveRequest", $"Leave Request has been {(isApproved? "Approved":"Rejected")}");
 
             return Json(response.message);
         }

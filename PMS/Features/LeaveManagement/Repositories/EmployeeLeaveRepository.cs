@@ -55,6 +55,37 @@ namespace PMS.Features.LeaveManagement.Repositories
             return ("Employee Leave Featched Succcessfully", true, response);
         }
 
+        public async Task<(string message, bool isSuccess, IEnumerable<EmployeeLeaveVm> model)> GetEmployeeRequest(int managerId)
+        {
+            var cordinatEmpList = await _dbContext.Employees.Where(x => x.ManagerId == managerId && x.IsDeleted == false)
+                                            .Select(x => x.Id).ToListAsync();
+
+            var cordinatEmpModels = await _dbContext.Employees.Where(x => x.ManagerId == managerId && x.IsDeleted == false)
+                                          .ToListAsync();
+
+            var employeeLeaves = await _dbContext.EmployeeLeaves.Where(x => cordinatEmpList.Contains(x.EmployeeId)
+                                        && x.LeaveStatus != "Approved"
+                                        && x.LeaveStatus != "Rejected" && x.IsActive == true && x.IsDeleted == false)
+                                        .ToListAsync();
+
+            var leaveType = await _dbContext.LeaveTypes.Where(x => x.IsActive == true && x.IsDeleted == false).ToListAsync();
+
+            var response = employeeLeaves.Select(x => new EmployeeLeaveVm()
+            {
+                LeaveStatus = x.LeaveStatus,
+                FromDate = x.FromDate,
+                ToDate = x.ToDate,
+                Reason = x.Reason,
+                EmployeeId= x.EmployeeId,
+                Id=x.Id,
+                LeaveType = $"{leaveType.FirstOrDefault(z => z.Id == x.LeaveTypeId)?.LeaveTypeName} ({leaveType.FirstOrDefault(z => z.Id == x.LeaveTypeId)?.LeaveTypeCode})",
+                EmployeeName = $"{cordinatEmpModels.FirstOrDefault(z => z.Id == x.EmployeeId)?.Name} ({cordinatEmpModels.FirstOrDefault(z => z.Id == x.EmployeeId)?.EmployeeCode})"
+            }).ToList();
+
+            return ("Employee Leave request List", true, response);
+
+        }
+
         public async Task<(string message, bool isSuccess, LeaveCountVm model)> GetLeaveCountDetail(int leaveType, int empId)
         {
             var responseModel = await _dbContext.LeaveTypes.FirstOrDefaultAsync(x => x.Id == leaveType);
@@ -74,7 +105,7 @@ namespace PMS.Features.LeaveManagement.Repositories
 
                 empLeaveModel.ForEach(data =>
                 {
-                    leaveTaken +=Convert.ToDecimal((Convert.ToDateTime(data.ToDate) - Convert.ToDateTime(data.FromDate)).TotalDays);
+                    leaveTaken += Convert.ToDecimal((Convert.ToDateTime(data.ToDate) - Convert.ToDateTime(data.FromDate)).TotalDays);
                 });
 
 
@@ -100,6 +131,30 @@ namespace PMS.Features.LeaveManagement.Repositories
             }
 
             return ("Leave Count Detail", false, new());
+        }
+
+        public async Task<(string message, bool isSuccess)> ApprovedReject(int empId, int managerId, bool isApproved, int requestId)
+        {
+            var model = await _dbContext.EmployeeLeaves.FirstOrDefaultAsync(x => x.Id == requestId);
+
+            if (model is null)
+            {
+                return ($"Leave request not found for Id {requestId}", false);
+            }
+
+            model.ApprovedRejectBy = managerId;
+            model.ApprovedRejectDate = DateTime.Now;
+            model.ApprovedRejectReason = isApproved ? "Leave Request has been Approved !" : "Leave Request has been rejected !";
+            model.UpdatedBy = managerId;
+            model.UpdatedDate = DateTime.Now;
+            model.LeaveStatus = isApproved ? "Approved" : "Rejected";
+
+            _dbContext.EmployeeLeaves.Update(model);
+
+            await _dbContext.SaveChangesAsync();
+
+            return ($"Leave request has been {(isApproved ? "Approved" : "Rejected")}.", true);
+
         }
     }
 }

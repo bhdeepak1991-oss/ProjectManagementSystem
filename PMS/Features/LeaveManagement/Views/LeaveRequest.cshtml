@@ -78,7 +78,7 @@
     function fn_EmployeeList() {
         $("#pmModalPopUp").modal('show');
             $("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Leave Type List");
-        $.get('/features/LeaveManagement/GetLeaveType', function(resp){
+        $.get('/features/LeaveManagement/GetEmployeeLeaveRequest', function(resp){
             $("#divData").html(resp);
         });
     }
@@ -86,15 +86,6 @@
         $("#pmModalPopUp").modal('hide');
     }
     function fn_OnBegin(){
-    }
-
-    function fn_getLeaveType(eData){
-        debugger;
-        $.get("/features/LeaveManagement/GetLeaveTypeDetail",{leaveType:eData.value}, function(resp){
-          $("#txtLeaveTaken").val(resp.leaveTaken);
-            $("#txtLeaveRemaining").val(resp.remainingLeaveCout);
-              $("#txtPercentageRemaining").val(resp.percentageOfLeaveTaken);
-        })
     }
 
     function fn_OnSuccess(resp){

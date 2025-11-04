@@ -6,6 +6,9 @@ namespace PMS.Features.Document.Repositories
     {
         Task<(string message, bool isSuccess)> UploadProjectDocument(ProjectDocument model, CancellationToken cancellationToken);
         Task<(string message, bool isSuccess)> DeleteProjectDocument(int documentId, int userId, CancellationToken cancellationToken);
-        Task<(string message, bool isSuccess, IEnumerable<ProjectDocument> models)> GetProjectDocuments(CancellationToken cancellationToken);
+        Task<(string message, bool isSuccess, IEnumerable<ProjectDocument> models)> GetProjectDocuments(int empId, CancellationToken cancellationToken);
+
+        Task<(string message, bool isSuccess)> DocumentRequestAccess(ProjectDocumentsRequest model);
+
     }
 }

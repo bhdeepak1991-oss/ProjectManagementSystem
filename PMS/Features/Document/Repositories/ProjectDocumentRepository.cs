@@ -34,9 +34,27 @@ namespace PMS.Features.Document.Repositories
             return ("Project document deleted successfully !", true);
         }
 
-        public async Task<(string message, bool isSuccess, IEnumerable<ProjectDocument> models)> GetProjectDocuments(CancellationToken cancellationToken)
+        public async  Task<(string message, bool isSuccess)> DocumentRequestAccess(ProjectDocumentsRequest model)
         {
-            var responseModels = await _dbContext.ProjectDocuments.Where(x => x.IsDeleted == false).ToListAsync(cancellationToken);
+            var repsonse = await _dbContext.ProjectDocumentsRequests.AddAsync(model);
+
+            await _dbContext.SaveChangesAsync();
+
+            return ("Document request has been addedd", true);
+        }
+
+        public async Task<(string message, bool isSuccess, IEnumerable<ProjectDocument> models)> GetProjectDocuments(int empId, CancellationToken cancellationToken)
+        {
+            var requestDocumentIds = await _dbContext.ProjectDocumentsRequests
+                          .Where(x => x.RequestById == empId && x.RequestStatus == "Approved")
+                          .Select(x => x.DocumentId) 
+                          .ToListAsync();
+
+            var responseModels = await _dbContext.ProjectDocuments
+                        .Where(x => x.IsDeleted==false
+                            && (x.CreatedBy == empId || requestDocumentIds.Contains(x.Id)))
+                        .ToListAsync(cancellationToken);
+
 
             var result = from um in _dbContext.UserManagements
                          join emp in _dbContext.Employees

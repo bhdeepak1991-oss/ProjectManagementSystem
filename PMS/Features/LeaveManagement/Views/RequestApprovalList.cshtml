@@ -1,0 +1,155 @@
+﻿@model IEnumerable<PMS.Features.LeaveManagement.ViewModels.EmployeeLeaveVm>
+
+<style>
+	.badge-success {
+		background-color: #198754;
+		color: white;
+		padding: 5px 10px;
+		border-radius: 6px;
+		font-size: 0.85rem;
+	}
+
+	.badge-warning {
+		background-color: #ffc107;
+		color: #000;
+		padding: 5px 10px;
+		border-radius: 6px;
+		font-size: 0.85rem;
+	}
+
+	.badge-danger {
+		background-color: #dc3545;
+		color: white;
+		padding: 5px 10px;
+		border-radius: 6px;
+		font-size: 0.85rem;
+	}
+
+	.badge-secondary {
+		background-color: #6c757d;
+		color: white;
+		padding: 5px 10px;
+		border-radius: 6px;
+		font-size: 0.85rem;
+	}
+</style>
+
+
+@functions {
+	public string GetStatusClass(string status)
+	{
+		return status switch
+		{
+			"Approved" => "badge-success",
+			"In Progress" => "badge-warning",
+			"Rejected" => "badge-danger",
+			_ => "badge-secondary"
+		};
+	}
+}
+
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box" style="height:900px !important">
+			<div class="box-body">
+				<table id="documentTable" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>Leave Type</th>
+							<th>From Date</th>
+							<th>To Date</th>
+							<th>Reason</th>
+							<th>Leave Status</th>
+							<th>Employee Name</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<td>@item.LeaveType</td>
+								<td>@item.FromDate?.Date.ToString("yyyy-MM-dd")</td>
+								<td>@item.ToDate?.Date.ToString("yyyy-MM-dd")</td>
+								<td>@item.Reason</td>
+								<td>
+									<span class="badge @GetStatusClass(item.LeaveStatus)">
+										@item.LeaveStatus
+									</span>
+								</td>
+								<td>@item.EmployeeName</td>
+								@if (item.LeaveStatus == "Approved" || item.LeaveStatus == "Rejected")
+								{
+									<td>
+										<span>Leave Already <b>@item.LeaveStatus</b></span>
+									</td>
+								}
+								else
+								{
+									<td>
+										<a onclick="ConfirmApprove('@item.Id','@item.EmployeeId')" class="btn btn-success" title="Edit">
+											<i class="fa fa-check"> Approved</i>
+										</a>
+										<a href="#" class="btn btn-danger" title="Delete" onclick="ConfirmReject('@item.Id','@item.EmployeeId')">
+											<i class="fa fa-times"> Reject</i>
+										</a>
+									</td>
+								
+								}
+						
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function () {
+		$('#documentTable').DataTable({
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			"autoWidth": false,
+			"responsive": true
+		});
+	});
+
+	function ConfirmReject(id,empId) {
+		confirmAction({
+			title: 'Reject Request',
+			text: 'Are you sure you want to Rejected this request?',
+			confirmText: 'Yes',
+			cancelText: 'No, keep it'
+		}).then((result) => {
+				$.get('/Features/LeaveManagement/ApproveRejectRequest', {requestId:id, empId:empId,isApproved:false},function(resp){
+					toastr.success("Rejected successfully!");
+					fn_EmployeeList();
+					hideLoader();
+				});
+		});
+	}
+
+		function ConfirmApprove(id,empId) {
+		confirmAction({
+			title: 'Approve Request',
+			text: 'Are you sure you want to Aprove this request?',
+			confirmText: 'Yes',
+			cancelText: 'No, keep it'
+		}).then((result) => {
+			$.get('/Features/LeaveManagement/ApproveRejectRequest', {requestId:id, empId:empId,isApproved:true},function(resp){
+					toastr.success("Approved successfully!");
+					fn_EmployeeList();
+					hideLoader();
+				});
+		});
+	}
+</script>
+
+
+

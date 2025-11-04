@@ -25,9 +25,9 @@ namespace PMS.Features.Document
         [HttpPost]
         public async Task<IActionResult> UploadDocument(ProjectDocumentVm model)
         {
-            model.ProjectId =Convert.ToInt32(HttpContext.GetProjectId());
+            model.ProjectId = Convert.ToInt32(HttpContext.GetProjectId());
             model.CreatedBy = Convert.ToInt32(HttpContext.GetUserId());
-            
+
             var response = await _projectDocumentService.UploadProjectDocument(model, default);
 
             return Json(response);
@@ -35,7 +35,7 @@ namespace PMS.Features.Document
 
         public async Task<IActionResult> GetDocumentDetail()
         {
-            var response= await _projectDocumentService.GetProjectDocuments(default);
+            var response = await _projectDocumentService.GetProjectDocuments(default);
 
             var projEmployees = await _projectEmployeeService.GetMappedProjectEmployee(Convert.ToInt32(HttpContext.GetProjectId()));
 
@@ -46,9 +46,33 @@ namespace PMS.Features.Document
 
         public async Task<IActionResult> DeleteDocument(int id)
         {
-            var response = await _projectDocumentService.DeleteProjectDocument(id,1,default);
+            var response = await _projectDocumentService.DeleteProjectDocument(id, 1, default);
 
             return Json(response);
+        }
+
+        public async Task<IActionResult> DocumentRequest()
+        {
+            var response = await _projectDocumentService.GetProjectDocuments(default);
+
+            ViewBag.DocumentList = response.models.Select(x => new SelectListItem
+            {
+                Value = x.Id.ToString(),
+                Text = $"{x.DocumentName} ({x.DocumentDetail})"
+            }).ToList();
+
+            return View("~/Features/Document/Views/DocumentRequest.cshtml", new DocumentRequestVm());
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostDocumentRequest(DocumentRequestVm model)
+        {
+            model.RequestById = Convert.ToInt32(HttpContext.GetEmployeeId());
+
+            var response = await _projectDocumentService.DocumentRequestAccess(model);
+
+            return Json(response.message);
         }
     }
 }

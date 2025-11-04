@@ -11,5 +11,8 @@ namespace PMS.Features.LeaveManagement.Services
                     GetEmployeeLeaves(int empId, CancellationToken cancellationToken);
 
         Task<(string message, bool isSuccess, LeaveCountVm model)> GetLeaveCountDetail(int leaveType, int empId);
+        Task<(string message, bool isSuccess, IEnumerable<EmployeeLeaveVm> model)> GetEmployeeRequest(int managerId);
+
+        Task<(string message, bool isSuccess)> ApprovedReject(int empId, int managerId, bool isApproved, int requestId);
     }
 }

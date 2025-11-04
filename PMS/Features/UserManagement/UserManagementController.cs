@@ -138,6 +138,8 @@ namespace PMS.Features.UserManagement
 
                 HttpContext.Session.SetInt32("userId", response.Id);
 
+                HttpContext.Session.SetInt32("roleId", response.RoleId ?? 0);
+
                 HttpContext.Session.SetInt32("employeeId", Convert.ToInt32(response.EmployeeId));
 
                 var empModel = await _employeeService.GetEmployeeById(Convert.ToInt32(response.EmployeeId));
