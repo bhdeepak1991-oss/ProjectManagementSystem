@@ -22,7 +22,7 @@ namespace PMS.Features.UserManagement.Respositories
 
         public async Task<(string message, bool isSuccess)> ChangesPassword(Domain.UserManagement model)
         {
-            var updatePasswordModel = await _dbContext.UserManagements.FindAsync(model.Id);
+            var updatePasswordModel = await _dbContext.UserManagements.FirstOrDefaultAsync(x=>x.UserName==model.UserName);
 
             if (updatePasswordModel is null)
             {

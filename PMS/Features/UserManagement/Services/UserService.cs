@@ -31,6 +31,7 @@ namespace PMS.Features.UserManagement.Services
         {
             return await _userRepository.ChangesPassword(new Domain.UserManagement()
             {
+                UserName= model.EmailId,
                 Id = model.UserId,
                 IsTempPassword = false,
                 Password = _passwordService.Encrypt(model.NewPassword),

@@ -14,6 +14,7 @@ using PMS.Features.Notification.Services;
 using PMS.Features.Dashboard.Services;
 using PMS.Features.KanbanBoard.Services;
 using PMS.Features.LeaveManagement.Services;
+using PMS.Features.AccessManagement.Services;
 
 namespace PMS.Extensions
 {
@@ -67,6 +68,8 @@ namespace PMS.Extensions
             services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 
             services.AddScoped<IEmployeeLeaveService, EmployeeLeaveService>();
+
+            services.AddScoped<IAccessManagementService, AccessManagementService>();
 
             return services;
         }

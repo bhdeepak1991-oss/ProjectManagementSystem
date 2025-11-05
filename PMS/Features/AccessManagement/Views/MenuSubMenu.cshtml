@@ -1,0 +1,96 @@
+﻿@model PMS.Domains.MenuMaster
+<div class="content-wrapper" style="min-height: 948px;">
+	<section class="content-header d-flex align-items-center justify-content-between">
+		<h1 class="m-0">
+			Create Menu SubMenu Details
+			<small>Menu SubMenu Details</small>
+		</h1>
+		<a class="btn btn-success" onclick="fn_EmployeeList()">
+			<i class="fa fa-list"></i> Menu-SubMenu List
+		</a>
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title"> Create Menu SubMenu Access</h3>
+					</div>
+
+					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+						  asp-action="CreateMenuSubMenu" asp-controller="AccessManagement" enctype="multipart/form-data">
+						<div class="box-body" style="height:900px !important">
+							<div class="row">
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="MenuName">Menu Name</label>
+                                    <input type="text" class="form-control" asp-for="MenuName" placeholder="Enter Menu Name" />
+									<span asp-validation-for="MenuName" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="SubMenuName">Sub Name</label>
+									<input type="text" class="form-control" asp-for="SubMenuName" placeholder="Enter SubMenu Name" />
+									<span asp-validation-for="SubMenuName" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="ControllerName">Controller Name</label>
+									<input type="text" class="form-control" asp-for="ControllerName" placeholder="Enter Controller Name" />
+									<span asp-validation-for="ControllerName" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="ActionName">Action Name</label>
+									<input type="text" class="form-control" asp-for="ActionName" placeholder="Enter Action Name" />
+									<span asp-validation-for="ActionName" class="text-danger"></span>
+								</div>
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="IconClass">Icon Class</label>
+									<input type="text" class="form-control" asp-for="IconClass" placeholder="Enter Icon class Name" />
+									<span asp-validation-for="IconClass" class="text-danger"></span>
+								</div>
+								
+
+							</div>
+
+							<button type="submit" class="btn btn-primary pull-right">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		@await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml");
+	</section>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+	function fn_EmployeeList() {
+
+		$.get('/features/AccessManagement/GetMenuSubMenuList', function(resp){
+			$("#divData").html(resp);
+			$("#pmModalPopUp").modal('show');
+			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Menu SubMenu List");
+		});
+	}
+	function fn_CloseModal() {
+		$("#pmModalPopUp").modal('hide');
+	}
+	function fn_OnBegin(){
+	}
+
+	function fn_OnSuccess(resp){
+		toastr.success("Saved successfully!");
+	}
+	$(document).ready(function () {
+		// Initialize Select2 dropdown
+		$('.select2').select2({
+			placeholder: "Please Select Document to Request Access",
+			allowClear: true
+		});
+	});
+</script>
+
+
+
+

@@ -49,7 +49,7 @@
 		<h3 class="box-title" style="margin: 0; line-height: 34px;">Direct Chat</h3>
 		<div class="box-tools" style="display: flex; gap: 10px; align-items: center;">
 			<div class="form-group" style="margin: 0;">
-				<select id="selectUser" class="form-control">
+				<select id="selectUser" class="form-control select2">
 					<option value="">-- Select Employee --</option>
 					@{
 						foreach (var data in Model)
@@ -107,8 +107,8 @@
 <script>
 	(function () {
 		let chatConnection = null;
-		const currentUserId = '@name'; // Injected user ID
-		const senderName = '@name'; // Display name
+		const currentUserId = '@name';
+		const senderName = '@name';
 
 		if (!window.chatSignalRInitialized) {
 			window.chatSignalRInitialized = true;
@@ -116,25 +116,31 @@
 			chatConnection = new signalR.HubConnectionBuilder()
 				.withUrl("/chatHub?userId=" + encodeURIComponent(currentUserId))
 				.configureLogging(signalR.LogLevel.Information)
-				.withAutomaticReconnect() // Auto-reconnect added
+				.withAutomaticReconnect()
 				.build();
 
-			// Optional: Set keep-alive (default is 15s)
-			chatConnection.serverTimeoutInMilliseconds = 60000; // 60 seconds
-			chatConnection.keepAliveIntervalInMilliseconds = 15000; // 15 seconds
+			chatConnection.serverTimeoutInMilliseconds = 60000;
+			chatConnection.keepAliveIntervalInMilliseconds = 15000;
 
-			// Handle incoming messages
+			// ✅ FIXED ReceiveMessage Handler
 			chatConnection.on("ReceiveMessage", function (sender, message) {
 				const chatBox = document.querySelector(".direct-chat-messages");
 				if (!chatBox) return;
 
 				const messageDiv = document.createElement("div");
-				messageDiv.classList.add("direct-chat-msg", sender === senderName ? "right" : "");
+				messageDiv.classList.add("direct-chat-msg");
+
+				// ✅ Only add "right" class when the message is from current user
+				if (sender === senderName) {
+					messageDiv.classList.add("right");
+				}
 
 				messageDiv.innerHTML = `
 					<div class='direct-chat-info clearfix'>
 						<span class='direct-chat-name ${sender === senderName ? "pull-right" : "pull-left"}'>${sender}</span>
-						<span class='direct-chat-timestamp ${sender === senderName ? "pull-left" : "pull-right"}'>${new Date().toLocaleTimeString()}</span>
+						<span class='direct-chat-timestamp ${sender === senderName ? "pull-left" : "pull-right"}'>
+							${new Date().toLocaleTimeString()}
+						</span>
 					</div>
 					<img class="direct-chat-img" src="https://ui-avatars.com/api/?name=${encodeURIComponent(sender)}" />
 					<div class="direct-chat-text">${message}</div>
@@ -144,40 +150,40 @@
 				chatBox.scrollTop = chatBox.scrollHeight;
 			});
 
-			// Connection lifecycle logging
-			chatConnection.onclose(error => {
-				console.warn("⚠️ Chat disconnected", error);
-			});
-			chatConnection.onreconnected(connectionId => {
-				console.log("🔄 Chat reconnected:", connectionId);
-			});
-			chatConnection.onreconnecting(error => {
-				console.log("⏳ Chat reconnecting...", error);
-			});
+			chatConnection.onclose(err => console.warn("⚠️ Chat disconnected", err));
+			chatConnection.onreconnected(id => console.log("🔄 Reconnected", id));
+			chatConnection.onreconnecting(err => console.log("⏳ Reconnecting...", err));
 
-			// Start connection
 			chatConnection.start()
-				.then(() => console.log("✅ SignalR Chat connected"))
-				.catch(err => console.error("❌ SignalR Chat connection failed:", err));
+				.then(() => console.log("✅ SignalR Connected"))
+				.catch(err => console.error("❌ Connection Failed:", err));
 		}
 
-		// Delegate the click event to work with partial views
+		// ✅ Send button handler
 		document.addEventListener("click", function (e) {
-			if (e.target && e.target.classList.contains("btn-flat")) {
+			if (e.target && e.target.id === "sendBtn") {
 				const messageInput = document.querySelector("input[name='message']");
 				const message = messageInput?.value.trim();
 				const selectedUserId = document.getElementById("selectUser")?.value;
 
-				if (message && selectedUserId && chatConnection) {
-					chatConnection.invoke("SendMessageToUser", selectedUserId, message, senderName)
-						.then(() => console.log("📨 Message sent"))
-						.catch(err => console.error("❌ SendMessage error:", err));
-					messageInput.value = "";
+				if (!selectedUserId) {
+					alert("⚠️ Please select a user first.");
+					return;
 				}
+				if (!message) return;
+
+				if (chatConnection) {
+					chatConnection.invoke("SendMessageToUser", selectedUserId, message, senderName)
+						.catch(err => console.error("❌ Send Error:", err));
+				}
+
+				messageInput.value = "";
 			}
 		});
+
 	})();
 </script>
+
  
 
 

@@ -28,4 +28,5 @@ public partial class MenuMaster
     public int? DisplayOrder { get; set; }
 
     public string? SubMenuName { get; set; }
+    public string IconClass { get; set; }
 }

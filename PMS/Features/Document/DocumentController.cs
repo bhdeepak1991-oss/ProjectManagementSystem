@@ -35,7 +35,9 @@ namespace PMS.Features.Document
 
         public async Task<IActionResult> GetDocumentDetail()
         {
-            var response = await _projectDocumentService.GetProjectDocuments(default);
+            var empId= Convert.ToInt32(HttpContext.GetEmployeeId());
+
+            var response = await _projectDocumentService.GetProjectDocuments(empId,default);
 
             var projEmployees = await _projectEmployeeService.GetMappedProjectEmployee(Convert.ToInt32(HttpContext.GetProjectId()));
 
@@ -53,7 +55,8 @@ namespace PMS.Features.Document
 
         public async Task<IActionResult> DocumentRequest()
         {
-            var response = await _projectDocumentService.GetProjectDocuments(default);
+            var empId = Convert.ToInt32(HttpContext.GetEmployeeId());
+            var response = await _projectDocumentService.GetProjectDocuments(empId, default);
 
             ViewBag.DocumentList = response.models.Select(x => new SelectListItem
             {

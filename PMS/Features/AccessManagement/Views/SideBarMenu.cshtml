@@ -1,0 +1,142 @@
+﻿@model IEnumerable<PMS.Features.AccessManagement.ViewModels.AccesModel>
+<ul class="sidebar-menu">
+
+    @using System.Linq;
+
+    @foreach (var menuGroup in Model.GroupBy(x => x.MenuName))
+    {
+        var parent = menuGroup.First();
+        var children = menuGroup
+        .DistinctBy(x => new { x.ActionName, x.SubmenuName }) // Remove duplicates
+        .ToList();
+
+        if (children.Count == 1)
+        {
+            <!-- Single Menu -->
+            <li>
+                <a asp-action="@parent.ActionName" asp-controller="@parent.ControllerName">
+                    <i class="@parent.IconClass"></i> <span>@parent.MenuName</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <!-- Menu with multiple submenus -->
+            <li class="treeview">
+                <a href="#">
+                    <i class="@parent.IconClass"></i> <span>@parent.MenuName</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    @foreach (var child in children)
+                    {
+                        <li>
+                            <a asp-action="@child.ActionName" asp-controller="@child.ControllerName">
+                                <i class="@child.IconClass"></i> @child.SubmenuName
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+    }
+
+    </ul>
+@* 
+
+    <li>
+        <a asp-action="Index" asp-controller="Project">
+            <i class="fa fa-folder-open"></i> <span>Projects</span>
+        </a>
+    </li>
+
+    <li>
+        <a asp-action="Index" asp-controller="Document">
+            <i class="fa fa-file-text-o"></i> <span>Documents</span>
+        </a>
+    </li>
+
+    <li>
+        <a asp-action="DocumentRequest" asp-controller="Document">
+            <i class="fa fa-share-square-o"></i> <span>Document Request</span>
+        </a>
+    </li>
+
+    <li>
+        <a asp-action="Index" asp-controller="ProjectEmployee">
+            <i class="fa fa-users"></i> <span>Project Employee</span>
+        </a>
+    </li>
+
+    <li>
+        <a asp-action="CreateSprint" asp-controller="Sprint">
+            <i class="fa fa-bolt"></i> <span>Sprint</span>
+        </a>
+    </li>
+
+    <li>
+        <a asp-action="Index" asp-controller="ProjectTask">
+            <i class="fa fa-tasks"></i> <span>Project Task</span>
+        </a>
+    </li>
+
+    <li>
+        <a asp-action="Index" asp-controller="Board">
+            <i class="fa fa-columns"></i> <span>Board</span>
+        </a>
+    </li>
+
+    <li>
+        <a asp-action="ProjectTaskList" asp-controller="ProjectTask">
+            <i class="fa fa-list-ul"></i> <span>Task List</span>
+        </a>
+    </li>
+
+    <li>
+        <a asp-action="CreateTimeSheet" asp-controller="EmployeeTimeSheet">
+            <i class="fa fa-clock-o"></i> <span>TimeSheet</span>
+        </a>
+    </li>
+
+    <li>
+        <a asp-action="CreateVacation" asp-controller="Vacation">
+            <i class="fa fa-plane"></i> <span>Vacation</span>
+        </a>
+    </li>
+
+    <li>
+        <a asp-action="Index" asp-controller="LeaveManagement">
+            <i class="fa fa-list-alt"></i> <span>Leave Type</span>
+        </a>
+    </li>
+
+    <li>
+        <a asp-action="LeaveRequest" asp-controller="LeaveManagement">
+            <i class="fa fa-envelope-o"></i> <span>Leave Request</span>
+        </a>
+    </li>
+
+    <li>
+        <a asp-action="RequestApproval" asp-controller="LeaveManagement">
+            <i class="fa fa-check-square"></i> <span>Request Approval</span>
+        </a>
+    </li>
+
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-users-cog"></i> <span>User Management</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li><a asp-action="CreateRole" asp-controller="Master"><i class="fa fa-shield"></i> Roles</a></li>
+            <li><a asp-action="CreateDepartment" asp-controller="Master"><i class="fa fa-sitemap"></i> Departments</a></li>
+            <li><a asp-action="CreateDesignation" asp-controller="Master"><i class="fa fa-user-secret"></i> Designations</a></li>
+            <li><a asp-action="RoleMenuMapping" asp-controller="UserManagement"><i class="fa fa-key"></i> Role Access</a></li>
+            <li><a asp-action="CreateTask" asp-controller="Master"><i class="fa fa-check-circle"></i> Task Status</a></li>
+            <li><a asp-action="CreateEmployee" asp-controller="UserManagement"><i class="fa fa-user-secret"></i> Employees</a></li>
+            <li><a asp-action="CreateUser" asp-controller="UserManagement"><i class="fa fa-users"></i> Users</a></li>
+            <li><a asp-action="UploadMaster" asp-controller="Utilities"><i class="fa fa-wrench"></i> Utilities</a></li>
+        </ul>
+    </li>
+
+</ul> *@

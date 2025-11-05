@@ -12,6 +12,7 @@ using PMS.Features.Vacation.Repositories;
 using PMS.Features.Notification.Repositories;
 using PMS.Features.KanbanBoard.Repositories;
 using PMS.Features.LeaveManagement.Repositories;
+using PMS.Features.AccessManagement.Repositories;
 
 namespace PMS.Extensions
 {
@@ -58,6 +59,8 @@ namespace PMS.Extensions
             services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
 
             services.AddScoped<IEmployeeLeaveRepository, EmployeeLeaveRepository>();
+
+            services.AddScoped<IAccessManagementRepository, AccessManagementRepository>();
 
             return services;
         }
