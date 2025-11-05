@@ -61,8 +61,8 @@ namespace PMS.Features.Dashboard
         [AllowAnonymous]
         public async Task<IActionResult> ProjectSelection()
         {
-            var response = await _projectService.GetProjectList(default);
-            return View("~/Features/Dashboard/Views/ProjectSelection.cshtml", response.model);
+            var response = await _projectService.GetProjectSelectionList(Convert.ToInt32(HttpContext.GetEmployeeId()), Convert.ToInt32(HttpContext.GetRoleId()), default);
+            return View("~/Features/Dashboard/Views/ProjectSelection.cshtml", response.models);
         }
 
         public async Task<IActionResult> SelectProject(int projectId)

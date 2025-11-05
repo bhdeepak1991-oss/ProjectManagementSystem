@@ -13,5 +13,8 @@ namespace PMS.Features.Project.Services
         Task<(string message, bool isSuccess, string content)> GetProjectDetail(int projectId);
 
         Task<(string message, bool isSuccess)> UpdateProjectStatus(int id, string reason, string status);
+
+        Task<(string message, bool isSuccess, IEnumerable<ProjectViewModel> models)> GetProjectSelectionList(int empId, int roleId, CancellationToken cancellationToken);
+
     }
 }

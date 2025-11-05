@@ -1,16 +1,24 @@
 ﻿
+using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PMS.Domains;
+using PMS.Features.Project.ViewModels;
+using PMS.Features.UserManagement.ViewModels;
+using System.Data;
 
 namespace PMS.Features.Project.Repositories
 {
     public class ProjectRepository : IProjectRepository
     {
         private readonly PmsDbContext _dbContext;
+        private readonly IConfiguration _configuration;
 
-        public ProjectRepository(PmsDbContext dbContext)
+        public ProjectRepository(PmsDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
+            _configuration = configuration;
         }
 
         public async Task<(string message, bool isSuccess)> CreateProject(Domains.Project model, CancellationToken cancellationToken)
@@ -60,6 +68,26 @@ namespace PMS.Features.Project.Repositories
             var responseModels = await _dbContext.Projects.AsNoTracking().Where(x => x.IsDeleted == false).ToListAsync(cancellationToken);
 
             return ("Project fetched successfully", true, responseModels);
+        }
+
+        public async Task<(string message, bool isSuccess, IEnumerable<ProjectViewModel> models)> GetProjectSelectionList(int empId, int roleId, CancellationToken cancellationToken)
+        {
+            var roleModel = await _dbContext.RoleMasters.FindAsync(roleId);
+
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var parameters = roleModel?.Name == "Employee"
+                ? new { EmployeeId = empId }
+                : null; // no filter for non-employee roles
+
+            var result = await connection.QueryAsync<ProjectViewModel>(
+                "usp_GetEmployeeProjectSelection",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+
+            return ("Project selection list fetched", true, result.ToList());
+
         }
 
         public async Task<(string message, bool isSuccess)> UpdateProject(Domains.Project model, CancellationToken cancellationToken)

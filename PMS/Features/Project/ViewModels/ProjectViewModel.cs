@@ -27,5 +27,6 @@
 
         public string? ProjectStatus { get; set; }
         public string? Reason { get; set; }
+        public int EmployeeId { get; set; }
     }
 }

@@ -62,6 +62,11 @@ namespace PMS.Features.Project.Services
             return ("Project Detail fetched", true, responseModel);
         }
 
+        public async Task<(string message, bool isSuccess, IEnumerable<ProjectViewModel> models)> GetProjectSelectionList(int empId, int roleId, CancellationToken cancellationToken)
+        {
+           return await _projectRepository.GetProjectSelectionList(empId, roleId, cancellationToken);
+        }
+
         public async  Task<(string message, bool isSuccess)> UpdateProject(Domains.Project model, CancellationToken cancellationToken)
         {
             return await _projectRepository.UpdateProject(model, cancellationToken);
