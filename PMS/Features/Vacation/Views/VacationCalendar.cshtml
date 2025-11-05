@@ -23,44 +23,27 @@
     document.addEventListener('DOMContentLoaded', function () {
         const calendarEl = document.getElementById('calendar');
 
-        $("Vacation/GetCalendardetail", function(resp){
-            
-            const calendar = new FullCalendar.Calendar(calendarEl, {
+     $.get("Vacation/GetCalendardetail", function (resp) {
+               debugger
+        const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             height: 'auto',
 
-            // ✅ Toolbar with custom button
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
             },
 
-            // ✅ Static events
-            events: [
-                {
-                    title: 'Sick LeaveDemo 1111111',
-                    start: '2025-10-10',
-                    backgroundColor: '#dc3545',
-                    borderColor: '#dc3545'
-                },
-                {
-                    title: 'Annual Leave',
-                    start: '2025-10-15',
-                    end: '2025-10-17',
-                    backgroundColor: '#ffc107',
-                    borderColor: '#ffc107'
-                },
-                {
-                    title: 'Public Holiday',
-                    start: '2025-10-20',
-                    backgroundColor: '#20c997',
-                    borderColor: '#20c997'
-                }
-            ]
+            events: resp,
+
+            eventClick: function(info) {
+                const desc = info.event.extendedProps.description || "No description added";
+                alert("Leave Details:\n\n" + desc);
+            }
         });
 
         calendar.render();
-        })
+    });
 
      
     });

@@ -23,6 +23,11 @@ namespace PMS.Features.Vacation.Services
             return await _vacationRepository.DeleteVacationById(id, cancellationToken);
         }
 
+        public async  Task<(string message, bool isSuccess, IEnumerable<EventModel> models)> GetEventModels(CancellationToken cancellationToken)
+        {
+            return await _vacationRepository.GetEventModels(cancellationToken);
+        }
+
         public async  Task<(string message, bool isSuccess, IEnumerable<VacationVm> models)> GetVacationDetail(CancellationToken cancellationToken)
         {
             return await _vacationRepository.GetVacationDetail(cancellationToken);

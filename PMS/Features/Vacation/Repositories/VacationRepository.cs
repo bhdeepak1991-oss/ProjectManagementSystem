@@ -1,15 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using PMS.Domains;
+using PMS.Features.Project.ViewModels;
 using PMS.Features.Vacation.ViewModels;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace PMS.Features.Vacation.Repositories
 {
     public class VacationRepository : IVacationRepository
     {
         private readonly PmsDbContext _dbContext;
-        public VacationRepository(PmsDbContext dbContext)
+        private readonly IConfiguration _configuration;
+        public VacationRepository(PmsDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
+            _configuration = configuration;
         }
 
         public async Task<(string message, bool isSuccess)> CreateVacation(VacationDetail model, CancellationToken cancellationToken)
@@ -40,6 +46,18 @@ namespace PMS.Features.Vacation.Repositories
 
             return ("Vacation deleted successfully", true);
 
+        }
+
+        public async Task<(string message, bool isSuccess, IEnumerable<EventModel> models)> GetEventModels(CancellationToken cancellationToken)
+        {
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var result = await connection.QueryAsync<EventModel>(
+                "usp_GetCalendarInformation",
+                commandType: CommandType.StoredProcedure
+            );
+
+            return ("Event fetched successfully", true, result);
         }
 
         public async Task<(string message, bool isSuccess, IEnumerable<VacationVm> models)> GetVacationDetail(CancellationToken cancellationToken)
