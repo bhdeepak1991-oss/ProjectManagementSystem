@@ -14,7 +14,7 @@
 							<th>Due Date </th>
 							<th>Assign To</th>
 							<th>Task Status</th>
-							<th>Action</th>
+							@* <th>Action</th> *@
 							
 							
 						</tr>
@@ -33,7 +33,7 @@
 								<td>@item.EmployeeName</td>
 								<td>@item.TaskStatus</td>
 
-								<td>
+								@* <td>
 									<a asp-action="Index" asp-route-id="@item.Id" asp-controller="ProjectTask" class="btn btn-success" title="Edit">
 										<i class="fa fa-edit"></i>
 									</a>
@@ -41,7 +41,7 @@
 										<i class="fa fa-trash"></i>
 									</a>
 
-								</td>
+								</td> *@
 							</tr>
 						}
 					</tbody>

@@ -720,10 +720,10 @@
 			originalWarn.apply(console, [message, ...args]);
 		};
 
-		$(document).ready(function(){
-		$("#pmsBody").addClass('skin-blue sidebar-collapse sidebar-open')
+		// $(document).ready(function(){
+		// $("#pmsBody").addClass('skin-blue sidebar-collapse sidebar-open')
 			
-		})
+		// })
 		getNotificationDetail();
 		function getNotificationDetail(){
 			$.get('/Dashboard/GetNotificationDetail', function(resp){
