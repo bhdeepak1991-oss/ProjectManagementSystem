@@ -27,6 +27,16 @@ namespace PMS.Features.Notification.Services
             return await _notificationRepository.ChangeStatus(notificationId, status, cancellationToken);
         }
 
+        public async Task<(string message, bool isSuccess)> CreateMessage(ProjectMessage model)
+        {
+            return await _notificationRepository.CreateMessage(model);
+        }
+
+        public async Task<(string messsage, bool isSuccess, IEnumerable<ProjectMessage> models)> GetMessage(string userName)
+        {
+            return await _notificationRepository.GetMessage(userName);
+        }
+
         public async  Task<(string message, bool isSuccess, IEnumerable<NotificationDetail> models)> GetNotificationList(int userId, CancellationToken cancellationToken)
         {
             return await _notificationRepository.GetNotificationList(userId, cancellationToken);

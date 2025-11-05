@@ -55,6 +55,25 @@ namespace PMS.Features.Notification.Repositories
 
         }
 
+        public async  Task<(string message, bool isSuccess)> CreateMessage(ProjectMessage model)
+        {
+            model.CreatedDate= DateTime.Now;
+
+            var messageModel= await _dbContext.ProjectMessages.AddAsync(model);
+
+            await _dbContext.SaveChangesAsync();
+
+            return ("Message created successfully", true);
+        }
+
+        public async  Task<(string messsage, bool isSuccess, IEnumerable<ProjectMessage> models)> GetMessage(string userName)
+        {
+            var response= await _dbContext.ProjectMessages.Where(x=>x.Reciever== userName 
+                            && x.MessageStatus=="New").ToListAsync();
+
+            return ("Message fetched successfully", true, response);
+        }
+
         public async Task<(string message, bool isSuccess, IEnumerable<NotificationDetail> models)> GetNotificationList(int userId, CancellationToken cancellationToken)
         {
             var responseModels = await _dbContext.NotificationDetails.Where(x => x.IsActive == true && x.NotifiedUserId == userId

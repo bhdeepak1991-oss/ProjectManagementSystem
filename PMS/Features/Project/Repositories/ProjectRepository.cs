@@ -63,6 +63,60 @@ namespace PMS.Features.Project.Repositories
             return ("Fetched Successfully", true, responseModel?.Description ?? string.Empty);
         }
 
+        public async  Task<(string message, bool isSuccess, IEnumerable<ProjectDetailVm> models)> GetProjectDetailById(int id, CancellationToken cancellationToken)
+        {
+            var projModel = await _dbContext.Projects.FirstOrDefaultAsync(x => x.Id == id);
+
+            var projEmpModels = await (from pe in _dbContext.ProjectEmployees
+                                join e in _dbContext.Employees on pe.EmployeeId equals e.Id
+                                where pe.ProjectId == id && pe.IsDeleted==false && e.IsDeleted==false
+                                 select e).ToListAsync(cancellationToken);
+
+            var empModel= await _dbContext.Employees.AsNoTracking().ToListAsync(cancellationToken);
+
+            var departmentModel= await _dbContext.DepartmentMasters.AsNoTracking().ToListAsync(cancellationToken);
+
+            var designationModel= await _dbContext.DesignationMasters.AsNoTracking().ToListAsync(cancellationToken);    
+
+            var responseModel = new ProjectDetailVm
+            {
+                Id = projModel?.Id ?? 0,
+                ProjectName = projModel?.Name ?? string.Empty,
+                Description = projModel?.Description ?? string.Empty,
+                ProjectStartDate = projModel?.ProjectStartDate ?? DateTime.MinValue,
+                ProjectEndDate = projModel?.ProjectEndDate ??DateTime.MinValue,
+                ClientName = projModel?.ClientName ?? "N/A",
+                ContactPerson = projModel?.ClientContactPerson ?? "N/A",
+                ClientUrl = projModel?.ClientUrl ?? "N/A",
+                ProjectManager = empModel.FirstOrDefault(x => x.Id == projModel?.ProjectManager)?.Name ?? string.Empty,
+                ProjectHead = empModel.FirstOrDefault(x => x.Id == projModel?.ProjectHead)?.Name ?? string.Empty,
+                DeliveryManager = empModel.FirstOrDefault(x => x.Id == projModel?.DeliveryHead)?.Name ?? string.Empty,
+                ContactNumber = projModel?.ClientContactNumber ?? "N/A",
+                ProjectStatus = projModel?.ProjectStatus ?? "N/A",
+                Reason = projModel?.Reason ?? "N/A",
+                EmployeeCount = projEmpModels.Count
+            };
+
+            responseModel.ProjectEmployees= projEmpModels.Select(e=> new PMS.Features.Project.ViewModels.ProjectEmployee
+            {
+                EmployeeId= e.Id,
+                EmployeeName= e.Name ?? string.Empty,
+                DepartmentName= departmentModel.FirstOrDefault(x=> x.Id== e.DepartmentId)?.Name ?? string.Empty,
+                DesignationName= designationModel.FirstOrDefault(x=> x.Id== e.DesignationId)?.Name ?? string.Empty,
+                Email= e.EmailId ?? string.Empty,
+                Phone= e.PhoneNumber ?? string.Empty,
+                ManagerName= empModel.FirstOrDefault(x=> x.Id== e.ManagerId)?.Name ?? string.Empty,
+            }).ToList();
+
+            responseModel.ProjectDocument= await _dbContext.ProjectDocuments.Where(x=> x.ProjectId== id).Select(doc=> new PMS.Features.Project.ViewModels.ProjectDocument
+            {
+                DocumentName= doc.DocumentName ?? string.Empty,
+                //UploadByName = empModel.FirstOrDefault(x => x.Id == doc.UpdatedBy).Name ?? string.Empty,
+            }).ToListAsync(cancellationToken);
+
+            return ("Project detail fetched successfully", true, new List<ProjectDetailVm> { responseModel });
+        }
+
         public async Task<(string message, bool isSuccess, IEnumerable<Domains.Project> models)> GetProjectList(CancellationToken cancellationToken)
         {
             var responseModels = await _dbContext.Projects.AsNoTracking().Where(x => x.IsDeleted == false).ToListAsync(cancellationToken);
@@ -78,7 +132,7 @@ namespace PMS.Features.Project.Repositories
 
             var parameters = roleModel?.Name == "Employee"
                 ? new { EmployeeId = empId }
-                : null; // no filter for non-employee roles
+                : null; 
 
             var result = await connection.QueryAsync<ProjectViewModel>(
                 "usp_GetEmployeeProjectSelection",
@@ -108,6 +162,10 @@ namespace PMS.Features.Project.Repositories
             updateModel.ProjectEndDate = model.ProjectEndDate;
             updateModel.UpdatedBy = 1; //TODO: Need to change
             updateModel.UpdatedDate = DateTime.UtcNow;
+            updateModel.ClientContactNumber = model.ClientContactNumber;
+            updateModel.ClientContactPerson = model.ClientContactPerson;
+            updateModel.ClientName = model.ClientName;
+            updateModel.ClientUrl = model.ClientUrl;
 
             _dbContext.Projects.Update(updateModel);
             await _dbContext.SaveChangesAsync(cancellationToken);

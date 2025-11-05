@@ -1,11 +1,22 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using PMS.Features.Notification.Services;
+using PMS.Features.Project.Services;
 using System.Collections.Concurrent;
+using PMS.Helpers;
 
 namespace PMS.Notification
 {
     public class ChatHub : Hub
     {
         private static readonly ConcurrentDictionary<string, string> _userConnections = new();
+
+        private readonly INotificationService _notificationService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ChatHub(INotificationService notificationService, IHttpContextAccessor contextAccessor)
+        {
+            _notificationService = notificationService;
+            _httpContextAccessor= contextAccessor;
+        }
 
         public override Task OnConnectedAsync()
         {
@@ -35,6 +46,14 @@ namespace PMS.Notification
             {
                 await Clients.Client(connectionId).SendAsync("ReceiveMessage", senderName, message);
             }
+
+            await _notificationService.CreateMessage(new Domains.ProjectMessage
+            {
+                FromMessage = senderName,
+                Reciever = receiverUserId,
+                MessageInfo = message,
+                MessageStatus="New"
+            });
 
             // Optionally: echo message back to sender
             await Clients.Caller.SendAsync("ReceiveMessage", senderName, message);

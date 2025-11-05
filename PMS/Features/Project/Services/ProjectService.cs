@@ -34,6 +34,11 @@ namespace PMS.Features.Project.Services
             return await _projectRepository.GetProjectDetail(projectId);
         }
 
+        public async Task<(string message, bool isSuccess, IEnumerable<ProjectDetailVm> models)> GetProjectDetailById(int id, CancellationToken cancellationToken)
+        {
+            return await _projectRepository.GetProjectDetailById(id, cancellationToken);
+        }
+
         public async Task<(string message, bool isSuccess, IEnumerable<ProjectViewModel> model)> GetProjectList(CancellationToken cancellationToken)
         {
             var empModels= await _employeeRepository.GetEmployeeList(cancellationToken);

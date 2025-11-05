@@ -5,6 +5,7 @@ using PMS.Attributes;
 using PMS.Domains;
 using PMS.Features.Project.Services;
 using PMS.Features.UserManagement.Services;
+using PMS.Helpers;
 using PMS.Notification;
 using SelectPdf;
 
@@ -108,6 +109,15 @@ namespace PMS.Features.Project
         {
             var response = await _projectService.UpdateProjectStatus(id, reason, status);
             return Json(response);
+        }
+
+        public async Task<IActionResult> GetProjectDetailById(int projId)
+        {
+            projId= projId == 0 ? Convert.ToInt32(HttpContext.GetProjectId()) : projId;
+
+            var response = await _projectService.GetProjectDetailById(projId, default);
+
+            return View("~/Features/Project/Views/ProjectDetail.cshtml", response.models.FirstOrDefault());
         }
     }
 }
