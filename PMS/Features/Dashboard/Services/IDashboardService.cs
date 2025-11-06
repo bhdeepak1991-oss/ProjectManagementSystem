@@ -22,5 +22,7 @@ namespace PMS.Features.Dashboard.Services
            string priority, string taskType, int empId);
 
         Task<IEnumerable<PMS.Domains.NotificationDetail>> GetNotificationDetail(int userId);
+
+        Task<IEnumerable<ProjectTaskPercetage>> GetProjectTaskPercetages(int empId);
     }
 }

@@ -317,5 +317,21 @@ namespace PMS.Features.Dashboard.Services
 
             return responseModels;
         }
+
+        public async Task<IEnumerable<ProjectTaskPercetage>> GetProjectTaskPercetages(int empId)
+        {
+            var response =await (from t in _dbContext.ProjectTasks
+                        where t.IsDeleted == false && t.EmployeeId == empId
+                        group t by t.TaskStatus into g
+                        let total = _dbContext.ProjectTasks.Count(x => x.IsDeleted == false && x.EmployeeId == empId)
+                        select new ProjectTaskPercetage
+                        {
+                            TaskStatus = g.Key,
+                            RecordCount = g.Count(),
+                            Percentage =Convert.ToDecimal(Math.Round((double)g.Count() * 100 / total, 2))
+                        }).ToListAsync();
+
+            return response;
+        }
     }
 }
