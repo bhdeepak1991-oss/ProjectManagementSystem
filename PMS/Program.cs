@@ -32,6 +32,8 @@ builder.Services.AddOpenTelemetry()
 
 builder.Services.AddSignalR();
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddDbContext<PmsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

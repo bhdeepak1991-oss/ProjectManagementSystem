@@ -27,7 +27,7 @@ namespace PMS.Features.LeaveManagement.Repositories
             var empLeaveModels = new List<EmployeeLeave>();
 
             var leaveTypeModels = await _dbContext.LeaveTypes.Where(x => x.IsActive == true && x.IsDeleted == false).ToListAsync();
-            var empModels = await _dbContext.Employees.Where(x => x.IsDeleted == false).ToListAsync();
+            var empModels = await _dbContext.Employees.ToListAsync();
 
             if (empId == 0)
             {
@@ -46,7 +46,7 @@ namespace PMS.Features.LeaveManagement.Repositories
                 ToDate = x.ToDate,
                 Reason = x.Reason,
                 LeaveStatus = x.LeaveStatus,
-                ApprovedRejectedBy = $"{empModels.FirstOrDefault(z => z.Id == x.ApprovedRejectBy)?.Name ?? string.Empty} ({empModels.FirstOrDefault(z => z.Id == x.ApprovedRejectBy)?.EmployeeCode ?? string.Empty})",
+                ApprovedRejectedBy =x.ApprovedRejectBy !=null ? $"{empModels.FirstOrDefault(z => z.Id == x.ApprovedRejectBy)?.Name ?? string.Empty} ({empModels.FirstOrDefault(z => z.Id == x.ApprovedRejectBy)?.EmployeeCode ?? string.Empty})" : "In Progress",
                 ApprovedRejectDate = x.ApprovedRejectDate,
                 ApprovedRejectReason = x.ApprovedRejectReason,
                 EmployeeName = $"{empModels.FirstOrDefault(z => z.Id == x.EmployeeId)?.Name ?? string.Empty} ({empModels.FirstOrDefault(z => z.Id == x.EmployeeId)?.EmployeeCode ?? string.Empty})",

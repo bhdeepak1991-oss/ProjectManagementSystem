@@ -132,6 +132,11 @@ namespace PMS.Features.TaskDetail.Respositories
 
             updateModel.UpdatedDate = DateTime.Now;
 
+            if (status == "Completed")
+            {
+                updateModel.CompletedDate = DateTime.Now;
+            }
+
             _dbContext.ProjectTasks.Update(updateModel);
 
             await _dbContext.SaveChangesAsync();

@@ -320,16 +320,21 @@ namespace PMS.Features.Dashboard.Services
 
         public async Task<IEnumerable<ProjectTaskPercetage>> GetProjectTaskPercetages(int empId)
         {
-            var response =await (from t in _dbContext.ProjectTasks
-                        where t.IsDeleted == false && t.EmployeeId == empId
-                        group t by t.TaskStatus into g
-                        let total = _dbContext.ProjectTasks.Count(x => x.IsDeleted == false && x.EmployeeId == empId)
-                        select new ProjectTaskPercetage
-                        {
-                            TaskStatus = g.Key,
-                            RecordCount = g.Count(),
-                            Percentage =Convert.ToDecimal(Math.Round((double)g.Count() * 100 / total, 2))
-                        }).ToListAsync();
+            var total = await _dbContext.ProjectTasks
+              .Where(t => t.IsDeleted==false && t.EmployeeId == empId)
+              .CountAsync();
+
+            var response = await _dbContext.ProjectTasks
+                .Where(t => t.IsDeleted==false && t.EmployeeId == empId)
+                .GroupBy(t => t.TaskStatus)
+                .Select(g => new ProjectTaskPercetage
+                {
+                    TaskStatus = g.Key,
+                    RecordCount = g.Count(),
+                    Percentage = Convert.ToDecimal((g.Count() * 100.0) / total)
+                })
+                .ToListAsync();
+
 
             return response;
         }

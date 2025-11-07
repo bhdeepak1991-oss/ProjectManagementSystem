@@ -6,7 +6,7 @@
         <span class="label label-danger">@Model.Count()</span>
     </a>
     <ul class="dropdown-menu">
-        <li class="header">You have @Model.Count() tasks</li>
+        <li class="header">You have @Model.Count() Status</li>
         <li>
 
             <ul class="menu">
@@ -17,24 +17,21 @@
                         <a href="#">
                             <h3>
                                 @data.TaskStatus
-                                <small class="pull-right">@data.RecordCount</small>
+                                <small class="pull-right"> @data.Percentage.ToString("0.00")%</small>
                             </h3>
                             <div class="progress xs">
                                 @{
-                                    string colorClass = data.Percentage <= 30 ? "bg-danger"
-                                    : data.Percentage <= 70 ? "bg-warning"
-                                    : "bg-success";
+                                    // Percent value (0-100)
+                                    double pct =Convert.ToDouble(data.Percentage);
+
+                                    // Convert percentage to a hue (0 = red, 120 = green)
+                                    // 0% -> red, 50% -> yellow, 100% -> green
+                                    int hue = (int)(pct * 1.2); // scale 0..100 to 0..120
+                                    string colorStyle = $"background-color: hsl({hue}, 90%, 45%);";
                                 }
 
-                                <div class="progress mb-2" style="height: 22px;">
-                                    <div class="progress-bar @colorClass"
-                                         role="progressbar"
-                                         style="width:@data.Percentage%;"
-                                         aria-valuenow="@data.Percentage"
-                                         aria-valuemin="0"
-                                         aria-valuemax="100">
-                                        @data.Percentage%
-                                    </div>
+
+                                <div class="progress-bar" style="width:@data.Percentage%; @colorStyle; height:20px !important">
                                 </div>
 
                             </div>

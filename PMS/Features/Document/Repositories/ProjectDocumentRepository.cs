@@ -51,25 +51,15 @@ namespace PMS.Features.Document.Repositories
                           .ToListAsync();
 
             var responseModels = await _dbContext.ProjectDocuments
-                        .Where(x => x.IsDeleted==false
-                            && (x.CreatedBy == empId || requestDocumentIds.Contains(x.Id)))
+                        .Where(x => x.IsDeleted==false && x.CreatedBy == empId)
                         .ToListAsync(cancellationToken);
 
 
-            var result = from um in _dbContext.UserManagements
-                         join emp in _dbContext.Employees
-                         on um.EmployeeId equals emp.Id
-                         where um.IsDeleted ==false && emp.IsDeleted== false
-                         select new
-                         {
-                             emp.Name,
-                             emp.EmployeeCode,
-                             um.Id
-                         };
+            var empModel = await _dbContext.Employees.ToListAsync();
 
             responseModels.ForEach(data =>
             {
-                data.CreatedByName = result.FirstOrDefault(x => x.Id == data.CreatedBy)?.Name ?? string.Empty;
+                data.CreatedByName = empModel.FirstOrDefault(x => x.Id == data.CreatedBy)?.Name ?? string.Empty;
             });
 
 

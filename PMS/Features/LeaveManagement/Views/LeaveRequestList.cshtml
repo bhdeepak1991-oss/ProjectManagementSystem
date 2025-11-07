@@ -1,145 +1,156 @@
 ﻿@model IEnumerable<PMS.Features.LeaveManagement.ViewModels.EmployeeLeaveVm>
 
 <style>
-	.badge-success {
-		background-color: #198754;
-		color: white;
-		padding: 5px 10px;
-		border-radius: 6px;
-		font-size: 0.85rem;
-	}
+    .badge-success {
+        background-color: #198754;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+    }
 
-	.badge-warning {
-		background-color: #ffc107;
-		color: #000;
-		padding: 5px 10px;
-		border-radius: 6px;
-		font-size: 0.85rem;
-	}
+    .badge-warning {
+        background-color: #ffc107;
+        color: #000;
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+    }
 
-	.badge-danger {
-		background-color: #dc3545;
-		color: white;
-		padding: 5px 10px;
-		border-radius: 6px;
-		font-size: 0.85rem;
-	}
+    .badge-danger {
+        background-color: #dc3545;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+    }
 
-	.badge-secondary {
-		background-color: #6c757d;
-		color: white;
-		padding: 5px 10px;
-		border-radius: 6px;
-		font-size: 0.85rem;
-	}
+    .badge-secondary {
+        background-color: #6c757d;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+    }
 </style>
 
 
 @functions {
-	public string GetStatusClass(string status)
-	{
-		return status switch
-		{
-			"Approved" => "badge-success",
-			"In Progress" => "badge-warning",
-			"Rejected" => "badge-danger",
-			_ => "badge-secondary"
-		};
-	}
+    public string GetStatusClass(string status)
+    {
+        return status switch
+        {
+            "Approved" => "badge-success",
+            "In Progress" => "badge-warning",
+            "Rejected" => "badge-danger",
+            _ => "badge-secondary"
+        };
+    }
 }
 
 
 <div class="row">
-	<div class="col-xs-12">
-		<div class="box">
-			<div class="box-body">
-				<table id="documentTable" class="table table-bordered table-striped">
-					<thead>
-						<tr>
-							<th>Leave Type</th>
-							<th>From Date</th>
-							<th>To Date</th>
-							<th>Reason</th>
-							<th>Leave Status</th>
-							<th>Aproved/Reject (By)</th>
-							<th>Approved/Reject (Date)</th>
-							<th>Approved/Reject (Reason)</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach (var item in Model)
-						{
-							<tr>
-								<td>@item.LeaveType</td>
-								<td>@item.FromDate?.Date.ToString("yyyy-MM-dd")</td>
-								<td>@item.ToDate?.Date.ToString("yyyy-MM-dd")</td>
-								<td>@item.Reason</td>
-								<td>
-									<span class="badge @GetStatusClass(item.LeaveStatus)">
-										@item.LeaveStatus
-									</span>
-								</td>
-								<td>@item.ApprovedRejectBy</td>
-								<td>@item.ApprovedRejectDate?.Date.ToString("yyyy-MM-dd")</td>
-								<td>@item.ApprovedRejectReason</td>
-								@if (item.LeaveStatus == "Approved" || item.LeaveStatus == "Rejected")
-								{
-									<td>
-										<span>Leave Already <b>@item.LeaveStatus</b></span>
-									</td>
-								}
-								else
-								{
-									<td>
-										<a asp-action="Index" asp-route-id="@item.Id" asp-controller="LeaveManagement" class="btn btn-success" title="Edit">
-											<i class="fa fa-edit"></i>
-										</a>
-										<a href="#" class="btn btn-danger" title="Delete" onclick="confirmDelete('@item.Id')">
-											<i class="fa fa-trash"></i>
-										</a>
-									</td>
-								
-								}
-						
-							</tr>
-						}
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-body">
+                <table id="documentTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Leave Type</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Reason</th>
+                            <th>Leave Status</th>
+                            <th>Aproved/Reject (By)</th>
+                            <th>Approved/Reject (Date)</th>
+                            <th>Approved/Reject (Reason)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.LeaveType</td>
+                                <td>@item.FromDate?.Date.ToString("yyyy-MM-dd")</td>
+                                <td>@item.ToDate?.Date.ToString("yyyy-MM-dd")</td>
+                                <td>@item.Reason</td>
+                                <td>
+                                    <span class="badge @GetStatusClass(item.LeaveStatus)">
+                                        @item.LeaveStatus
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (@item.ApprovedRejectedBy == "In Progress")
+                                    {
+                                        <span class="badge @GetStatusClass(item.LeaveStatus)">
+                                            @item.ApprovedRejectedBy Not Approved/Reject Yet !
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @item.ApprovedRejectedBy    
+                                    }
+                                </td>
+                                <td>@item.ApprovedRejectDate?.Date.ToString("yyyy-MM-dd")</td>
+                                <td>@item.ApprovedRejectReason</td>
+                                @if (item.LeaveStatus == "Approved" || item.LeaveStatus == "Rejected")
+                                {
+                                    <td>
+                                        <span>Leave Already <b>@item.LeaveStatus</b></span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <a asp-action="Index" asp-route-id="@item.Id" asp-controller="LeaveManagement" class="btn btn-success" title="Edit">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-danger" title="Delete" onclick="confirmDelete('@item.Id')">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+
+                                }
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-	$(document).ready(function () {
-		$('#documentTable').DataTable({
-			"paging": true,
-			"lengthChange": true,
-			"searching": true,
-			"ordering": true,
-			"info": true,
-			"autoWidth": false,
-			"responsive": true
-		});
-	});
+    $(document).ready(function () {
+        $('#documentTable').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true
+        });
+    });
 
-	function confirmDelete(id) {
-		confirmAction({
-			title: 'Delete Record',
-			text: 'Are you sure you want to delete this records?',
-			confirmText: 'Yes, delete it!',
-			cancelText: 'No, keep it'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				$.get('/Features/UserManagement/DeleteEmployee', {id:id},function(resp){
-					toastr.success("Deleted successfully!");
-					fn_EmployeeList();
-					hideLoader();
-				});
-			}
-		});
-	}
+    function confirmDelete(id) {
+        confirmAction({
+            title: 'Delete Record',
+            text: 'Are you sure you want to delete this records?',
+            confirmText: 'Yes, delete it!',
+            cancelText: 'No, keep it'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.get('/Features/UserManagement/DeleteEmployee', {id:id},function(resp){
+                    toastr.success("Deleted successfully!");
+                    fn_EmployeeList();
+                    hideLoader();
+                });
+            }
+        });
+    }
 </script>
 
 

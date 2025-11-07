@@ -26,7 +26,7 @@ namespace PMS.Features.Document
         public async Task<IActionResult> UploadDocument(ProjectDocumentVm model)
         {
             model.ProjectId = Convert.ToInt32(HttpContext.GetProjectId());
-            model.CreatedBy = Convert.ToInt32(HttpContext.GetUserId());
+            model.CreatedBy = Convert.ToInt32(HttpContext.GetEmployeeId());
 
             var response = await _projectDocumentService.UploadProjectDocument(model, default);
 
@@ -36,6 +36,7 @@ namespace PMS.Features.Document
         public async Task<IActionResult> GetDocumentDetail()
         {
             var empId= Convert.ToInt32(HttpContext.GetEmployeeId());
+          
 
             var response = await _projectDocumentService.GetProjectDocuments(empId,default);
 

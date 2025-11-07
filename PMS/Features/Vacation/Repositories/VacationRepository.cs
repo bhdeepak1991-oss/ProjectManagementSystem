@@ -69,7 +69,7 @@ namespace PMS.Features.Vacation.Repositories
             var response = responseModels.Select(x => new VacationVm
             {
                 Id = x.Id,
-                VacationName = x.VacationType ?? string.Empty,
+                VacationName = x.VacationName ?? string.Empty,
                 VacationType = x.VacationType ?? string.Empty,
                 FromDate = x.FromDate,
                 ToDate = x.ToDate,
