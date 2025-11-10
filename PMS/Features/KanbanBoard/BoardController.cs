@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PMS.Attributes;
 using PMS.Features.KanbanBoard.Services;
 using PMS.Helpers;
 using System.Threading.Tasks;
 
 namespace PMS.Features.KanbanBoard
 {
+
+    [PmsAuthorize]
     public class BoardController : Controller
     {
         private readonly IBoardService _boardService;

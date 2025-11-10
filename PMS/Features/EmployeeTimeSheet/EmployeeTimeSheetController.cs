@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
+using PMS.Attributes;
 using PMS.Domains;
 using PMS.Features.EmployeeTimeSheet.Services;
 using PMS.Features.EmployeeTimeSheet.ViewModels;
@@ -7,6 +8,8 @@ using PMS.Helpers;
 
 namespace PMS.Features.EmployeeTimeSheet
 {
+
+    [PmsAuthorize]
     public class EmployeeTimeSheetController : Controller
     {
         private readonly ITimeSheetService _timeSheetService;

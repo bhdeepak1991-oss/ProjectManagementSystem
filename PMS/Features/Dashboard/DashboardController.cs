@@ -18,6 +18,7 @@ namespace PMS.Features.Dashboard
 {
 
 
+    [PmsAuthorize]
     public class DashboardController : Controller
     {
         private readonly ILogger<DashboardController> _logger;

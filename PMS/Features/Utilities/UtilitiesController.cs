@@ -1,6 +1,7 @@
 ﻿
 
 using Microsoft.AspNetCore.Mvc;
+using PMS.Attributes;
 using PMS.Features.Utilities.Services;
 using PMS.Features.Utilities.ViewModels;
 using PMS.Helpers;
@@ -9,6 +10,8 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace PMS.Features.Utilities
 {
+
+    [PmsAuthorize]
     public class UtilitiesController : Controller
     {
         private readonly IWebHostEnvironment _webHosting;

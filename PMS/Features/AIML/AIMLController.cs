@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
+using PMS.Attributes;
 using PMS.Features.AIML.ViewModel;
 using System.Net.Http.Headers;
 using System.Text;
@@ -7,6 +8,8 @@ using System.Text.Json;
 
 namespace PMS.Features.AIML
 {
+
+    [PmsAuthorize]
     public class AIMLController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;

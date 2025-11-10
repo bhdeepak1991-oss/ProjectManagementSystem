@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
+using PMS.Attributes;
 using PMS.Domains;
 using PMS.Features.LeaveManagement.Services;
 using PMS.Helpers;
@@ -10,6 +11,8 @@ using PMS.Notification;
 
 namespace PMS.Features.LeaveManagement
 {
+
+    [PmsAuthorize]
     public class LeaveManagement : Controller
     {
         private readonly ILeaveTypeService _leaveTypeService;

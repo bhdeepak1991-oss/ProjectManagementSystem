@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PMS.Attributes;
 using PMS.Features.Document.Services;
 using PMS.Features.Document.ViewModels;
 using PMS.Features.ProjectEmployee.Services;
@@ -7,6 +8,8 @@ using PMS.Helpers;
 
 namespace PMS.Features.Document
 {
+
+    [PmsAuthorize]
     public class DocumentController : Controller
     {
         private readonly IProjectDocumentService _projectDocumentService;

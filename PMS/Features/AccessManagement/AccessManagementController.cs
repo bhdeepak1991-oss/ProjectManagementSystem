@@ -1,11 +1,14 @@
 ﻿using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
+using PMS.Attributes;
 using PMS.Domains;
 using PMS.Features.AccessManagement.Services;
 using PMS.Helpers;
 
 namespace PMS.Features.AccessManagement
 {
+
+    [PmsAuthorize]
     public class AccessManagementController : Controller
     {
         private readonly IAccessManagementService _accessManagementService;
