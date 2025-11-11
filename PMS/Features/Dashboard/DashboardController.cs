@@ -18,7 +18,7 @@ namespace PMS.Features.Dashboard
 {
 
 
-    [PmsAuthorize]
+  
     public class DashboardController : Controller
     {
         private readonly ILogger<DashboardController> _logger;
@@ -59,7 +59,6 @@ namespace PMS.Features.Dashboard
         }
 
 
-        [AllowAnonymous]
         public async Task<IActionResult> ProjectSelection()
         {
             var response = await _projectService.GetProjectSelectionList(Convert.ToInt32(HttpContext.GetEmployeeId()), Convert.ToInt32(HttpContext.GetRoleId()), default);
@@ -96,6 +95,7 @@ namespace PMS.Features.Dashboard
         {
             int projectId = Convert.ToInt32(HttpContext.GetProjectId());
             var response = await _dashBoardService.GetProjectTaskList(projectId, status, default);
+            ViewBag.isMasterCall = false;
             return PartialView("~/Features/ProjectTask/Views/ProjectTaskList.cshtml", response);
         }
 
@@ -105,6 +105,8 @@ namespace PMS.Features.Dashboard
 
             var response = await _dashBoardService.GetEmpProjectTaskList(projectId, status, empCode, default);
 
+            ViewBag.isMasterCall = false;
+
             return PartialView("~/Features/ProjectTask/Views/ProjectTaskList.cshtml", response);
         }
 
@@ -113,6 +115,8 @@ namespace PMS.Features.Dashboard
             int projectId = Convert.ToInt32(HttpContext.GetProjectId());
 
             var response = await _dashBoardService.GetProjectTaskFilter(projectId, taskStatus, taskPriority, taskType, employeeId);
+
+            ViewBag.isMasterCall = false;
 
             return PartialView("~/Features/ProjectTask/Views/ProjectTaskList.cshtml", response);
         }

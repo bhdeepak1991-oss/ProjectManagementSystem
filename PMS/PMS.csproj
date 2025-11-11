@@ -39,6 +39,8 @@
     <Folder Include="Features\Notification\Validators\" />
     <Folder Include="Features\Notification\ViewModels\" />
     <Folder Include="Features\ProjectEmployee\Validators\" />
+    <Folder Include="Features\Reports\Validators\" />
+    <Folder Include="Features\Reports\ViewModels\" />
     <Folder Include="Features\TaskDetail\Validators\" />
     <Folder Include="Features\Vacation\Validators\" />
   </ItemGroup>

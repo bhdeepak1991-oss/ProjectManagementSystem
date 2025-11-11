@@ -1,0 +1,71 @@
+﻿@model PMS.Domains.ReportMaster
+
+<div class="content-wrapper" style="min-height: 948px;">
+    <section class="content-header d-flex align-items-center justify-content-between">
+        <h1 class="m-0">
+            Project Management Report List
+            <small>Get Report List (Download Reports)</small>
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Download Reports</h3>
+                    </div>
+
+
+                    <div class="box-body" style="height:900px !important">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <input type="hidden" asp-for="Id" />
+                                <label class=" pull-left" asp-for="ReportName">Select Report</label>
+                                <select onchange="fn_DownloadReport(this)" class="form-control select2" asp-for="ReportName" placeholder="Please enter Vacation name!">
+                                    <option value="">-- Select Report --</option>
+                                    @foreach (var data in (IEnumerable<PMS.Domains.ReportMaster>)ViewBag.ReportList)
+                                    {
+                                        <option value="@data.ReportName">@data.ReportDisplayName</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="ReportName" class="text-danger"></span>
+                            </div>
+                          
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+           hideLoader();
+    })
+
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: "Please select report name to download !",
+            allowClear: true
+        });
+    });
+
+    function fn_DownloadReport(eData){
+        if (!eData.value) return;
+        hideLoader(); // optional if you have a global loader
+        window.location = '/Reports/Index?ReportName=' + encodeURIComponent(eData.value);
+    }
+</script>
+
+
+
+
+
+
+
