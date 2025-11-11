@@ -30,8 +30,6 @@ namespace PMS.Features.ProjectTask
 
             ViewBag.ProjectEmployee = new SelectList(projectEmployees.models, "Id", "Name");
 
-            
-
             return View("~/Features/ProjectTask/Views/CreateProjectTask.cshtml", response.models);
         }
         [HttpPost]
@@ -69,6 +67,8 @@ namespace PMS.Features.ProjectTask
             var projectId = Convert.ToInt32(HttpContext.Session.GetInt32("selectedProjectId") ?? 1);
 
             var response = await _projectTaskService.GetProjectTaskList(projectId, default);
+
+            ViewBag.isMasterCall = false;
 
             return View("~/Features/ProjectTask/Views/ProjectTaskList.cshtml", response.models);
         }

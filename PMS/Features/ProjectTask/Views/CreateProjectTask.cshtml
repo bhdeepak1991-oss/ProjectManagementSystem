@@ -38,6 +38,9 @@
 									<input class="form-control" asp-for="ModuleName" placeholder="Please enter Module Name">
 									<span asp-validation-for="ModuleName" class="text-danger"></span>
 								</div>
+
+
+								
 								<div class="form-group col-md-6">
 									<label class=" pull-left" asp-for="EmployeeId">Assign Employee</label>
 									<select class="form-control select2" asp-items=" ViewBag.ProjectEmployee" asp-for="EmployeeId" placeholder="Please assign Employee">
@@ -47,7 +50,7 @@
 								</div>
 								<div class="form-group col-md-6">
 									<label class=" pull-left" asp-for="TaskPriority">Task Priority</label>
-									<select class="form-control" asp-for="TaskPriority" placeholder="Please enter project start date">
+									<select class="form-control select2" asp-for="TaskPriority" placeholder="Please enter project start date">
 										<option value="">--select---</option>
 										<option value="Critical">Critical</option>
 										<option value="High">High</option>
@@ -58,7 +61,7 @@
 								</div>
 								<div class="form-group col-md-6">
 									<label class=" pull-left" asp-for="TaskType">Task Type</label>
-									<select class="form-control" asp-for="TaskType" placeholder="Please enter project start date">
+									<select class="form-control select2" asp-for="TaskType" placeholder="Please enter project start date">
 										<option value="">--select---</option>
 										<option value="Epic">Epic</option>
 										<option value="Bug">Bug</option>
@@ -68,12 +71,12 @@
 								</div>
 								<div class="form-group col-md-6">
 									<label class=" pull-left" asp-for="DueDate">Due Date</label>
-									<input class="form-control"  asp-for="DueDate" placeholder="Please enter project version control">
+									<input class="form-control" type="date"  asp-for="DueDate" placeholder="Please enter project version control">
 									<span asp-validation-for="DueDate" class="text-danger"></span>
 								</div>
 								<div class="form-group col-md-6">
 									<label class=" pull-left" asp-for="TaskStatus">Task Status</label>
-									<select class="form-control" asp-for="TaskStatus" placeholder="Please enter project start date">
+									<select class="form-control select2" asp-for="TaskStatus" placeholder="Please enter project start date">
 										<option value="">--select---</option>
 										<option value="NotStarted">NotStarted</option>
 										<option value="InProgress">InProgress</option>
@@ -82,6 +85,20 @@
 										<option value="MovedToQA">MovedToQA</option>
 									</select>
 									<span asp-validation-for="TaskStatus" class="text-danger"></span>
+								</div>
+
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="EstimatedHour">Estimated Hour (ETA)</label>
+									<input class="form-control" type="number" asp-for="EstimatedHour" placeholder="Please enter estimated Hour">
+									<span asp-validation-for="EstimatedHour" class="text-danger"></span>
+								</div>
+
+								<div class="form-group col-md-6">
+									<label class=" pull-left" asp-for="SprintId">Sprint Name</label>
+									<select class="form-control select2" asp-for="SprintId" placeholder="Please select sprint name">
+										<option value="">--Select--</option>
+									</select>
+									<span asp-validation-for="SprintId" class="text-danger"></span>
 								</div>
 
 								<div class="form-group col-md-12">
@@ -147,7 +164,7 @@
 
 		// Initialize Select2
 		$('.select2').select2({
-			placeholder: "Please enter project manager",
+			placeholder: "Please search for details !",
 			allowClear: true
 		});
 	});

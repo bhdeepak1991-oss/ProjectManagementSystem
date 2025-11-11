@@ -107,6 +107,22 @@ namespace PMS.Features.TaskDetail.Respositories
 
             _dbContext.ProjectTasks.Update(dbModel);
 
+            var empModel = await _dbContext.Employees.FirstOrDefaultAsync(x => x.Id == userId);
+
+            var taskDiscussionComment = new TaskDiscussionBoard()
+            {
+                Discusion=$"Task start date has been changes to {startDate} by Employee {empModel?.Name ?? string.Empty} ({empModel?.EmployeeCode ?? string.Empty})  ",
+                ProjectTaskId= taskId,
+                CreatedBy=userId,
+                CreatedDate= DateTime.Now,
+                EmployeeId= userId,
+                UpdatedBy= userId,
+                UpdatedDate= DateTime.Now
+            };
+
+
+            await _dbContext.TaskDiscussionBoards.AddAsync(taskDiscussionComment);
+
             await _dbContext.SaveChangesAsync();
 
             return ("Project start date has been modified", true);
@@ -138,6 +154,22 @@ namespace PMS.Features.TaskDetail.Respositories
             }
 
             _dbContext.ProjectTasks.Update(updateModel);
+
+            var empModel = await _dbContext.Employees.FirstOrDefaultAsync(x => x.Id == userId);
+
+            var taskDiscussionComment = new TaskDiscussionBoard()
+            {
+                Discusion = $"Task start status has been changes to {status} by Employee {empModel?.Name ?? string.Empty} ({empModel?.EmployeeCode ?? string.Empty})  ",
+                ProjectTaskId = taskId,
+                CreatedBy = userId,
+                CreatedDate = DateTime.Now,
+                EmployeeId = userId,
+                UpdatedBy = userId,
+                UpdatedDate = DateTime.Now
+            };
+
+            await _dbContext.TaskDiscussionBoards.AddAsync(taskDiscussionComment);
+
 
             await _dbContext.SaveChangesAsync();
 

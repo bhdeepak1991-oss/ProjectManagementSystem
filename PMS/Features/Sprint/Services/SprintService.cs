@@ -39,11 +39,11 @@ namespace PMS.Features.Sprint.Services
             return responseModel.model.SprintGoal ?? string.Empty;
         }
 
-        public async Task<(string message, bool isSuccess, IEnumerable<SprintViewModel> models)> GetSprintList(CancellationToken cancellationToken)
+        public async Task<(string message, bool isSuccess, IEnumerable<SprintViewModel> models)> GetSprintList(int projectId,CancellationToken cancellationToken)
         {
             var departmentResponse = await _departmentRepository.GetAllDepartments(cancellationToken);
 
-            var sprintResponse = await _sprintRepository.GetSprintList(cancellationToken);
+            var sprintResponse = await _sprintRepository.GetSprintList(projectId,cancellationToken);
 
             var response = sprintResponse.models.ToList().Select(x => new SprintViewModel()
             {

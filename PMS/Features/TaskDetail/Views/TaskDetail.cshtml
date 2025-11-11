@@ -1,380 +1,406 @@
 ﻿@model PMS.Features.TaskDetail.ViewModels.TaskDetailViewModel
 
 @{
-	ViewBag.Title = "Task Detail";
+    ViewBag.Title = "Task Detail";
 }
 
 @functions {
-	// Generate a consistent color from project name
-	string GetProjectColor(string input)
-	{
-		int hash = input.GetHashCode();
-		byte r = (byte)((hash & 0xFF0000) >> 16);
-		byte g = (byte)((hash & 0x00FF00) >> 8);
-		byte b = (byte)(hash & 0x0000FF);
+    // Generate a consistent color from project name
+    string GetProjectColor(string input)
+    {
+        int hash = input.GetHashCode();
+        byte r = (byte)((hash & 0xFF0000) >> 16);
+        byte g = (byte)((hash & 0x00FF00) >> 8);
+        byte b = (byte)(hash & 0x0000FF);
 
-		// Brighten color
-		r = (byte)((r + 200) / 2);
-		g = (byte)((g + 200) / 2);
-		b = (byte)((b + 200) / 2);
+        // Brighten color
+        r = (byte)((r + 200) / 2);
+        g = (byte)((g + 200) / 2);
+        b = (byte)((b + 200) / 2);
 
-		return $"#{r:X2}{g:X2}{b:X2}";
-	}
+        return $"#{r:X2}{g:X2}{b:X2}";
+    }
 
-	// Determine text color (black or white) based on background brightness
-	string GetTextColor(string hex)
-	{
-		hex = hex.Replace("#", "");
-		int r = Convert.ToInt32(hex.Substring(0, 2), 16);
-		int g = Convert.ToInt32(hex.Substring(2, 2), 16);
-		int b = Convert.ToInt32(hex.Substring(4, 2), 16);
-		int brightness = (r * 299 + g * 587 + b * 114) / 1000;
-		return brightness > 160 ? "#000000" : "#FFFFFF"; // black if bright, else white
-	}
+    // Determine text color (black or white) based on background brightness
+    string GetTextColor(string hex)
+    {
+        hex = hex.Replace("#", "");
+        int r = Convert.ToInt32(hex.Substring(0, 2), 16);
+        int g = Convert.ToInt32(hex.Substring(2, 2), 16);
+        int b = Convert.ToInt32(hex.Substring(4, 2), 16);
+        int brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness > 160 ? "#000000" : "#FFFFFF"; // black if bright, else white
+    }
 
 }
 
 
 @{
-	var name = Model?.EmployeeName?.Split('(')[0] ?? "Super Admin";
-	var colorHex = GetProjectColor(name);
-	var textColor = GetTextColor(colorHex);
-	var colorHexForUrl = colorHex.Replace("#", "");
+    var name = Model?.EmployeeName?.Split('(')[0] ?? "Super Admin";
+    var colorHex = GetProjectColor(name);
+    var textColor = GetTextColor(colorHex);
+    var colorHexForUrl = colorHex.Replace("#", "");
 }
 
 <style>
-	.TaskDetail-wrapper {
-		padding: 24px;
-		background: #f3f4f6;
-		font-family: 'Segoe UI', sans-serif;
-	}
+    .TaskDetail-wrapper {
+        padding: 24px;
+        background: #f3f4f6;
+        font-family: 'Segoe UI', sans-serif;
+    }
 
-	.ckeditor-body {
-		font-family: 'Inter', sans-serif;
-		font-size: 16px;
-		line-height: 1.6;
-		color: #333;
-	}
+    .ckeditor-body img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
 
-	.TaskDetail-avatar {
-		width: 60px; /* Adjust size as needed */
-		height: 60px;
-		border-radius: 50%;
-		object-fit: cover;
-		border: 2px solid #0078d4;
-	}
+    .ckeditor-body {
+        font-family: 'Inter', sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+    }
 
-	.TaskDetail-header {
-		background: #f8f9fa;
-		padding: 20px;
-		border-bottom: 1px solid #e0e0e0;
-		margin-bottom: 24px;
-	}
+    .TaskDetail-avatar {
+        width: 60px; /* Adjust size as needed */
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #0078d4;
+    }
 
-	.TaskDetail-title {
-		margin: 0;
-		font-size: 24px;
-		color: #333;
-	}
+    .TaskDetail-header {
+        background: #f8f9fa;
+        padding: 20px;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 24px;
+    }
 
-	.TaskDetail-meta {
-		margin-top: 8px;
-		font-size: 14px;
-		color: #555;
-	}
+    .TaskDetail-title {
+        margin: 0;
+        font-size: 24px;
+        color: #333;
+    }
 
-	.TaskDetail-body {
-		display: flex;
-		flex-wrap: nowrap;
-		gap: 24px;
-	}
+    .TaskDetail-meta {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #555;
+    }
 
-	.TaskDetail-main {
-		flex: 1 1 auto;
-		min-width: 0;
-		min-height: 900px !important
-	}
+    .TaskDetail-body {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 24px;
+    }
 
-	.TaskDetail-sidebar {
-		min-width: 300px;
-		max-width: 300px;
-		background: #fff;
-		border-radius: 6px;
-		box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-		padding: 12px;
-	}
+    .TaskDetail-main {
+        flex: 1 1 auto;
+        min-width: 0;
+        min-height: 900px !important
+    }
 
-	.TaskDetail-sidebarSection {
-		margin-bottom: 16px;
-	}
+    .TaskDetail-sidebar {
+        min-width: 300px;
+        max-width: 300px;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        padding: 12px;
+    }
 
-		.TaskDetail-sidebarSection h4 {
-			font-size: 18px;
-			margin-bottom: 4px;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			color: #333;
-		}
+    .TaskDetail-sidebarSection {
+        margin-bottom: 16px;
+    }
 
-		.TaskDetail-sidebarSection p {
-			font-size: 16px;
-			margin: 0;
-			color: #555;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
+        .TaskDetail-sidebarSection h4 {
+            font-size: 18px;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #333;
+        }
 
-	.TaskDetail-section {
-		margin-bottom: 32px;
-		background: #fff;
-		padding: 20px;
-		border-radius: 8px;
-		box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-		transition: box-shadow 0.3s ease, transform 0.2s ease;
-		max-height: 800px; /* or any desired height */
-		overflow-y: auto;
-		overflow-x: auto;
-		box-sizing: border-box;
-	}
+        .TaskDetail-sidebarSection p {
+            font-size: 16px;
+            margin: 0;
+            color: #555;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-		.TaskDetail-section:hover {
-			box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-			transform: translateY(-2px);
-		}
+    .TaskDetail-section {
+        margin-bottom: 32px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        transition: box-shadow 0.3s ease, transform 0.2s ease;
+        max-height: 800px; /* or any desired height */
+        overflow-y: auto;
+        overflow-x: auto;
+        box-sizing: border-box;
+    }
 
-		.TaskDetail-section h3 {
-			font-size: 18px;
-			border-bottom: 1px solid #ddd;
-			padding-bottom: 8px;
-			color: #444;
-		}
+        .TaskDetail-section:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
 
-	.TaskDetail-fieldList {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		font-size: 14px;
-		color: #333;
-	}
+        .TaskDetail-section h3 {
+            font-size: 18px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+            color: #444;
+        }
 
-		.TaskDetail-fieldList li {
-			margin-bottom: 8px;
-		}
+    .TaskDetail-fieldList {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+    }
 
-	.TaskDetail-comments .TaskDetail-comment {
-		border: 1px solid #ddd;
-		border-radius: 4px;
-		padding: 12px;
-		margin-bottom: 12px;
-		background: #fafafa;
-	}
+        .TaskDetail-fieldList li {
+            margin-bottom: 8px;
+        }
 
-	.TaskDetail-commentHeader {
-		font-size: 13px;
-		color: #666;
-		margin-bottom: 6px;
-	}
+    .TaskDetail-comments .TaskDetail-comment {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 12px;
+        margin-bottom: 12px;
+        background: #fafafa;
+    }
 
-	.TaskDetail-commentBody {
-		font-size: 14px;
-		color: #333;
-		/* Add scroll behavior */
-		max-height: 200px; /* Adjust as needed */
-		overflow-y: auto;
-		overflow-x: auto;
-		box-sizing: border-box;
-		padding-right: 6px; /* Prevent text from touching scrollbar */
-	}
+    .TaskDetail-commentHeader {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 6px;
+    }
 
-	.TaskDetail-addComment textarea {
-		width: 100%;
-		height: 80px;
-		padding: 10px;
-		font-size: 14px;
-		border: 1px solid #ccc;
-		border-radius: 4px;
-		resize: vertical;
-	}
+    .TaskDetail-commentBody {
+        font-size: 14px;
+        color: #333;
+        /* Add scroll behavior */
+        max-height: 200px; /* Adjust as needed */
+        overflow-y: auto;
+        overflow-x: auto;
+        box-sizing: border-box;
+        padding-right: 6px; /* Prevent text from touching scrollbar */
+    }
 
-	.TaskDetail-addComment button {
-		margin-top: 8px;
-		padding: 10px 20px;
-		background: #0078d4;
-		color: white;
-		border: none;
-		border-radius: 4px;
-		cursor: pointer;
-		align-content: right;
-	}
+    .TaskDetail-addComment textarea {
+        width: 100%;
+        height: 80px;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+    }
 
-		.TaskDetail-addComment button:hover {
-			background: #005ea1;
-		}
+    .TaskDetail-addComment button {
+        margin-top: 8px;
+        padding: 10px 20px;
+        background: #0078d4;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        align-content: right;
+    }
 
-	@@media (max-width: 768px) {
-		.TaskDetail-body {
-			flex-direction: column;
-		}
+        .TaskDetail-addComment button:hover {
+            background: #005ea1;
+        }
 
-		.TaskDetail-main,
-		.TaskDetail-sidebar {
-			flex: 1 1 100%;
-			max-width: 100%;
-		}
-	}
+    @@media (max-width: 768px) {
+        .TaskDetail-body {
+            flex-direction: column;
+        }
+
+        .TaskDetail-main,
+        .TaskDetail-sidebar {
+            flex: 1 1 100%;
+            max-width: 100%;
+        }
+    }
+
+    .ckeditor-body img {
+        max-width: 100% !important;
+        height: auto !important;
+        display: block;
+        object-fit: contain;
+    }
+
 </style>
 
 <!-- Main Wrapper -->
 <div class="content-wrapper">
-	<div class="TaskDetail-wrapper">
+    <div class="TaskDetail-wrapper">
 
-		<!-- Header -->
-		<div class="TaskDetail-header" style="background: #f8f9fa; padding: 20px; border-bottom: 1px solid #e0e0e0; margin-bottom: 24px; font-family: 'Segoe UI', sans-serif;">
-			<h1 class="TaskDetail-title" style="margin: 0; font-size: 24px; color: #333; display: flex; align-items: center; gap: 12px;">
-				<img src="https://ui-avatars.com/api/?name=@(name)&size=64&background=@colorHexForUrl&color=fff"
-					 alt="User Image"
-					 style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
-				@Model.TaskCode - @Model.TaskName
-			</h1>
+        <!-- Header -->
+        <div class="TaskDetail-header" style="background: #f8f9fa; padding: 20px; border-bottom: 1px solid #e0e0e0; margin-bottom: 24px; font-family: 'Segoe UI', sans-serif;">
+            <h1 class="TaskDetail-title" style="margin: 0; font-size: 24px; color: #333; display: flex; align-items: center; gap: 12px;">
+                <img src="https://ui-avatars.com/api/?name=@(name)&size=64&background=@colorHexForUrl&color=fff"
+                     alt="User Image"
+                     style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
+                @Model.TaskCode - @Model.TaskName
+            </h1>
 
-			<div class="TaskDetail-meta" style="margin-top: 8px; font-size: 14px; color: #555;">
-				Status: <strong>@Model.TaskStatus</strong> |
-				Priority: <strong>@Model.TaskPriority</strong> |
-				Type: <strong>@Model.TaskType</strong> |
-				Sprint: <strong>@Model.SprintName</strong> |
-				Reported By: <strong>@Model.ReportedBy</strong> |
-				Module Name: <strong>@Model.ModuleName</strong> |
-				Due Date: <strong>@Model.DueDate?.ToString("yyyy-MM-dd")</strong>
-			</div>
-		</div>
-
-
-		<!-- Body -->
-		<div class="TaskDetail-body">
-
-			<!-- Main Content -->
-			<div class="TaskDetail-main">
-				<!-- Description -->
-				<div class="TaskDetail-section">
-					<h3>Description</h3>
-					<div>@Html.Raw(Model.TaskDetail)</div>
-				</div>
-
-				<!-- Comments Section -->
-
-				<div class="TaskDetail-section-master TaskDetail-comments-master">
-					<h3>Discussion</h3>
-					<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
-						  asp-action="CreateDiscussion" asp-controller="TaskDetail">
-						  <input type="hidden" asp-for="TaskId" />
-						<div class="TaskDetail-addComment">
-							<textarea asp-for="Discussion" id="editor1" placeholder="Add a comment..."></textarea>
-							<button>Add Detail</button>
-						</div>
-					</form>
-
-					<br />
-					<div class="TaskDetail-section TaskDetail-comments">
-						<div id="divDiscussionBoard"></div>
-					</div>
+            <div class="TaskDetail-meta" style="margin-top: 8px; font-size: 14px; color: #555;">
+                Status: <strong>@Model.TaskStatus</strong> |
+                Priority: <strong>@Model.TaskPriority</strong> |
+                Type: <strong>@Model.TaskType</strong> |
+                Sprint: <strong>@Model.SprintName</strong> |
+                Reported By: <strong>@Model.ReportedBy</strong> |
+                Module Name: <strong>@Model.ModuleName</strong> |
+                Due Date: <strong>@Model.DueDate?.ToString("yyyy-MM-dd")</strong>
+                Estimated Hour: <strong>@Model.EstimatedHour (HR)</strong>
+            </div>
+        </div>
 
 
-				</div>
+        <!-- Body -->
+        <div class="TaskDetail-body">
 
-			</div>
+            <!-- Main Content -->
+            <div class="TaskDetail-main">
+                <!-- Description -->
+                <div class="TaskDetail-section">
+                    <h3>Description</h3>
+                    <div>@Html.Raw(Model.TaskDetail)</div>
+                </div>
 
-			<!-- Sidebar -->
-			<div class="TaskDetail-sidebar">
+                <!-- Comments Section -->
 
-				<div class="col-md-12">
-					<!-- Custom Tabs -->
-					<div class="nav-tabs-custom">
-						<ul class="nav nav-tabs">
-							
-							<li class="active"><a href="#tab_1" data-toggle="tab">Task Detail</a></li>
-							<li ><a href="#tab_2" data-toggle="tab">Attachment</a></li>
-						
-						</ul>
-						<div class="tab-content">
-							<div class="tab-pane active" id="tab_1">
-								<div class="TaskDetail-sidebarSection">
-									<div style="display: flex; justify-content: space-between; align-items: center;">
-										<h4 style="margin: 0;">Assigned To</h4>
-										<button class="btn btn-success" onclick="fn_AssignHisotry('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
-									</div>
+                <div class="TaskDetail-section-master TaskDetail-comments-master">
+                    <h3>Discussion</h3>
+                    <form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+                          asp-action="CreateDiscussion" asp-controller="TaskDetail">
+                        <input type="hidden" asp-for="TaskId" />
+                        <div class="TaskDetail-addComment">
+                            <textarea asp-for="Discussion" id="editor1" placeholder="Add a comment..."></textarea>
+                            <button>Add Detail</button>
+                        </div>
+                    </form>
 
-									<select asp-for="EmployeeId" onchange="fn_AssignToEmployee(this)" asp-items="ViewBag.Employees" class="form-control" style="margin-top: 10px; width: 100%;">
-										<option>-select</option>
-									</select>
-								</div>
-								<div class="TaskDetail-sidebarSection">
-									<h4>Start Date</h4>
-									<input type="date" onchange="fn_changeStartDate(this)" class="form-control" asp-for="StartDate" />
+                    <br />
+                    <div class="TaskDetail-section TaskDetail-comments">
+                        <div id="divDiscussionBoard"></div>
+                    </div>
 
-								</div>
-								<div class="TaskDetail-sidebarSection">
-									<h4>Completed Date</h4>
-									<input type="date" class="form-control" asp-for="CompletedDate" />
 
-								</div>
-								<div class="TaskDetail-sidebarSection">
-									<div style="display: flex; justify-content: space-between; align-items: center;">
-										<h4 style="margin: 0;">Change Status</h4>
-										<button class="btn btn-success" onclick="fn_Status('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
-									</div>
+                </div>
 
-									<select asp-for="TaskStatus" onchange="fn_changeStatus(this)" asp-items="ViewBag.Status" class="form-control" style="margin-top: 10px; width: 100%;">
-										<option>Select</option>
-									</select>
-								</div>
+            </div>
 
-								<div class="TaskDetail-sidebarSection">
-									<div style="display: flex; justify-content: space-between; align-items: center;">
-										<h4 style="margin: 0;">Change Priority</h4>
-										<button class="btn btn-success" onclick="fn_Priority('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
-									</div>
+            <!-- Sidebar -->
+            <div class="TaskDetail-sidebar">
 
-									<select asp-for="TaskPriority" asp-items="ViewBag.Priority" class="form-control" style="margin-top: 10px; width: 100%;">
-										<option>Select</option>
-									</select>
-								</div>
-							</div><!-- /.tab-pane -->
-							<div class="tab-pane" id="tab_2" style="height:300px !important">
-								<div class="row">
+                <div class="col-md-12">
+                    <!-- Custom Tabs -->
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
 
-									<div style="display: flex; justify-content: space-between; align-items: center;">
-										<h4 style="margin: 0;">Add Attachment </h4>
-										<button class="btn btn-success" onclick="fn_GetAttachmentList('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
-									</div>
-									<br/>
-									<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
-										  asp-action="UploadAttachment" asp-controller="TaskDetail" enctype="multipart/form-data">
-									
-										
-												<div class="form-group col-md-12">
-													<input type="hidden" asp-for="Id" />
-													<input class="form-control" asp-for="Attachment" placeholder="Please upload Attachment!">
-												</div>
-											<button type="submit" class="btn btn-primary pull-right">Submit</button>
-										
-									</form>
+                            <li class="active"><a href="#tab_1" data-toggle="tab">Task Detail</a></li>
+                            <li><a href="#tab_2" data-toggle="tab">Attachment</a></li>
 
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <div class="TaskDetail-sidebarSection">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <h5 style="margin: 0;">Assigned To</h5>
+                                        <button class="btn btn-success" onclick="fn_AssignHisotry('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
+                                    </div>
 
-				
+                                    <select  asp-for="EmployeeId" onchange="fn_AssignToEmployee(this)" asp-items="ViewBag.Employees" class="form-control select2" style="margin-top: 10px; width: 100%;">
+                                        <option>-select</option>
+                                    </select>
+                                </div>
+                                <div class="TaskDetail-sidebarSection">
+                                    <h5>Start Date</h5>
+                                    <input type="date" onchange="fn_changeStartDate(this)" class="form-control" asp-for="StartDate" />
 
-			
+                                </div>
+                                <div class="TaskDetail-sidebarSection">
+                                    <h5>Logged Hour</h5>
+                                    <input type="number" class="form-control" asp-for="LoggedHour" />
 
-			</div>
-		</div>
-	</div>
+                                </div>
+                                <div class="TaskDetail-sidebarSection">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <h5 style="margin: 0;">Change Status</h5>
+                                        <button class="btn btn-sm btn-primary rounded-circle"
+                                                style="width:32px;height:32px;" onclick="fn_Status('@Model.TaskName')" >
+                                            <i class="fa fa-history"></i>
+                                        </button>
+                                    </div>
+
+                                    <select asp-for="TaskStatus" onchange="fn_changeStatus(this)" asp-items="ViewBag.Status" class="form-control select2" style="margin-top: 10px; width: 100%;">
+                                        <option>Select</option>
+                                    </select>
+                                </div>
+
+                                <div class="TaskDetail-sidebarSection">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <h5 style="margin: 0;">Change Priority</h5>
+                                        <button type="button"
+                                                class="btn btn-sm btn-primary rounded-circle"
+                                                style="width:32px;height:32px;"
+                                                onclick="fn_Priority('@Model.TaskName')"
+                                                title="View Priority History">
+                                            <i class="fa fa-history"></i>
+                                        </button>
+
+                                    </div>
+
+                                    <select asp-for="TaskPriority" asp-items="ViewBag.Priority" class="form-control select2" style="margin-top: 10px; width: 100%;">
+                                        <option>Select</option>
+                                    </select>
+                                </div>
+
+                              
+                            </div><!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2" style="height:300px !important">
+                                <div class="row">
+
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <h5 style="margin: 0;">Add Attachment </h5>
+                                        <button class="btn btn-success" onclick="fn_GetAttachmentList('@Model.TaskName')" style="margin-left: 10px;"><i class="fa fa-list"></i></button>
+                                    </div>
+                                    <br />
+                                    <form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+                                          asp-action="UploadAttachment" asp-controller="TaskDetail" enctype="multipart/form-data">
+
+
+                                        <div class="form-group col-md-12">
+                                            <input type="hidden" asp-for="Id" />
+                                            <input class="form-control" asp-for="Attachment" placeholder="Please upload Attachment!">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+
+                                    </form>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
 </div>
 
 @await Html.PartialAsync("~/Features/shared/PmsModalPopUp.cshtml")
@@ -383,138 +409,137 @@
 
 <script>
 
-	function fn_AssignHisotry(eData){
-		$.get('/TaskDetail/TaskEmployeeAssignHistory',{taskId:'@Model.Id'}, function(resp){
-			$("#pmModalPopUp").modal('show');
-			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Assignment History For : ("+ eData + ")");
-			$("#divData").html(resp);
-		});
-	}
+    function fn_AssignHisotry(eData){
+        $.get('/TaskDetail/TaskEmployeeAssignHistory',{taskId:'@Model.Id'}, function(resp){
+            $("#pmModalPopUp").modal('show');
+            $("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Assignment History For : ("+ eData + ")");
+            $("#divData").html(resp);
+        });
+    }
 
-		function fn_Priority(eData){
-		$.get('/TaskDetail/TaskPriorityHistory',{taskId:'@Model.Id'}, function(resp){
-			$("#pmModalPopUp").modal('show');
-			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Priority History For : ("+ eData + ")");
-			$("#divData").html(resp);
-		});
-	}
+        function fn_Priority(eData){
+        $.get('/TaskDetail/TaskPriorityHistory',{taskId:'@Model.Id'}, function(resp){
+            $("#pmModalPopUp").modal('show');
+            $("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Priority History For : ("+ eData + ")");
+            $("#divData").html(resp);
+        });
+    }
 
-		function fn_Status(eData){
-		$.get('/TaskDetail/GetTaskStatusHistory',{taskId:'@Model.Id'}, function(resp){
-			$("#pmModalPopUp").modal('show');
-			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Priority History For : ("+ eData + ")");
-			$("#divData").html(resp);
-		});
-		}
-
-
-		function fn_GetAttachmentList(eData){
-		$.get('/TaskDetail/GetAttachmentList',{taskId:'@Model.Id'}, function(resp){
-			$("#pmModalPopUp").modal('show');
-			$("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Attachment List For : ("+ eData + ")");
-			$("#divData").html(resp);
-		});
-	}
-
-	function fn_CloseModal() {
-		$("#pmModalPopUp").modal('hide');
-	}
-
-		$(document).ready(function () {
-		 setTimeout(()=>{
-			 $(".cke_notification_warning").css("display", "none");
-			},200)
-
-	GetTaskDiscussionDetail('@Model.Id');
-
-	const customCkToolbar = [
-		   { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
-		   { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'] },
-		   { name: 'links', items: ['Link', 'Unlink'] },
-		   { name: 'insert', items: ['Image'] },
-		   { name: 'clipboard', items: ['Undo', 'Redo'] },
-		   { name: 'tools', items: ['Maximize'] }
-	   ];
-
-	// Initialize CKEditor on specific editors
-	function initCkEditor(editorId) {
-		const editorElement = document.getElementById(editorId);
-		if (editorElement) {
-		  CKEDITOR.replace(editorId, {
-					// Load Inter font from Google Fonts
-					contentsCss: [
-						'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap',
-						CKEDITOR.basePath + 'contents.css'
-					],
-					height: 150,
-					bodyClass: 'ckeditor-body',
-					font_names: 'Inter/Inter, sans-serif;' + CKEDITOR.config.font_names,
-					font_defaultLabel: 'Inter',
-					fontSize_defaultLabel: '16px !important',
-					fontSize_sizes: '12/12px;14/14px;16/16px;18/18px;20/20px;',
-					toolbar: customCkToolbar,
-					removePlugins: 'elementspath',
-					resize_enabled: false,
-					enterMode: CKEDITOR.ENTER_BR,
-					shiftEnterMode: CKEDITOR.ENTER_P,
+        function fn_Status(eData){
+        $.get('/TaskDetail/GetTaskStatusHistory',{taskId:'@Model.Id'}, function(resp){
+            $("#pmModalPopUp").modal('show');
+            $("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Priority History For : ("+ eData + ")");
+            $("#divData").html(resp);
+        });
+        }
 
 
-			});
-		}
-	}
+        function fn_GetAttachmentList(eData){
+        $.get('/TaskDetail/GetAttachmentList',{taskId:'@Model.Id'}, function(resp){
+            $("#pmModalPopUp").modal('show');
+            $("#pmModalPopUpTitle").html("<i class='fa fa-list'></i> Task Attachment List For : ("+ eData + ")");
+            $("#divData").html(resp);
+        });
+    }
 
-	// Initialize all editors
-	initCkEditor('editor1');
-	initCkEditor('editor2');
+    function fn_CloseModal() {
+        $("#pmModalPopUp").modal('hide');
+    }
+
+        $(document).ready(function () {
+         setTimeout(()=>{
+             $(".cke_notification_warning").css("display", "none");
+            },200)
+
+    GetTaskDiscussionDetail('@Model.Id');
+
+    const customCkToolbar = [
+           { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
+           { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'] },
+           { name: 'links', items: ['Link', 'Unlink'] },
+           { name: 'insert', items: ['Image'] },
+           { name: 'clipboard', items: ['Undo', 'Redo'] },
+           { name: 'tools', items: ['Maximize'] }
+       ];
+
+    // Initialize CKEditor on specific editors
+        function initCkEditor(editorId) {
+        const editorElement = document.getElementById(editorId);
+        if (editorElement) {
+               CKEDITOR.replace(editorId, {
+        contentsCss: [
+            'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
+            CKEDITOR.basePath + 'contents.css'
+        ],
+        height: 150,
+        bodyClass: 'ckeditor-body',   // <--- important to match CSS
+        toolbar: customCkToolbar,
+        removePlugins: 'elementspath',
+        resize_enabled: false,
+        enterMode: CKEDITOR.ENTER_BR,
+        shiftEnterMode: CKEDITOR.ENTER_P,
+
+        // ✅ Auto-fit images
+        extraAllowedContent: 'img[!src,alt,width,height];',
+    });
+
+        }
+    }
 
 
 
-	// Update CKEditor instances before AJAX form submission
-	$('form[data-ajax="true"]').on('submit', function () {
-		for (let instance in CKEDITOR.instances) {
-			CKEDITOR.instances[instance].updateElement();
-		}
-	});
-
-		// Initialize Select2
-		$('.select2').select2({
-			placeholder: "Please enter project manager",
-			allowClear: true
-		});
-	});
-
-	function GetTaskDiscussionDetail(id){
-		$.get("/TaskDetail/DiscussionBoard",{taskId: id}, function(resp){
-			$("#divDiscussionBoard").html(resp);
-		
-		});
-	}
-
-	function fn_OnBegin(){
-	}
-
-	function fn_OnSuccess(resp){
-		toastr.success("Saved successfully!");
-		GetTaskDiscussionDetail('@Model.Id');
-	}
+    // Initialize all editors
+    initCkEditor('editor1');
+    initCkEditor('editor2');
 
 
-	function fn_changeStartDate(eData){
-		$.get("/TaskDetail/ChangeStartDate",{startDate:$(eData).val(), taskId:'@Model.Id'}, function(resp){
-			alert(resp.message)
-		})
-	}
 
-	function fn_changeStatus(eData){
-		$.get("/TaskDetail/ChangeStatus",{status:$(eData).val(), taskId:'@Model.Id'}, function(resp){
-			alert(resp.message)
-		})
-	}
+    // Update CKEditor instances before AJAX form submission
+    $('form[data-ajax="true"]').on('submit', function () {
+        for (let instance in CKEDITOR.instances) {
+            CKEDITOR.instances[instance].updateElement();
+        }
+    });
 
-	function fn_AssignToEmployee(eData){
-		$.get("/TaskDetail/AssignToEmployee",{empId:$(eData).val(), taskId:'@Model.Id'}, function(resp){
-			alert(resp.message)
-		})
-	}
+        // Initialize Select2
+        $('.select2').select2({
+            placeholder: "Please enter project manager",
+            allowClear: true
+        });
+    });
+
+    function GetTaskDiscussionDetail(id){
+        $.get("/TaskDetail/DiscussionBoard",{taskId: id}, function(resp){
+            $("#divDiscussionBoard").html(resp);
+
+        });
+    }
+
+    function fn_OnBegin(){
+    }
+
+    function fn_OnSuccess(resp){
+        toastr.success("Saved successfully!");
+        GetTaskDiscussionDetail('@Model.Id');
+    }
+
+
+    function fn_changeStartDate(eData){
+        $.get("/TaskDetail/ChangeStartDate",{startDate:$(eData).val(), taskId:'@Model.Id'}, function(resp){
+            alert(resp.message)
+        })
+    }
+
+    function fn_changeStatus(eData){
+        $.get("/TaskDetail/ChangeStatus",{status:$(eData).val(), taskId:'@Model.Id'}, function(resp){
+            alert(resp.message)
+        })
+    }
+
+    function fn_AssignToEmployee(eData){
+        $.get("/TaskDetail/AssignToEmployee",{empId:$(eData).val(), taskId:'@Model.Id'}, function(resp){
+            alert(resp.message)
+        })
+    }
 </script>
 

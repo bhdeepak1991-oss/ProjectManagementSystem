@@ -48,22 +48,22 @@
 
 								<div class="form-group col-md-6">
 									<label class=" pull-left" asp-for="ClientName">Client Name</label>
-									<input class="form-control" asp-for="ClientName" placeholder="Please enter project version control">
+									<input class="form-control" asp-for="ClientName" placeholder="Please enter Client Name">
 									<span asp-validation-for="ClientName" class="text-danger"></span>
 								</div>
 								<div class="form-group col-md-6">
 									<label class=" pull-left" asp-for="ClientUrl">ClientUrl</label>
-									<input class="form-control" asp-for="ClientUrl" placeholder="Please enter Development Url">
+									<input class="form-control" asp-for="ClientUrl" placeholder="Please enter client website details">
 									<span asp-validation-for="ClientUrl" class="text-danger"></span>
 								</div>
 								<div class="form-group col-md-6">
 									<label class=" pull-left" asp-for="ClientContactNumber">Client Contact Number</label>
-									<input class="form-control" asp-for="ClientContactNumber" placeholder="Please enter QA Url">
+									<input class="form-control" asp-for="ClientContactNumber" placeholder="Please enter Client Contact Number">
 									<span asp-validation-for="ClientContactNumber" class="text-danger"></span>
 								</div>
 								<div class="form-group col-md-6">
 									<label class=" pull-left" asp-for="ClientContactPerson">Client Contact Person</label>
-									<input class="form-control" asp-for="ClientContactPerson" placeholder="Please enter Production url">
+									<input class="form-control" asp-for="ClientContactPerson" placeholder="Please enter Client Contact person">
 									<span asp-validation-for="ClientContactPerson" class="text-danger"></span>
 								</div>
 
@@ -154,7 +154,7 @@
 
 		// Initialize Select2
 		$('.select2').select2({
-			placeholder: "Please enter project manager",
+			placeholder: "Please enter detail to search !",
 			allowClear: true
 		});
 	});

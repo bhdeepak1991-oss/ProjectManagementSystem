@@ -108,7 +108,7 @@ namespace PMS.Features.Utilities.Services
 
             var projectEmpModels = await _projectEmployeeService.GetMappedProjectEmployee(projectId);
 
-            var sprintModels = await _sprintService.GetSprintList(default);
+            var sprintModels = await _sprintService.GetSprintList(projectId, default);
 
             var errorList = new List<ErrorListVm>();
 

@@ -29,9 +29,9 @@ namespace PMS.Features.Sprint.Repositories
             return ("Sprint fetched successfully", true, response ?? new());
         }
 
-        public async Task<(string message, bool isSuccess, IEnumerable<Domains.Sprint> models)> GetSprintList(CancellationToken cancellationToken)
+        public async Task<(string message, bool isSuccess, IEnumerable<Domains.Sprint> models)> GetSprintList(int projectId, CancellationToken cancellationToken)
         {
-            var response = await _dbContext.Sprints.AsNoTracking().Where(x => x.IsDeleted == false).ToListAsync();
+            var response = await _dbContext.Sprints.AsNoTracking().Where(x => x.IsDeleted == false && x.ProjectId==projectId).ToListAsync();
 
             return ("Sprint fetched successfully", true, response);
         }

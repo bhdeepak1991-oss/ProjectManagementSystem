@@ -4,6 +4,7 @@ using PMS.Attributes;
 using PMS.Domains;
 using PMS.Features.Master.Services;
 using PMS.Features.Sprint.Services;
+using PMS.Helpers;
 
 namespace PMS.Features.Sprint
 {
@@ -38,6 +39,10 @@ namespace PMS.Features.Sprint
 
             model.DurationDays = (model.EndDate.Value - model.StartDate.Value).Days;
 
+            model.BusinessGoal = string.IsNullOrEmpty(model.BusinessGoal) ? string.Empty : model.BusinessGoal;
+
+            model.SprintGoal = string.IsNullOrEmpty(model.SprintGoal) ? string.Empty : model.SprintGoal;
+
             if (model.Id != 0)
             {
                 var updateResponse = await _sprintService.UpdateSprint(model, default);
@@ -52,7 +57,9 @@ namespace PMS.Features.Sprint
 
         public async Task<IActionResult> SprintList()
         {
-            var response = await _sprintService.GetSprintList(default);
+            var projectId = Convert.ToInt32(HttpContext.GetProjectId());
+
+            var response = await _sprintService.GetSprintList(projectId,default);
 
             return PartialView("~/Features/Sprint/Views/SprintList.cshtml", response.models);
         }
