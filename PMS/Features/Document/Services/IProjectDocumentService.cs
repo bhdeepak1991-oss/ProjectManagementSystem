@@ -10,5 +10,7 @@ namespace PMS.Features.Document.Services
         Task<(string message, bool isSuccess, IEnumerable<ProjectDocument> models)> GetProjectDocuments(int empId,CancellationToken cancellationToken);
 
         Task<(string message, bool isSuccess)> DocumentRequestAccess(DocumentRequestVm model);
+
+        Task<(string message, bool isSuccess, IEnumerable<ProjectDocument> models)> GetProjctDocumentDetail(int projectId);
     }
 }

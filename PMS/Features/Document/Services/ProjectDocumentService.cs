@@ -36,6 +36,11 @@ namespace PMS.Features.Document.Services
             return await _projectDocumentRepository.DocumentRequestAccess(projectDocumentRequest);
         }
 
+        public async Task<(string message, bool isSuccess, IEnumerable<ProjectDocument> models)> GetProjctDocumentDetail(int projectId)
+        {
+            return await _projectDocumentRepository.GetProjctDocumentDetail(projectId);
+        }
+
         public async Task<(string message, bool isSuccess, IEnumerable<ProjectDocument> models)> GetProjectDocuments(int empId, CancellationToken cancellationToken)
         {
             return await _projectDocumentRepository.GetProjectDocuments(empId,cancellationToken);

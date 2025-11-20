@@ -1,0 +1,385 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Project Detail — (PMS)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f6f8fb;
+            --card: #ffffff;
+            --muted: #6b7280;
+            --accent: #0f6fff;
+            --success: #10b981;
+            --danger: #ef4444;
+            --glass: rgba(15,111,255,0.06);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: #0f172a;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 28px auto;
+            padding: 24px
+        }
+
+        header {
+            display: flex;
+            gap: 16px;
+            align-items: center
+        }
+
+        .brand {
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+
+        .logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 10px;
+            background: linear-gradient(135deg,var(--accent),#4f46e5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 20px
+        }
+
+        .meta {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 20px;
+            margin-top: 18px
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 6px 18px rgba(15,23,42,0.06)
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px
+        }
+
+            .section-title h2 {
+                margin: 0;
+                font-size: 16px
+            }
+
+        .pill {
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--glass);
+            color: var(--accent)
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .label {
+            font-size: 13px;
+            color: var(--muted);
+            min-width: 140px
+        }
+
+        .value {
+            font-weight: 600
+        }
+
+        .project-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .field {
+            background: #fbfdff;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #eef2ff
+        }
+
+        .client-card {
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+
+        .client-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 8px;
+            background: #eef2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0f172a;
+            font-weight: 700
+        }
+
+        .timeline {
+            list-style: none;
+            padding: 0;
+            margin: 0
+        }
+
+            .timeline li {
+                padding: 10px 0;
+                border-left: 3px solid #eef2ff;
+                margin-left: 12px;
+                padding-left: 18px;
+                position: relative
+            }
+
+                .timeline li::before {
+                    content: '';
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    background: var(--accent);
+                    position: absolute;
+                    left: -7px;
+                    top: 14px
+                }
+
+        .team-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .member {
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #eef2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700
+        }
+
+        .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .tag {
+            background: #f1f5f9;
+            padding: 6px 10px;
+            border-radius: 999px;
+            color: #0f172a;
+            font-size: 13px
+        }
+
+        .docs {
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap: 10px
+        }
+
+        .doc {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px dashed #eef2ff;
+            background: #fff
+        }
+
+        footer {
+            margin-top: 18px;
+            text-align: right;
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        /* responsive */
+        @media (max-width:980px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">
+                <div class="logo">{{projectShortName}}</div>
+                <div>
+                    <h1>{{ProjectName}}</h1>
+                    <div class="meta">{{description}}</div>
+                </div>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+                <div class="pill">Status: {{status}}</div>
+                <button onclick="printPage()" style="background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer">Print / Export</button>
+            </div>
+        </header>
+
+        <main class="grid">
+            <section>
+                <div class="card">
+                    <div class="section-title">
+                        <h2>Project Summary</h2>
+                        <div class="meta">Client Name: <strong>{{ClientName}}</strong></div>
+                    </div>
+
+                    <div class="project-info">
+                        <div class="field">
+                            <div class="label">Project Name</div>
+                            <div class="value">{{ProjectName}}</div>
+                            <div style="height:8px"></div>
+                            <div class="label">Project Description</div>
+                            <div class="meta">{{projectDescription}}.</div>
+                        </div>
+
+                        <div class="field">
+                            <div class="label">Client</div>
+                            <div class="client-card">
+                                <div class="client-avatar">{{ClientName}}</div>
+                                <div>
+                                    <div class="value">{{clientContactPersone}}</div>
+                                    <div class="meta">{{clientWebsite}}</div>
+                                    <div style="height:6px"></div>
+                                    <div class="meta">Contact: {{clientContactPerson}} | {{clientContactNumber}}</div>
+                                </div>
+                            </div>
+
+                            <div style="height:12px"></div>
+
+                            <div class="label">Primary Goals</div>
+                            <ul>
+                                <li>Achieve PCI DSS Level 1 compliance</li>
+                                <li>Handle 5k TPS (transactions per second) peak load</li>
+                                <li>Provide 99.95% uptime SLA</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:14px">
+                    <div class="section-title"><h2>Timeline & Milestones</h2><div class="meta">Sprint / Release dates</div></div>
+                    <ul class="timeline">
+                        <li><strong>Kickoff:</strong> Jan 10, 2025 — Project kickoff and requirements finalization</li>
+                        <li><strong>Design Complete:</strong> Feb 28, 2025 — Architecture and security design signed off</li>
+                        <li><strong>Sprint 1 Demo:</strong> Mar 20, 2025 — Core payments flow implemented</li>
+                        <li><strong>UAT:</strong> May 10, 2025 — User acceptance testing</li>
+                        <li><strong>Go-Live:</strong> Jun 30, 2025 — Production rollout</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="margin-top:14px">
+                    <div class="section-title"><h2>Project Goals & Business Objectives</h2><div class="pill">Strategic</div></div>
+                    <p style="margin-top:8px">The project is focused on delivering a secure, scalable payments platform that reduces transaction latency and increases throughput while meeting regulatory and compliance requirements. Business objectives include expanding client offerings, reducing payment failure rates, and enabling global multi-currency support.</p>
+
+                    <div style="display:flex;gap:12px;margin-top:12px">
+                        <div style="flex:1">
+                            <div class="label">Success Metrics</div>
+                            <ul>
+                                <li>Transaction success rate ≥ 99.95%</li>
+                                <li>Average response time &lt; 200ms</li>
+                                <li>SLA adherence 99.95%</li>
+                            </ul>
+                        </div>
+                        <div style="flex:1">
+                            <div class="label">Key Risks</div>
+                            <ul>
+                                <li>Third-party gateway availability</li>
+                                <li>Regulatory changes affecting compliance</li>
+                                <li>Data migration complexity</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:14px">
+                    <div class="section-title"><h2>Documents & Attachments</h2><div class="meta">Uploaded project files</div></div>
+                    <div class="docs">
+                         {{projectDocuments}}
+                    </div>
+                </div>
+
+            </section>
+
+            <aside>
+                <div class="card">
+                    <div class="section-title"><h2>Project Details</h2><div class="meta">Quick facts</div></div>
+                    <div class="row" style="margin-bottom:10px">
+                        <div><div class="label">Project Head</div><div class="value">{{ProjectHead}}</div></div>
+                        <div><div class="label">Project Manager</div><div class="value">{{ProjectManager}}</div></div>
+                    </div>
+                    <div class="row" style="margin-bottom:10px">
+                        <div><div class="label">Delivery Manager</div><div class="value">{{DeliveryManager}}</div></div>
+                        <div><div class="label">Status</div><div class="value">{{ProjectStatus}}</div></div>
+                    </div>
+                    <div class="row" style="margin-bottom:10px">
+                        <div><div class="label">Start Date</div><div class="value">{{ProjectStartDate}}</div></div>
+                        <div><div class="label">End Date</div><div class="value">{{ProjectEndDate}}</div></div>
+                    </div>
+
+                    <hr style="margin:14px 0;border:none;border-top:1px solid #f1f5f9" />
+
+                    <div class="section-title"><h2>Team</h2><div class="meta">Core members</div></div>
+                    <div class="team-list">
+                        <div class="member"><div class="avatar">MJ</div><div><div class="value">Meera Joshi</div><div class="meta">Project Manager</div></div></div>
+                        <div class="member"><div class="avatar">AK</div><div><div class="value">Arun Kumar</div><div class="meta">Project Head</div></div></div>
+                        <div class="member"><div class="avatar">VS</div><div><div class="value">Vikram Singh</div><div class="meta">Delivery Manager</div></div></div>
+                        <div class="member"><div class="avatar">JT</div><div><div class="value">Justin Tom</div><div class="meta">Lead Developer</div></div></div>
+                    </div>
+
+                    <hr style="margin:14px 0;border:none;border-top:1px solid #f1f5f9" />
+
+
+                </div>
+
+               
+
+            </aside>
+        </main>
+
+        <footer>Generated on: Nov 12, 2025 • Project Dashboard</footer>
+    </div>
+
+    <script>
+    function printPage(){ window.print(); }
+    </script>
+</body>
+</html>

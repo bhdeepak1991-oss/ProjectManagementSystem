@@ -10,5 +10,7 @@ namespace PMS.Features.Document.Repositories
 
         Task<(string message, bool isSuccess)> DocumentRequestAccess(ProjectDocumentsRequest model);
 
+        Task<(string message, bool isSuccess, IEnumerable<ProjectDocument> models)> GetProjctDocumentDetail(int projectId);
+
     }
 }

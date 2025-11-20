@@ -43,6 +43,14 @@ namespace PMS.Features.Document.Repositories
             return ("Document request has been addedd", true);
         }
 
+        public async Task<(string message, bool isSuccess, IEnumerable<ProjectDocument> models)> GetProjctDocumentDetail(int projectId)
+        {
+            var responseModels = await _dbContext.ProjectDocuments
+                        .Where(x => x.IsDeleted == false && x.ProjectId == projectId).ToListAsync();
+
+            return ("Project Document fetched successfully", true, responseModels);
+        }
+
         public async Task<(string message, bool isSuccess, IEnumerable<ProjectDocument> models)> GetProjectDocuments(int empId, CancellationToken cancellationToken)
         {
             var requestDocumentIds = await _dbContext.ProjectDocumentsRequests
