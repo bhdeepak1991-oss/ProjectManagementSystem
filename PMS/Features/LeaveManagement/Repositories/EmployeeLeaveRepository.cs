@@ -64,8 +64,7 @@ namespace PMS.Features.LeaveManagement.Repositories
                                           .ToListAsync();
 
             var employeeLeaves = await _dbContext.EmployeeLeaves.Where(x => cordinatEmpList.Contains(x.EmployeeId)
-                                        && x.LeaveStatus != "Approved"
-                                        && x.LeaveStatus != "Rejected" && x.IsActive == true && x.IsDeleted == false)
+                                         && x.IsActive == true && x.IsDeleted == false)
                                         .ToListAsync();
 
             var leaveType = await _dbContext.LeaveTypes.Where(x => x.IsActive == true && x.IsDeleted == false).ToListAsync();
