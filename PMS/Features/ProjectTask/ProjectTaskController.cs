@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using PMS.Attributes;
 using PMS.Features.Dashboard.Services;
 using PMS.Features.ProjectTask.Services;
+using PMS.Features.Sprint.Services;
 using PMS.Helpers;
 
 namespace PMS.Features.ProjectTask
@@ -13,11 +14,13 @@ namespace PMS.Features.ProjectTask
     {
         private readonly IProjectTaskService _projectTaskService;
         private readonly IDashboardService _dashboardService;
+        private readonly ISprintService _sprintService;
 
-        public ProjectTaskController(IProjectTaskService projectTaskService, IDashboardService dashboardService)
+        public ProjectTaskController(IProjectTaskService projectTaskService, IDashboardService dashboardService, ISprintService sprintService)
         {
             _projectTaskService = projectTaskService;
             _dashboardService = dashboardService;
+            _sprintService = sprintService;
         }
 
         public async Task<IActionResult> Index(int id)
@@ -29,6 +32,8 @@ namespace PMS.Features.ProjectTask
             var projectEmployees = await _projectTaskService.GetProjectEmployee(projectId, default);
 
             ViewBag.ProjectEmployee = new SelectList(projectEmployees.models, "Id", "Name");
+
+            ViewBag.SprintModels = (await _sprintService.GetSprintList(projectId, default)).models;
 
             return View("~/Features/ProjectTask/Views/CreateProjectTask.cshtml", response.models);
         }

@@ -7,7 +7,7 @@ using PMS.Features.ProjectEmployee.Services;
 namespace PMS.Features.ProjectEmployee
 {
 
-    [PmsAuthorize]
+   // [PmsAuthorize]
     public class ProjectEmployeeController : Controller
     {
         private readonly IProjectEmployeeServices _projectEmployeeServices;

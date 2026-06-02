@@ -43,6 +43,8 @@ namespace PMS.Features.Sprint
 
             model.SprintGoal = string.IsNullOrEmpty(model.SprintGoal) ? string.Empty : model.SprintGoal;
 
+            model.IsActive = true;
+
             if (model.Id != 0)
             {
                 var updateResponse = await _sprintService.UpdateSprint(model, default);

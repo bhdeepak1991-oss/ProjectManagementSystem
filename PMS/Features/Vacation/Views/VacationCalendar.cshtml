@@ -34,12 +34,7 @@
                 center: 'title',
             },
 
-            events: resp,
-
-            eventClick: function(info) {
-                const desc = info.event.extendedProps.description || "No description added";
-                alert("Leave Details:\n\n" + desc);
-            }
+            events: resp
         });
 
         calendar.render();

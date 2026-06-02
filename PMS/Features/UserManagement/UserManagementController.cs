@@ -36,7 +36,7 @@ namespace PMS.Features.UserManagement
             _roleMenuMappingService = roleMenuMappingService;
         }
 
-        [PmsAuthorize]
+       
         public async Task<IActionResult> CreateEmployee(int empId)
         {
             var empModel = await _employeeService.GetEmployeeById(empId);
@@ -57,11 +57,13 @@ namespace PMS.Features.UserManagement
         }
 
         [HttpPost]
-        [PmsAuthorize]
+       
         public async Task<IActionResult> CreateEmployeePost(Employee model)
         {
             if (model.Id == 0)
             {
+                model.ManagerId = model.ManagerId is null ? 0 : model.ManagerId;
+
                 var response = await _employeeService.CreateEmployee(model);
 
                 return Json(response);
@@ -72,7 +74,7 @@ namespace PMS.Features.UserManagement
             return Json(updateResponse);
         }
 
-        [PmsAuthorize]
+       
         public async Task<IActionResult> GetEmployeeList()
         {
             var response = await _employeeService.GetEmployees(default);
@@ -80,14 +82,14 @@ namespace PMS.Features.UserManagement
             return PartialView("~/Features/UserManagement/Views/EmployeeList.cshtml", response.models);
         }
 
-        [PmsAuthorize]
+       
         public async Task<IActionResult> DeleteEmployee(int id)
         {
             var response = await _employeeService.DeleteEmployee(id);
             return Json(response);
         }
 
-        [PmsAuthorize]
+       
         public async Task<IActionResult> CreateUser(int userId)
         {
             var responseModel = await _userService.GetUserById(userId, default);
@@ -201,14 +203,14 @@ namespace PMS.Features.UserManagement
             return await Task.Run(() => RedirectToAction("TwoFactorAuth", "UserManagement", new { totpUri = totpUri }));
         }
 
-        [PmsAuthorize]
+       
         public async Task<IActionResult> UserListDetail()
         {
             var response = await _userService.GetUserList(default);
             return PartialView("~/Features/UserManagement/Views/UserList.cshtml", response.models);
         }
 
-        [PmsAuthorize]
+       
         public async Task<IActionResult> DeleteUser(int id)
         {
             var response = await _userService.DeleteUser(id, default);

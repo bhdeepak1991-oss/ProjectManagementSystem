@@ -7,7 +7,7 @@ using PMS.Features.Master.Services;
 
 namespace PMS.Features.Master
 {
-    [PmsAuthorize]
+    
     public class MasterController : Controller
     {
         private readonly IRoleService _roleService;

@@ -11,8 +11,7 @@ namespace PMS.Features.UserManagement.Validators
             .EmailAddress().WithMessage("Invalid email address.");
 
             RuleFor(x => x.Password)
-                .NotEmpty().WithMessage("Password is required.")
-                .MinimumLength(6).WithMessage("Password must be at least 5 characters.");
+                .NotEmpty().WithMessage("Password is required.");
         }
     }
 }

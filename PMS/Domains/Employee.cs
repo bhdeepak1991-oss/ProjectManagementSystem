@@ -33,5 +33,5 @@ public partial class Employee
 
     public DateTime? UpdatedDate { get; set; }
 
-    public int ManagerId { get; set; } = 0;// Head of Department
+    public int? ManagerId { get; set; } = 0;// Head of Department
 }

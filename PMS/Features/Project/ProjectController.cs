@@ -16,7 +16,7 @@ using System.Text;
 
 namespace PMS.Features.Project
 {
-    [PmsAuthorize]
+    //[PmsAuthorize]
     public class ProjectController : Controller
     {
         private readonly IProjectService _projectService;
@@ -89,11 +89,6 @@ namespace PMS.Features.Project
             return Json(response);
         }
         public async Task<IActionResult> GetProjectDetail(int id)
-        
-        
-        
-        
-        
         {
             var dbModel = await _projectService.GetProjectById(id, default);
 

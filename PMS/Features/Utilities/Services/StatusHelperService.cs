@@ -274,7 +274,8 @@ namespace PMS.Features.Utilities.Services
                     TaskStatus = taskStatus,
                     IsDeleted = false,
                     CreatedBy = 1,
-                    CreatedDate = DateTime.Now
+                    CreatedDate = DateTime.Now,
+                    ProjectId= projectId
                 };
 
                 models.Add(model);
