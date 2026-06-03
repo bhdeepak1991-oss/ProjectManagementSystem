@@ -6,19 +6,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using OpenTelemetry.Trace;
 using PMS.Attributes;
 using PMS.Features.Dashboard.Services;
+using PMS.Features.Dashboard.ViewModels;
 using PMS.Features.Project.Services;
 using PMS.Features.ProjectEmployee.Services;
 using PMS.Features.ProjectTask.Services;
 using PMS.Features.UserManagement.Services;
 using PMS.Helpers;
+using RabbitMQ.Client;
 using System.Reflection.Emit;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PMS.Features.Dashboard
 {
 
 
-  
+
     public class DashboardController : Controller
     {
         private readonly ILogger<DashboardController> _logger;
@@ -80,6 +84,51 @@ namespace PMS.Features.Dashboard
             var responseModel = await _projectEmployeeService.GetMappedProjectEmployee(Convert.ToInt32(HttpContext.GetProjectId()));
 
             return PartialView("~/Features/Dashboard/Views/ProjectEmployee.cshtml", responseModel.models);
+        }
+
+        public async Task<IActionResult> CreateProject()
+        {
+
+            ViewBag.ProjectSelection = true;
+
+            return PartialView("~/Features/project/Views/CreateProject.cshtml");
+        }
+
+        public async Task<IActionResult> CopyProject(int projectId)
+        {
+            HttpContext.Session.SetInt32("ProjectId", projectId);
+
+            return await Task.Run(() => PartialView("~/Features/Dashboard/Views/CopyProject.cshtml"));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CopyProjectPost(CopyProjectModel model)
+        {
+            model.ProjectId = Convert.ToInt32(HttpContext.Session.GetInt32("ProjectId"));
+
+            var factory = new ConnectionFactory()
+            {
+                HostName = "localhost"
+            };
+
+            using var connection = await factory.CreateConnectionAsync();
+            using var channel = await connection.CreateChannelAsync();
+
+            await channel.QueueDeclareAsync(
+                            queue: "copy_queue1",
+                            durable: true,
+                            exclusive: false,
+                            autoDelete: false);
+
+
+            var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(model));
+
+            await channel.BasicPublishAsync(
+            exchange: "",
+            routingKey: "copy_queue1",
+            body: body);
+
+            return RedirectToAction("ProjectSelection");
         }
 
         [PmsAuthorize]

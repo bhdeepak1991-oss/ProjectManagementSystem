@@ -15,6 +15,7 @@ using PMS.Features.Dashboard.Services;
 using PMS.Features.KanbanBoard.Services;
 using PMS.Features.LeaveManagement.Services;
 using PMS.Features.AccessManagement.Services;
+using PMS.CopyProcessor;
 
 namespace PMS.Extensions
 {
@@ -70,6 +71,8 @@ namespace PMS.Extensions
             services.AddScoped<IEmployeeLeaveService, EmployeeLeaveService>();
 
             services.AddScoped<IAccessManagementService, AccessManagementService>();
+
+            services.AddScoped<ICopyService, CopyService>();
 
             return services;
         }
