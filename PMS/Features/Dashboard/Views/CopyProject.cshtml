@@ -1,0 +1,38 @@
+﻿@model PMS.Features.Dashboard.ViewModels.CopyProjectModel
+
+<section class="content">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="box">
+
+				<form role="form" data-ajax="true" data-ajax-begin="fn_OnBegin" data-ajax-success="fn_OnSuccess"
+					  asp-action="CopyProjectPost" asp-controller="Dashboard">
+					<div class="box-body" style="height:200px !important">
+						<div class="row">
+							<div class="form-group col-md-6">
+
+								<label class=" pull-left" asp-for="ProjectName">Please enter new Project Name</label>
+								<input class="form-control" asp-for="ProjectName" placeholder="Please enter new project name!">
+								<span asp-validation-for="ProjectName" class="text-danger"></span>
+							</div>
+
+						</div>
+
+						<button type="submit" class="btn btn-primary pull-right">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+
+	function fn_OnBegin() {
+		
+	}
+
+	function fn_OnSuccess(resp) {
+		toastr.success("Saved successfully!");
+	}
+</script>

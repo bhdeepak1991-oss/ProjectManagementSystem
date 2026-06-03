@@ -37,6 +37,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddDbContext<PmsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddHostedService<PMS.CopyProcessor.CopyBackGroundProcess>();
+
 builder.Services.AddControllersWithViews()
     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RoleValidator>());
 
